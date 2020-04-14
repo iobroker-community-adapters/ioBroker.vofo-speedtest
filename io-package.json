@@ -1,0 +1,76 @@
+{
+	"common": {
+		"name": "vodafone-speedtest",
+		"version": "0.0.1",
+		"news": {
+			"0.0.1": {
+				"en": "initial release",
+				"de": "Erstveröffentlichung",
+				"ru": "Начальная версия",
+				"pt": "lançamento inicial",
+				"nl": "Eerste uitgave",
+				"fr": "Première version",
+				"it": "Versione iniziale",
+				"es": "Versión inicial",
+				"pl": "Pierwsze wydanie",
+				"zh-cn": "首次出版"
+			}
+		},
+		"title": "Vodafone Speedtest",
+		"titleLang": {
+			"en": "Vodafone Speedtest",
+			"de": "Vodafone Speedtest",
+			"ru": "Vodafone Speedtest",
+			"pt": "Vodafone Speedtest",
+			"nl": "Vodafone Speedtest",
+			"fr": "Vodafone Speedtest",
+			"it": "Vodafone Speedtest",
+			"es": "Vodafone Speedtest",
+			"pl": "Vodafone Speedtest",
+			"zh-cn": "沃达丰速度测试"
+		},
+		"desc": {
+			"en": "Speedtest of Vodafone.de",
+			"de": "Speedtest von Vodafone.de",
+			"ru": "Speedtest of Vodafone.de",
+			"pt": "Speedtest da Vodafone.de",
+			"nl": "Speedtest van Vodafone.de",
+			"fr": "Speedtest de Vodafone.de",
+			"it": "Speedtest di Vodafone.de",
+			"es": "Speedtest de Vodafone.de",
+			"pl": "Speedtest of Vodafone.de",
+			"zh-cn": "Vodafone.de的速度测试"
+		},
+		"authors": [
+			"Peter Baumert <muh@kuh.de>"
+		],
+		"keywords": [
+			"speedtest speed bandwidth"
+		],
+		"license": "MIT",
+		"platform": "Javascript/Node.js",
+		"main": "main.js",
+		"icon": "vodafone-speedtest.png",
+		"enabled": true,
+		"extIcon": "https://raw.githubusercontent.com/Peter Baumert/ioBroker.vodafone-speedtest/master/admin/vodafone-speedtest.png",
+		"readme": "https://github.com/Peter Baumert/ioBroker.vodafone-speedtest/blob/master/README.md",
+		"loglevel": "info",
+		"mode": "daemon",
+		"type": "network",
+		"compact": true,
+		"connectionType": "cloud",
+		"dataSource": "poll",
+		"materialize": true,
+		"dependencies": [
+			{
+				"js-controller": ">=1.4.2"
+			}
+		]
+	},
+	"native": {
+		"option1": true,
+		"option2": "42"
+	},
+	"objects": [],
+	"instanceObjects": []
+}
