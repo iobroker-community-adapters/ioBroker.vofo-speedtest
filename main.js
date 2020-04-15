@@ -256,10 +256,13 @@ class VodafoneSpeedtest extends utils.Adapter {
 		const newSpeed = Math.round(8 * newBytes / newTime);
 		result.overall_time[running] = overallTime;
 		result.overall_bytes[running] = bytesLoadedUntilNow;
+		this.log.silly("nB: "+newBytes +" nT: "+newTime);
 		if (newBytes > 0 && newTime > 0) {
 			timeSection = now;
 			bytes_loaded_last_section = bytesLoadedUntilNow;
+			this.log.silly("dit/2: "+ download_interval_time / 2);
 			if (newTime > download_interval_time / 2) {
+				this.log.silly("running: "+running);
 				if (running == "download") {
 					result.download_raw.push(newSpeed);
 					this.log.silly("draw: "+JSON.stringify(result.download_raw));
