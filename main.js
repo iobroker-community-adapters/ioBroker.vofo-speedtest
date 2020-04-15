@@ -35,6 +35,7 @@ let provider_upload = 0;
 let currentSpeedtestId = null;
 let is_umCustomer = !1;
 let isp = null;
+let initiating = false;
 let init_done = !1;
 const result = {
 	download_raw: Array(),
@@ -128,10 +129,10 @@ class VodafoneSpeedtest extends utils.Adapter {
 	}
 
 	doSpeedtest() {
-		this.init_sbc();
+		if (!initiating && !init_done) this.init_sbc();
 		this.log.silly("doSpeedtest "+init_done);
 		if (!init_done) setTimeout(() => this.doSpeedtest(),5000);
-		//this.startDownload();
+		this.startDownload();
 	}
 
 	startDownload() {
@@ -177,6 +178,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 	}
 
 	init_sbc() {
+		initiating = true;
 		const options = {
 			hostname: "speedtest.vodafone.de",
 			port: 443,
@@ -204,14 +206,17 @@ class VodafoneSpeedtest extends utils.Adapter {
 					is_umCustomer = args.isCustomer;
 					isp = args.isp;
 					init_done = !0;
+					initiating = false;
 					this.log.debug("SBC-Init (Success):" + JSON.stringify(args));
 				} else {
+					initiating = false;
 					this.log.error("init_sbc: Unknown Error");
 				}
 			});
 		});
 
 		req.on("error", e => {
+			initiating = false;
 			this.log.error("init_sbc: " + JSON.stringify(e));
 		});
 		req.end();
