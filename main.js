@@ -151,22 +151,34 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 				bytes_loaded[testServer][i] = 0;
 
-				const downloadStream = {
-					url: testServer + "/data.zero.bin.512M?" + Math.random(),
-					req: new XMLHttpRequest(),
-					updateProgress: function (evt) {
-						that.log.silly("evt: "+JSON.stringify(evt));
-						bytes_loaded[this.testServer][this.id] = evt.loaded;
-					}
+				const options = {
+					hostname: testServer,
+					port: 443,
+					path: "/data.zero.bin.512M?" + Math.random(),
+					method: "GET",
+					rejectUnauthorized: false,
+					resolveWithFullResponse: true,
 				};
-				downloadStream.req.id = i;
-				downloadStream.req.testServer = testServer;
-				downloadStream.req.open("GET", downloadStream.url, !0);
-				downloadStream.req.onprogress = downloadStream.updateProgress;
-				downloadStream.req.onload = this.transferEnd;
-				downloadStream.req.onerror = this.transferEnd;
-				downloadStream.req.onabort = this.transferEnd;
-				downloadStream.req.responseType = "blob";
+
+				const req = https.request(options, res => {
+					res.on("data", d => {
+						that.log.silly("evt: " + JSON.stringify(d));
+						bytes_loaded[testServer][i] = d.length;
+					});
+					res.on("end", () => {
+						that.transferEnd;
+					});
+				});
+
+				req.on("error", e => {
+					that.transferEnd;
+					this.log.error("startDownload error: " + JSON.stringify(e));
+				});
+
+				const downloadStream = {
+					options: options,
+					req: req
+				};
 				download_streams.push(downloadStream);
 				this.log.silly("starDownload: " + JSON.stringify(downloadStream));
 			}
@@ -182,7 +194,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		timeStart = new Date();
 		timeSection = timeStart;
 		for (let k = 0; k < download_streams.length; k++) {
-			download_streams[k].req.send();
+			download_streams[k].req.end();
 		}
 	}
 
@@ -235,7 +247,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 	getBytesUntilNow() {
 		let bytesLoadedUntilNow = 0;
-		that.log.silly("gbun "+running);
+		that.log.silly("gbun " + running);
 		if (running == "download") {
 			conf.server.testServers.forEach(testServer => {
 				for (let i = 0; i < num_download_streams; i++) {
@@ -260,16 +272,16 @@ class VodafoneSpeedtest extends utils.Adapter {
 		const newSpeed = Math.round(8 * newBytes / newTime);
 		result.overall_time[running] = overallTime;
 		result.overall_bytes[running] = bytesLoadedUntilNow;
-		that.log.silly("nB: "+newBytes +" nT: "+newTime);
+		that.log.silly("nB: " + newBytes + " nT: " + newTime);
 		if (newBytes > 0 && newTime > 0) {
 			timeSection = now;
 			bytes_loaded_last_section = bytesLoadedUntilNow;
-			that.log.silly("dit/2: "+ download_interval_time / 2);
+			that.log.silly("dit/2: " + download_interval_time / 2);
 			if (newTime > download_interval_time / 2) {
-				that.log.silly("running: "+running);
+				that.log.silly("running: " + running);
 				if (running == "download") {
 					result.download_raw.push(newSpeed);
-					that.log.silly("draw: "+JSON.stringify(result.download_raw));
+					that.log.silly("draw: " + JSON.stringify(result.download_raw));
 				}
 				if (running == "upload") {
 					result.upload_raw.push(newSpeed);
@@ -347,7 +359,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 					}
 					this.log.debug("result:" + JSON.stringify(args));
 				} else {
-					this.log.error("result: Unknown Error "+ res.statusCode);
+					this.log.error("result: Unknown Error " + res.statusCode);
 				}
 			});
 		});
