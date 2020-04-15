@@ -234,6 +234,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 	getBytesUntilNow() {
 		let bytesLoadedUntilNow = 0;
+		that.log.silly("gbun "+running);
 		if (running == "download") {
 			conf.server.testServers.forEach(testServer => {
 				for (let i = 0; i < num_download_streams; i++) {
@@ -244,6 +245,8 @@ class VodafoneSpeedtest extends utils.Adapter {
 		if (running == "upload") {
 			bytesLoadedUntilNow = bytes_loaded[0]; //+ bytes_loaded_push
 		}
+		that.log.silly(JSON.stringify(bytes_loaded));
+		that.log.silly(bytesLoadedUntilNow);
 		return bytesLoadedUntilNow;
 	}
 
