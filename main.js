@@ -125,25 +125,26 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 	updateData() {
 		this.doSpeedtest();
-		this.timer = setTimeout(() => this.updateData(), this.config.interval * 60000);
+		//this.timer = setTimeout(() => this.updateData(), this.config.interval * 60000);
 	}
 
 	doSpeedtest() {
 		if (!initiating && !init_done) this.init_sbc();
-		this.log.silly("doSpeedtest "+init_done);
+		this.log.silly("doSpeedtest " + init_done);
 		if (!init_done) {
-			setTimeout(() => this.doSpeedtest(),5000);
+			setTimeout(() => this.doSpeedtest(), 5000);
 			return;
 		}
 		this.startDownload();
 	}
 
 	startDownload() {
-		this.log.silly("starDownload start: "+running);
+		this.log.silly("startDownload start: " + running);
 		if (running != null) return;
 		running = "download";
 		this.log.silly(conf.server.testServers);
 		conf.server.testServers.forEach(testServer => {
+			if (typeof bytes_loaded[testServer] == "undefined") { bytes_loaded[testServer] = []; }
 			for (let i = 0; i < num_download_streams; i++) {
 
 				bytes_loaded[testServer][i] = 0;
@@ -164,7 +165,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 				downloadStream.req.onabort = this.transferEnd;
 				downloadStream.req.responseType = "blob";
 				download_streams.push(downloadStream);
-				this.log.silly("starDownload: "+ JSON.stringify(downloadStream));
+				this.log.silly("starDownload: " + JSON.stringify(downloadStream));
 			}
 		});
 
