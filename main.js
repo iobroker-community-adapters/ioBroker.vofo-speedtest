@@ -136,9 +136,10 @@ class VodafoneSpeedtest extends utils.Adapter {
 	}
 
 	startDownload() {
+		this.log.silly("starDownload start");
 		if (running != null) return;
 		running = "download";
-		console.error(conf.server.testServers);
+		this.log.silly(conf.server.testServers);
 		conf.server.testServers.forEach(testServer => {
 			for (let i = 0; i < num_download_streams; i++) {
 
@@ -160,6 +161,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 				downloadStream.req.onabort = this.transferEnd;
 				downloadStream.req.responseType = "blob";
 				download_streams.push(downloadStream);
+				this.log.silly("starDownload: "+ JSON.stringify(downloadStream));
 			}
 		});
 
