@@ -51,7 +51,7 @@ const result = {
 };
 let stopHandler;
 
-const conf = JSON.parse("{'debug':false,'webench':[{'id':1,'url':'https://ref-large.system.info'},{'id':2,'url':'https://www.focus.de'},{'id':3,'url':'https://www.formel1.de'},{'id':4,'url':'https://www.chip.de'},{'id':5,'url':'https://www.wikipedia.org'}],'server':{'testServers':['https://speedtest-10g-fra-2.kabel-deutschland.de','https://speedtest-10g-drs-1.kabel-deutschland.de'],'pingServer':'https://speedtest-10g-fra-2.kabel-deutschland.de'}}");
+const conf = JSON.parse('{"debug":false,"webench":[{"id":1,"url":"https://ref-large.system.info"},{"id":2,"url":"https://www.focus.de"},{"id":3,"url":"https://www.formel1.de"},{"id":4,"url":"https://www.chip.de"},{"id":5,"url":"https://www.wikipedia.org"}],"server":{"testServers":["https://speedtest-10g-ham-2.kabel-deutschland.de","https://speedtest-10g-fra-2.kabel-deutschland.de"],"pingServer":"https://speedtest-10g-ham-2.kabel-deutschland.de"}}');
 
 
 class VodafoneSpeedtest extends utils.Adapter {
@@ -130,6 +130,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 	doSpeedtest() {
 		this.init_sbc();
 		if (!init_done) this.doSpeedtest();
+		this.startDownload();
 	}
 
 	startDownload() {
