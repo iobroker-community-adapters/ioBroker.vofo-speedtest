@@ -10,6 +10,7 @@ const utils = require("@iobroker/adapter-core");
 
 // Load your modules here, e.g.:
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+const querystring = require("querystring");
 const https = require("https");
 
 let that = null;
@@ -311,7 +312,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 	}
 
 	result_from_arr(arr, type, ref, time, bytes) {
-		const data = JSON.stringify({
+		const data = querystring.stringify({
 			values: arr,
 			type: type,
 			ref: ref,
@@ -327,7 +328,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			rejectUnauthorized: false,
 			resolveWithFullResponse: true,
 			headers: {
-				"Content-Type": "application/json; charset=utf-8",
+				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
 				"Content-Length": Buffer.byteLength(data, "utf8")
 			}
 		};

@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.2.1",
+    "querystring": "^0.2.0",
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
