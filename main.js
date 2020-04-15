@@ -180,7 +180,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 					req: req
 				};
 				download_streams.push(downloadStream);
-				this.log.silly("starDownload: " + JSON.stringify(downloadStream));
+				//this.log.silly("starDownload: " + JSON.stringify(downloadStream));
 			}
 		});
 
