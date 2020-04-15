@@ -312,13 +312,15 @@ class VodafoneSpeedtest extends utils.Adapter {
 	}
 
 	result_from_arr(arr, type, ref, time, bytes) {
-		const data = querystring.stringify({
+		let data = querystring.stringify({
 			values: arr,
 			type: type,
 			ref: ref,
 			time: time,
 			bytes: bytes
 		});
+
+		data = data.replace("values=","values%5B%5D=");
 
 		const options = {
 			hostname: "speedtest.vodafone.de",
