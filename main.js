@@ -12,6 +12,7 @@ const utils = require("@iobroker/adapter-core");
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const https = require("https");
 
+let that = null;
 
 const num_download_streams = 6;
 const download_time = 10;
@@ -77,6 +78,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 	 */
 	async onReady() {
 		this.setState("info.connection", false, true);
+		that = this;
 		this.updateData();
 	}
 
@@ -246,7 +248,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 	}
 
 	transferEnd() {
-		const bytesLoadedUntilNow = this.getBytesUntilNow();
+		const bytesLoadedUntilNow = that.getBytesUntilNow();
 		const now = new Date();
 		const newBytes = bytesLoadedUntilNow - bytes_loaded_last_section;
 		const newTime = now.getTime() - timeSection.getTime();
