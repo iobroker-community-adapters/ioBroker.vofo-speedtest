@@ -320,7 +320,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			bytes: bytes
 		});
 
-		data = data.replace("values=","values%5B%5D=");
+		data = data.replace(/values=/g,"values%5B%5D=");
 
 		const options = {
 			hostname: "speedtest.vodafone.de",
