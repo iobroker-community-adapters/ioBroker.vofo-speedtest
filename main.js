@@ -131,12 +131,15 @@ class VodafoneSpeedtest extends utils.Adapter {
 	doSpeedtest() {
 		if (!initiating && !init_done) this.init_sbc();
 		this.log.silly("doSpeedtest "+init_done);
-		if (!init_done) setTimeout(() => this.doSpeedtest(),5000);
+		if (!init_done) {
+			setTimeout(() => this.doSpeedtest(),5000);
+			return;
+		}
 		this.startDownload();
 	}
 
 	startDownload() {
-		this.log.silly("starDownload start");
+		this.log.silly("starDownload start: "+running);
 		if (running != null) return;
 		running = "download";
 		this.log.silly(conf.server.testServers);
