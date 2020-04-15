@@ -155,6 +155,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 					url: testServer + "/data.zero.bin.512M?" + Math.random(),
 					req: new XMLHttpRequest(),
 					updateProgress: function (evt) {
+						that.log.silly("evt: "+JSON.stringify(evt));
 						bytes_loaded[this.testServer][this.id] = evt.loaded;
 					}
 				};
