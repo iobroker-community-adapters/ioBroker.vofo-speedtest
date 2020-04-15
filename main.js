@@ -9,7 +9,50 @@
 const utils = require("@iobroker/adapter-core");
 
 // Load your modules here, e.g.:
-// const fs = require("fs");
+const XMLHttpRequest = require("xmlhttprequest");
+const https = require("https");
+
+
+const num_download_streams = 6;
+const download_time = 10;
+const download_interval_time = 750;
+/*const upload_time = 12;
+const upload_interval_time = 750;
+const ping_interval_time = 1000;
+const webench_time = 30;
+const ping_time = 8;*/
+const bytes_loaded = [];
+const download_streams = [];
+//const upload_streams = [];
+let bytes_loaded_last_section = 0;
+let running = null;
+let timeSection = null;
+let timeStart = null;
+let timeEnd = null;
+let remote_port = null;
+let provider_download = 0;
+let provider_upload = 0;
+let currentSpeedtestId = null;
+let is_umCustomer = !1;
+let isp = null;
+let init_done = !1;
+const result = {
+	download_raw: Array(),
+	upload_raw: Array(),
+	ping_raw: Array(),
+	overall_time: Array(),
+	overall_bytes: Array(),
+	download: 0,
+	upload: 0,
+	ping: 0,
+	jitter: 0,
+	webench: Array(),
+	webench_result: 0,
+};
+let stopHandler;
+
+const conf = JSON.parse("{'debug':false,'webench':[{'id':1,'url':'https://ref-large.system.info'},{'id':2,'url':'https://www.focus.de'},{'id':3,'url':'https://www.formel1.de'},{'id':4,'url':'https://www.chip.de'},{'id':5,'url':'https://www.wikipedia.org'}],'server':{'testServers':['https://speedtest-10g-fra-2.kabel-deutschland.de','https://speedtest-10g-drs-1.kabel-deutschland.de'],'pingServer':'https://speedtest-10g-fra-2.kabel-deutschland.de'}}");
+
 
 class VodafoneSpeedtest extends utils.Adapter {
 
@@ -32,53 +75,8 @@ class VodafoneSpeedtest extends utils.Adapter {
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	async onReady() {
-		// Initialize your adapter here
-
-		// The adapters config (in the instance object everything under the attribute "native") is accessible via
-		// this.config:
-		this.log.info("config option1: " + this.config.option1);
-		this.log.info("config option2: " + this.config.option2);
-
-		/*
-		For every state in the system there has to be also an object of type state
-		Here a simple template for a boolean variable named "testVariable"
-		Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
-		*/
-		await this.setObjectAsync("testVariable", {
-			type: "state",
-			common: {
-				name: "testVariable",
-				type: "boolean",
-				role: "indicator",
-				read: true,
-				write: true,
-			},
-			native: {},
-		});
-
-		// in this template all states changes inside the adapters namespace are subscribed
-		this.subscribeStates("*");
-
-		/*
-		setState examples
-		you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
-		*/
-		// the variable testVariable is set to true as command (ack=false)
-		await this.setStateAsync("testVariable", true);
-
-		// same thing, but the value is flagged "ack"
-		// ack should be always set to true if the value is received from or acknowledged from the target system
-		await this.setStateAsync("testVariable", { val: true, ack: true });
-
-		// same thing, but the state is deleted after 30s (getState will return null afterwards)
-		await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
-
-		// examples for the checkPassword/checkGroup functions
-		let result = await this.checkPasswordAsync("admin", "iobroker");
-		this.log.info("check user admin pw iobroker: " + result);
-
-		result = await this.checkGroupAsync("admin", "admin");
-		this.log.info("check group user admin group admin: " + result);
+		this.setState("info.connection", false, true);
+		this.updateData();
 	}
 
 	/**
@@ -104,8 +102,8 @@ class VodafoneSpeedtest extends utils.Adapter {
 			// The object was changed
 			this.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
 		} else {
-			// The object was deleted
-			this.log.info(`object ${id} deleted`);
+			// The object was deconsted
+			this.log.info(`object ${id} deconsted`);
 		}
 	}
 
@@ -119,29 +117,301 @@ class VodafoneSpeedtest extends utils.Adapter {
 			// The state was changed
 			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
 		} else {
-			// The state was deleted
-			this.log.info(`state ${id} deleted`);
+			// The state was deconsted
+			this.log.info(`state ${id} deconsted`);
 		}
 	}
 
-	// /**
-	//  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
-	//  * Using this method requires "common.message" property to be set to true in io-package.json
-	//  * @param {ioBroker.Message} obj
-	//  */
-	// onMessage(obj) {
-	// 	if (typeof obj === "object" && obj.message) {
-	// 		if (obj.command === "send") {
-	// 			// e.g. send email or pushover or whatever
-	// 			this.log.info("send command");
+	updateData() {
+		this.doSpeedtest();
+		this.timer = setTimeout(() => this.updateData(), this.config.interval * 60000);
+	}
 
-	// 			// Send response in callback if required
-	// 			if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-	// 		}
-	// 	}
-	// }
+	doSpeedtest() {
+		this.init_sbc();
+		if (!init_done) this.doSpeedtest();
+	}
 
+	startDownload() {
+		if (running != null) return;
+		running = "download";
+		console.error(conf.server.testServers);
+		conf.server.testServers.forEach(testServer => {
+			for (let i = 0; i < num_download_streams; i++) {
+
+				bytes_loaded[testServer][i] = 0;
+
+				const downloadStream = {
+					url: testServer + "/data.zero.bin.512M?" + Math.random(),
+					req: new XMLHttpRequest(),
+					updateProgress: function (evt) {
+						bytes_loaded[this.testServer][this.id] = evt.loaded;
+					}
+				};
+				downloadStream.req.id = i;
+				downloadStream.req.testServer = testServer;
+				downloadStream.req.open("GET", downloadStream.url, !0);
+				downloadStream.req.onprogress = downloadStream.updateProgress;
+				downloadStream.req.onload = this.transferEnd;
+				downloadStream.req.onerror = this.transferEnd;
+				downloadStream.req.onabort = this.transferEnd;
+				downloadStream.req.responseType = "blob";
+				download_streams.push(downloadStream);
+			}
+		});
+
+		this.interval(this.transferEnd, download_interval_time, this.intervalRoundTrips(download_time, download_interval_time));
+		if (typeof stopHandler === "number") {
+			console.debug("resetting Timeout download");
+			clearTimeout(stopHandler);
+			stopHandler = null;
+		}
+		stopHandler = setTimeout(this.stopDownloadTest, download_time * 1000);
+		timeStart = new Date();
+		timeSection = timeStart;
+		for (let k = 0; k < download_streams.length; k++) {
+			download_streams[k].req.send();
+		}
+	}
+
+	init_sbc() {
+		const options = {
+			hostname: "speedtest.vodafone.de",
+			port: 443,
+			path: "/ajax/speedtest-init/?port=" + remote_port,
+			method: "GET",
+			rejectUnauthorized: false,
+			resolveWithFullResponse: true,
+			timeout: 60000,
+			headers: {
+				"Content-Type": "application/json; charset=utf-8",
+			}
+		};
+
+		const req = https.request(options, res => {
+			let data = "";
+			res.on("data", d => {
+				data += d;
+			});
+			res.on("end", () => {
+				if (res.statusCode == 200) {
+					const args = JSON.parse(data);
+					provider_download = args.downstreamSpeed;
+					provider_upload = args.upstreamSpeed;
+					currentSpeedtestId = args.speedtestId;
+					is_umCustomer = args.isCustomer;
+					isp = args.isp;
+					init_done = !0;
+					this.log.debug("SBC-Init (Success):" + JSON.stringify(args));
+				} else {
+					this.log.error("init_sbc: Unknown Error");
+				}
+			});
+		});
+
+		req.on("error", e => {
+			this.log.error("init_sbc: " + JSON.stringify(e));
+		});
+		req.end();
+	}
+
+
+	getBytesUntilNow() {
+		let bytesLoadedUntilNow = 0;
+		if (running == "download") {
+			conf.server.testServers.forEach(testServer => {
+				for (let i = 0; i < num_download_streams; i++) {
+					bytesLoadedUntilNow += bytes_loaded[testServer][i];
+				}
+			});
+		}
+		if (running == "upload") {
+			bytesLoadedUntilNow = bytes_loaded[0]; //+ bytes_loaded_push
+		}
+		return bytesLoadedUntilNow;
+	}
+
+	transferEnd() {
+		const bytesLoadedUntilNow = this.getBytesUntilNow();
+		const now = new Date();
+		const newBytes = bytesLoadedUntilNow - bytes_loaded_last_section;
+		const newTime = now.getTime() - timeSection.getTime();
+		const overallTime = now.getTime() - timeStart.getTime();
+		const newSpeed = Math.round(8 * newBytes / newTime);
+		result.overall_time[running] = overallTime;
+		result.overall_bytes[running] = bytesLoadedUntilNow;
+		if (newBytes > 0 && newTime > 0) {
+			timeSection = now;
+			bytes_loaded_last_section = bytesLoadedUntilNow;
+			if (newTime > download_interval_time / 2) {
+				if (running == "download") {
+					result.download_raw.push(newSpeed);
+				}
+				if (running == "upload") {
+					result.upload_raw.push(newSpeed);
+				}
+			}
+		}
+	}
+
+	run(type) {
+		switch (type) {
+			case "download":
+				this.startDownload();
+				break;
+			/*case 'upload':
+				startUpload();
+				break;
+			case 'upload_ws':
+				startUploadWS();
+				break;
+			case 'ping':
+				startPing();
+				break;
+			case 'webench':
+				startWebench();
+				break*/
+		}
+	}
+
+	result_from_arr(arr, type, ref, time, bytes) {
+		const data = JSON.stringify({
+			values: arr,
+			type: type,
+			ref: ref,
+			time: time,
+			bytes: bytes
+		});
+
+		const options = {
+			hostname: "speedtest.vodafone.de",
+			port: 443,
+			path: "/ajax/result/",
+			method: "POST",
+			rejectUnauthorized: false,
+			resolveWithFullResponse: true,
+			headers: {
+				"Content-Type": "application/json; charset=utf-8",
+				"Content-Length": Buffer.byteLength(data, "utf8")
+			}
+		};
+
+		const req = https.request(options, res => {
+			let data = "";
+			res.on("data", d => {
+				data += d;
+			});
+			res.on("end", () => {
+				if (res.statusCode == 200) {
+					const args = JSON.parse(data);
+					switch (args.type) {
+						case "download":
+							result.download = args.value;
+							if (parseInt(args.value, 10) == 0) {
+								if (false /*_$.retry.download == !1*/) {
+									/*this.log.debug('second download test');
+									retry.download = !0;
+									download_time = 5;
+									startDownload()*/
+								} else {
+									this.log.debug("retry error");
+								}
+							} else {
+								setTimeout(() => this.run("upload"), 500);
+							}
+							break;
+					}
+					this.log.debug("result:" + JSON.stringify(args));
+				} else {
+					this.log.error("result: Unknown Error");
+				}
+			});
+		});
+
+		req.on("error", e => {
+			this.log.error("result: " + JSON.stringify(e));
+		});
+		req.write(data);
+		req.end();
+
+		/*success: function (args) {
+			switch (args.type) {
+				case 'download':
+					_$.result.download = args.value;
+					if (parseInt(args.value, 10) == 0) {
+						if (_$.retry.download == !1) {
+							_$.log('second download test');
+							_$.retry.download = !0;
+							download_time = 5;
+							_$.startDownload()
+						} else {
+							_$.config.callback_error(500)
+						}
+					} else {
+						_$.config.callback_progress('download_finished', _$.result.download);
+						window.setTimeout(function () {
+							_$.run('upload')
+						}, 500)
+					}
+					break;
+				case 'upload':
+					_$.result.upload = args.value;
+					_$.config.callback_progress('upload_finished', _$.result.upload);
+					window.setTimeout(function () {
+						_$.run('ping')
+					}, 500);
+					break;
+				case 'ping':
+					_$.result.ping = args.value;
+					_$.result.jitter = args.jitter;
+					_$.config.callback_progress('ping_finished', _$.result.ping);
+					if (_$.webench_active === !0) {
+						window.setTimeout(function () {
+							_$.run('webench')
+						}, 500)
+					} else {
+						window.setTimeout(function () {
+							_$.config.callback_progress('finished')
+						}, 500)
+					}
+					break
+			}
+		}*/
+	}
+
+	stopDownloadTest() {
+		stopHandler && clearTimeout(stopHandler);
+		stopHandler = null;
+		for (let i = 0; i < download_streams.length; i++) {
+			download_streams[i].req.abort();
+		}
+		running = null;
+		this.result_from_arr(result.download_raw, "download", provider_download, result.overall_time.download, result.overall_bytes.download);
+	}
+
+	interval(func, wait, times) {
+		const intervalClosure = function (w, t) {
+			return function () {
+				if (typeof t === "undefined" || t-- > 0) {
+					setTimeout(intervalClosure, w);
+					try {
+						func.call(null);
+						console.debug("interval: #" + t + " @" + new Date());
+					} catch (e) {
+						t = 0;
+						throw e.toString();
+					}
+				}
+			};
+		}(wait, times);
+		setTimeout(intervalClosure, wait);
+	}
+
+	intervalRoundTrips(runtime, interval) {
+		return Math.round((runtime * 1000) / interval) + 1;
+	}
 }
+
 
 // @ts-ignore parent is a valid property on module
 if (module.parent) {
