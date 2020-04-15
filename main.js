@@ -339,7 +339,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 					}
 					this.log.debug("result:" + JSON.stringify(args));
 				} else {
-					this.log.error("result: Unknown Error");
+					this.log.error("result: Unknown Error "+ res.statusCode);
 				}
 			});
 		});
@@ -349,6 +349,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		});
 		req.write(data);
 		req.end();
+		this.log.silly("result start:" + JSON.stringify(data));
 
 		/*success: function (args) {
 			switch (args.type) {
