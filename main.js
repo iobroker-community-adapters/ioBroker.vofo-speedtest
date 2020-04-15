@@ -162,7 +162,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 				const req = https.request(options, res => {
 					res.on("data", d => {
-						that.log.silly("evt: " + JSON.stringify(d));
+						//that.log.silly("evt: " + JSON.stringify(d));
 						bytes_loaded[testServer][i] = d.length;
 					});
 					res.on("end", () => {
