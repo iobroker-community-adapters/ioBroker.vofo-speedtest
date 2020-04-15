@@ -402,7 +402,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			download_streams[i].req.abort();
 		}
 		running = null;
-		this.result_from_arr(result.download_raw, "download", provider_download, result.overall_time.download, result.overall_bytes.download);
+		that.result_from_arr(result.download_raw, "download", provider_download, result.overall_time.download, result.overall_bytes.download);
 	}
 
 	interval(func, wait, times) {
