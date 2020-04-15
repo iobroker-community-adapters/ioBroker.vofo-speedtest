@@ -130,7 +130,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 	doSpeedtest() {
 		this.init_sbc();
 		this.log.silly("doSpeedtest "+init_done);
-		//if (!init_done) this.doSpeedtest();
+		if (!init_done) setTimeout(() => this.doSpeedtest(),5000);
 		//this.startDownload();
 	}
 
