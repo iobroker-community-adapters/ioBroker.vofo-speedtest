@@ -262,6 +262,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			if (newTime > download_interval_time / 2) {
 				if (running == "download") {
 					result.download_raw.push(newSpeed);
+					this.log.silly("draw: "+JSON.stringify(result.download_raw));
 				}
 				if (running == "upload") {
 					result.upload_raw.push(newSpeed);
