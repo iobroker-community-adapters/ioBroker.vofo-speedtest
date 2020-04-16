@@ -250,6 +250,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		const req = https.request(options, res => {
 			res.on("end", () => {
 				that.transferEnd;
+				that.pushData();
 			});
 		});
 
@@ -269,7 +270,6 @@ class VodafoneSpeedtest extends utils.Adapter {
 		};
 		upload_streams.push(uploadStream);
 		req.end(data);
-		this.pushData();
 	}
 
 	init_sbc() {
