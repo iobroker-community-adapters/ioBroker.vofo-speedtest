@@ -212,7 +212,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			return;
 		running = "upload";
 		data = "0";
-		for (let i = 0; i < 1E7 - 1; i++) {
+		for (let i = 0; Buffer.byteLength(data, "utf8") < 512; i++) {
 			data += "0";
 		}
 		bytes_loaded_last_section = 0;
@@ -234,6 +234,8 @@ class VodafoneSpeedtest extends utils.Adapter {
 	pushData() {
 		if (running != "upload")
 			return;
+
+		bytes_loaded_push = 0;
 		const options = {
 			hostname: conf.server.testServers[0],
 			port: 443,
@@ -242,22 +244,22 @@ class VodafoneSpeedtest extends utils.Adapter {
 			rejectUnauthorized: false,
 			resolveWithFullResponse: true,
 			headers: {
-				"Content-Type": "application/octet-stream; charset=utf-8",
+				"Content-Type": "text/plain;charset=UTF-8",
 				"Content-Length": Buffer.byteLength(data, "utf8")
 			}
 		};
 
 		const req = https.request(options, res => {
 			res.on("end", () => {
-				that.transferEnd;
-				that.pushData();
+				bytes_loaded[0] += 512;
+				bytes_loaded_push = 0;
 			});
 		});
 
 		req.on("error", e => {
 			that.transferEnd;
 			that.pushData();
-			that.log.error("startUpload error: " + JSON.stringify(e));
+			that.log.error("startUpload error: "/* + JSON.stringify(e)*/);
 		});
 
 		req.on("abort", e => {
@@ -271,6 +273,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		};
 		upload_streams.push(uploadStream);
 		req.end(data);
+		this.log.silly("pushData: " + JSON.stringify(options));
 	}
 
 	init_sbc() {
