@@ -212,7 +212,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			return;
 		running = "upload";
 		data = "0";
-		for (let i = 0; i < 1E7 - 1; i++) {
+		for (let i = 0; i < 1E6 - 1; i++) {
 			data += "0";
 		}
 		bytes_loaded_last_section = 0;
@@ -256,6 +256,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 		req.on("error", e => {
 			that.transferEnd;
+			that.pushData();
 			that.log.error("startUpload error: " + JSON.stringify(e));
 		});
 
