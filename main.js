@@ -334,9 +334,10 @@ class VodafoneSpeedtest extends utils.Adapter {
 			});
 		}
 		if (running == "upload") {
-			upload_streams.forEach(us => {
+			/*upload_streams.forEach(us => {
 				bytesLoadedUntilNow += us.req.socket._bytesDispatched;
-			});
+			});*/
+			bytesLoadedUntilNow = bytes_loaded[0] + bytes_loaded_push;
 		}
 		that.log.silly(JSON.stringify(bytes_loaded));
 		that.log.silly(bytesLoadedUntilNow);
