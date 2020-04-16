@@ -18,15 +18,17 @@ let that = null;
 const num_download_streams = 6;
 const download_time = 10;
 const download_interval_time = 750;
-/*const upload_time = 12;
+const upload_time = 12;
 const upload_interval_time = 750;
 const ping_interval_time = 1000;
 const webench_time = 30;
-const ping_time = 8;*/
+const ping_time = 8;
 const bytes_loaded = [];
 const download_streams = [];
-//const upload_streams = [];
+const upload_streams = [];
+const upload_xhr = new XMLHttpRequest();
 let bytes_loaded_last_section = 0;
+let bytes_loaded_push = 0;
 let running = null;
 let timeSection = null;
 let timeStart = null;
@@ -39,6 +41,7 @@ let is_umCustomer = !1;
 let isp = null;
 let initiating = false;
 let init_done = !1;
+let data = "";
 const result = {
 	download_raw: Array(),
 	upload_raw: Array(),
@@ -176,6 +179,11 @@ class VodafoneSpeedtest extends utils.Adapter {
 					this.log.error("startDownload error: " + JSON.stringify(e));
 				});
 
+				req.on("abort", e => {
+					that.transferEnd;
+					this.log.error("startDownload abort: " + JSON.stringify(e));
+				});
+
 				const downloadStream = {
 					options: options,
 					req: req
@@ -197,6 +205,70 @@ class VodafoneSpeedtest extends utils.Adapter {
 		for (let k = 0; k < download_streams.length; k++) {
 			download_streams[k].req.end();
 		}
+	}
+
+	startUpload() {
+		if (running != null)
+			return;
+		running = "upload";
+		data = "0";
+		for (let i = 0; i < 1E7 - 1; i++) {
+			data += "0";
+		}
+		bytes_loaded_last_section = 0;
+		bytes_loaded[0] = 0;
+		this.interval(this.transferEnd, upload_interval_time, this.intervalRoundTrips(upload_time, upload_interval_time));
+		if (typeof stopHandler === "number") {
+			this.log.silly("resetting Timeout upload");
+			clearTimeout(stopHandler);
+			stopHandler = null;
+		}
+		stopHandler = setTimeout(this.stopUploadTest, upload_time * 1000);
+		timeStart = new Date();
+		timeSection = timeStart;
+		this.pushData();
+	}
+
+	pushData() {
+		const options = {
+			hostname: conf.server.testServers[0],
+			port: 443,
+			path: "/empty.txt",
+			method: "POST",
+			rejectUnauthorized: false,
+			resolveWithFullResponse: true,
+			headers: {
+				"Content-Type": "application/octet-stream; charset=utf-8",
+				"Content-Length": Buffer.byteLength(data, "utf8")
+			}
+		};
+
+		const req = https.request(options, res => {
+			res.on("end", () => {
+				that.transferEnd;
+			});
+		});
+
+		req.on("error", e => {
+			that.transferEnd;
+			this.log.error("startUpload error: " + JSON.stringify(e));
+		});
+
+		req.on("abort", e => {
+			that.transferEnd;
+			this.log.error("startUpload abort: " + JSON.stringify(e));
+		});
+
+		req.write(data, "utf8", function (e) {
+			that.log.error(JSON.stringify(e));
+		});
+
+		const uploadStream = {
+			options: options,
+			req: req
+		};
+		upload_streams.push(uploadStream);
+		req.end();
 	}
 
 	init_sbc() {
@@ -296,10 +368,10 @@ class VodafoneSpeedtest extends utils.Adapter {
 			case "download":
 				this.startDownload();
 				break;
-			/*case 'upload':
-				startUpload();
+			case "upload":
+				this.startUpload();
 				break;
-			case 'upload_ws':
+			/*case 'upload_ws':
 				startUploadWS();
 				break;
 			case 'ping':
@@ -320,7 +392,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			bytes: bytes
 		});
 
-		data = data.replace(/values=/g,"values%5B%5D=");
+		data = data.replace(/values=/g, "values%5B%5D=");
 
 		const options = {
 			hostname: "speedtest.vodafone.de",
@@ -427,6 +499,17 @@ class VodafoneSpeedtest extends utils.Adapter {
 		}
 		running = null;
 		that.result_from_arr(result.download_raw, "download", provider_download, result.overall_time.download, result.overall_bytes.download);
+	}
+
+	stopUploadTest() {
+		stopHandler && clearTimeout(stopHandler);
+		stopHandler = null;
+		for (let i = 0; i < upload_streams.length; i++) {
+			upload_streams[i].req.abort();
+		}
+		running = null;
+		data = "0";
+		this.result_from_arr(result.upload_raw, "upload", provider_upload, result.overall_time.upload, result.overall_bytes.upload);
 	}
 
 	interval(func, wait, times) {
