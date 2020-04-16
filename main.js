@@ -235,7 +235,6 @@ class VodafoneSpeedtest extends utils.Adapter {
 		if (running != "upload")
 			return;
 
-		bytes_loaded_push = 0;
 		const options = {
 			hostname: conf.server.testServers[0],
 			port: 443,
@@ -251,13 +250,12 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 		const req = https.request(options, res => {
 			res.on("end", () => {
-				bytes_loaded[0] += req.socket.bytesWritten;
-				bytes_loaded_push = 0;
+				that.transferEnd;
+				that.pushData();
 			});
 		});
 
 		req.on("error", e => {
-			bytes_loaded[0] += req.socket.bytesWritten;
 			that.transferEnd;
 			that.pushData();
 			// @ts-ignore
@@ -267,7 +265,6 @@ class VodafoneSpeedtest extends utils.Adapter {
 		});
 
 		req.on("abort", e => {
-			bytes_loaded[0] += req.socket.bytesWritten;
 			that.transferEnd;
 			that.log.error("startUpload abort: " + JSON.stringify(e));
 		});
@@ -340,10 +337,9 @@ class VodafoneSpeedtest extends utils.Adapter {
 			});
 		}
 		if (running == "upload") {
-			/*upload_streams.forEach(us => {
-				bytesLoadedUntilNow += us.req.socket._bytesDispatched;
-			});*/
-			bytesLoadedUntilNow = bytes_loaded[0] + bytes_loaded_push;
+			upload_streams.forEach(us => {
+				bytesLoadedUntilNow += us.req.socket.bytesWritten;
+			});
 		}
 		that.log.silly(JSON.stringify(bytes_loaded));
 		that.log.silly(bytesLoadedUntilNow);
@@ -372,7 +368,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 				}
 				if (running == "upload") {
 					result.upload_raw.push(newSpeed);
-					that.log.silly("draw: " + JSON.stringify(result.upload_raw));
+					that.log.silly("uraw: " + JSON.stringify(result.upload));
 				}
 			}
 		}
