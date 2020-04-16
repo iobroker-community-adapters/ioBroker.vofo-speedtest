@@ -227,7 +227,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 		timeStart = new Date();
 		timeSection = timeStart;
-		//req.end();
+		this.transferEnd;
 		this.pushData();
 	}
 
