@@ -256,6 +256,8 @@ class VodafoneSpeedtest extends utils.Adapter {
 			});
 		});
 
+		this.log.silly(JSON.stringify(req.getHeaders()));
+
 		req.on("error", e => {
 			that.transferEnd;
 			that.pushData();
