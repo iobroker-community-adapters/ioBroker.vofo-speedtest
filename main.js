@@ -253,6 +253,8 @@ class VodafoneSpeedtest extends utils.Adapter {
 				that.transferEnd;
 				that.pushData();
 			});
+			// @ts-ignore
+			req.bwb = ((req.socket != null) ? req.socket.bytesWritten : 0);
 		});
 		
 		req.on("error", e => {
@@ -271,8 +273,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 		const uploadStream = {
 			options: options,
-			req: req,
-			bwb: ((req.socket != null) ? req.socket.bytesWritten : 0),
+			req: req
 		};
 		upload_streams.push(uploadStream);
 		req.end(data);
@@ -339,8 +340,8 @@ class VodafoneSpeedtest extends utils.Adapter {
 		}
 		if (running == "upload") {
 			upload_streams.forEach(us => {
-				that.log.silly(us.req.socket.bytesWritten + " - " + us.bwb);
-				bytesLoadedUntilNow += (us.req.socket.bytesWritten - us.bwb);
+				that.log.silly(us.req.socket.bytesWritten + " - " + us.req.bwb);
+				bytesLoadedUntilNow += (us.req.socket.bytesWritten - us.req.bwb);
 			});
 		}
 		that.log.silly(JSON.stringify(bytes_loaded));
