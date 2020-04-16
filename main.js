@@ -225,6 +225,15 @@ class VodafoneSpeedtest extends utils.Adapter {
 		}
 		stopHandler = setTimeout(this.stopUploadTest, upload_time * 1000);
 
+		timeStart = new Date();
+		timeSection = timeStart;
+		//req.end();
+		this.pushData();
+	}
+
+	pushData() {
+		if (running != "upload")
+			return;
 		const options = {
 			hostname: conf.server.testServers[0],
 			port: 443,
@@ -259,20 +268,8 @@ class VodafoneSpeedtest extends utils.Adapter {
 			req: req
 		};
 		upload_streams.push(uploadStream);
-
-		timeStart = new Date();
-		timeSection = timeStart;
-		//req.end();
+		req.end(data);
 		this.pushData();
-	}
-
-	pushData() {
-		upload_streams.forEach(us => {
-			if (!us.req.writableEnded) {
-				us.req.write(data);
-				this.pushData();
-			}
-		});
 	}
 
 	init_sbc() {
@@ -511,7 +508,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		stopHandler && clearTimeout(stopHandler);
 		stopHandler = null;
 		for (let i = 0; i < upload_streams.length; i++) {
-			upload_streams[i].req.end();
+			upload_streams[i].req.abort();
 		}
 		running = null;
 		data = "0";
