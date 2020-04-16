@@ -227,7 +227,6 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 		timeStart = new Date();
 		timeSection = timeStart;
-		this.transferEnd;
 		this.pushData();
 	}
 
@@ -244,7 +243,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			resolveWithFullResponse: true,
 			headers: {
 				"Content-Type": "text/plain;charset=UTF-8",
-				//"Content-Length": Buffer.byteLength(data, "utf8")
+				"Content-Length": Buffer.byteLength(data, "utf8")
 			}
 		};
 
@@ -275,6 +274,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			bwb: ((req.socket != null) ? req.socket.bytesWritten : 0)
 		};
 		upload_streams.push(uploadStream);
+		
 		req.end(data);
 		//this.log.silly(JSON.stringify(req.getHeaders()));
 		//this.log.silly("pushData: " + JSON.stringify(options));
@@ -370,7 +370,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 				}
 				if (running == "upload") {
 					result.upload_raw.push(newSpeed);
-					that.log.silly("uraw: " + JSON.stringify(result.upload));
+					that.log.silly("uraw: " + JSON.stringify(result.upload_raw));
 				}
 			}
 		}
