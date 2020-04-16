@@ -272,7 +272,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		const uploadStream = {
 			options: options,
 			req: req,
-			bwb: req.socket.bytesWritten || 0,
+			bwb: ((req.socket != null) ? req.socket.bytesWritten : 0),
 		};
 		upload_streams.push(uploadStream);
 		req.end(data);
