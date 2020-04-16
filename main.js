@@ -224,12 +224,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			stopHandler = null;
 		}
 		stopHandler = setTimeout(this.stopUploadTest, upload_time * 1000);
-		timeStart = new Date();
-		timeSection = timeStart;
-		this.pushData();
-	}
 
-	pushData() {
 		const options = {
 			hostname: conf.server.testServers[0],
 			port: 443,
@@ -251,12 +246,12 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 		req.on("error", e => {
 			that.transferEnd;
-			this.log.error("startUpload error: " + JSON.stringify(e));
+			that.log.error("startUpload error: " + JSON.stringify(e));
 		});
 
 		req.on("abort", e => {
 			that.transferEnd;
-			this.log.error("startUpload abort: " + JSON.stringify(e));
+			that.log.error("startUpload abort: " + JSON.stringify(e));
 		});
 
 		req.write(data, "utf8", function (e) {
@@ -268,6 +263,9 @@ class VodafoneSpeedtest extends utils.Adapter {
 			req: req
 		};
 		upload_streams.push(uploadStream);
+		
+		timeStart = new Date();
+		timeSection = timeStart;
 		req.end();
 	}
 
@@ -509,7 +507,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		}
 		running = null;
 		data = "0";
-		this.result_from_arr(result.upload_raw, "upload", provider_upload, result.overall_time.upload, result.overall_bytes.upload);
+		that.result_from_arr(result.upload_raw, "upload", provider_upload, result.overall_time.upload, result.overall_bytes.upload);
 	}
 
 	interval(func, wait, times) {
