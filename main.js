@@ -212,7 +212,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			return;
 		running = "upload";
 		data = "0";
-		for (let i = 0; Buffer.byteLength(data, "utf8") < 512; i++) {
+		for (let i = 0; Buffer.byteLength(data, "utf8") < 1048576; i++) {
 			data += "0";
 		}
 		bytes_loaded_last_section = 0;
