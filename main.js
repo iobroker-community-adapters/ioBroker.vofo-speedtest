@@ -225,7 +225,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		}
 		stopHandler = setTimeout(this.stopUploadTest, upload_time * 1000);
 
-		const options = {
+		/*const options = {
 			hostname: conf.server.testServers[0],
 			port: 443,
 			path: "/empty.txt",
@@ -254,19 +254,37 @@ class VodafoneSpeedtest extends utils.Adapter {
 			that.log.error("startUpload abort: " + JSON.stringify(e));
 		});
 
-		req.write(data, "utf8", function (e) {
-			that.log.error(JSON.stringify(e));
-		});
+		req.write(data);
 
 		const uploadStream = {
 			options: options,
 			req: req
 		};
 		upload_streams.push(uploadStream);
-		
+		*/
 		timeStart = new Date();
 		timeSection = timeStart;
-		req.end();
+		//req.end();
+		this.pushData();
+	}
+
+	pushData() {
+		const url = conf.server.testServers[0] + "/empty.txt";
+		bytes_loaded_push = 0;
+		upload_xhr.open("POST", url, !0);
+		upload_xhr.onerror = that.transferEnd;
+		upload_xhr.onabort = that.transferEnd;
+		upload_xhr.onload = function () {
+			bytes_loaded[0] += bytes_loaded_push;
+			bytes_loaded_push = 0;
+			that.pushData();
+		};
+		upload_xhr.contentType = "application/octet-stream";
+		upload_xhr.responseType = "blob";
+		upload_xhr.upload.onprogress = function (evt) {
+			bytes_loaded_push = evt.loaded;
+		};
+		upload_xhr.send(data);
 	}
 
 	init_sbc() {
@@ -327,7 +345,10 @@ class VodafoneSpeedtest extends utils.Adapter {
 			});
 		}
 		if (running == "upload") {
-			bytesLoadedUntilNow = bytes_loaded[0]; //+ bytes_loaded_push
+			/*upload_streams.forEach(us => {
+				bytesLoadedUntilNow += us.req.socket._bytesDispatched;
+			});*/
+			bytesLoadedUntilNow = bytes_loaded[0] + bytes_loaded_push;
 		}
 		that.log.silly(JSON.stringify(bytes_loaded));
 		that.log.silly(bytesLoadedUntilNow);
