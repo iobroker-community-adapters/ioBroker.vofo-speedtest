@@ -257,12 +257,17 @@ class VodafoneSpeedtest extends utils.Adapter {
 		});
 
 		req.on("error", e => {
+			bytes_loaded[0] += req.socket.bytesWritten;
 			that.transferEnd;
 			that.pushData();
-			that.log.error("startUpload error: " + JSON.stringify(e));
+			// @ts-ignore
+			if (e.code != "HPE_UNEXPECTED_CONTENT_LENGTH") {
+				that.log.error("startUpload error: " + JSON.stringify(e));
+			}
 		});
 
 		req.on("abort", e => {
+			bytes_loaded[0] += req.socket.bytesWritten;
 			that.transferEnd;
 			that.log.error("startUpload abort: " + JSON.stringify(e));
 		});
