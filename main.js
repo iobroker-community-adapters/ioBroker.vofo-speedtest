@@ -456,7 +456,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 		this.create_state("Results.download_MB", "download_MB", (result.download / 8 / 1000));
 		this.create_state("Results.download_Mb", "download_Mb", result.download / 1000);
-		
+
 		this.create_state("Results.upload_MB", "upload_MB", (result.upload / 8 / 1000));
 		this.create_state("Results.upload_Mb", "upload_Mb", result.upload / 1000);
 	}
@@ -526,19 +526,19 @@ class VodafoneSpeedtest extends utils.Adapter {
 					},
 					native: {}
 				});
+			} else {
+				await this.extendObjectAsync(state, {
+					type: "state",
+					common: {
+						name: state_name,
+						role: role,
+						type: type,
+						unit: unit,
+						write: writable
+					},
+					native: {},
+				});
 			}
-
-			await this.extendObjectAsync(state, {
-				type: "state",
-				common: {
-					name: state_name,
-					role: role,
-					type: type,
-					unit: unit,
-					write: writable
-				},
-				native: {},
-			});
 
 			// Only set value if input != null
 			if (value !== null) { await this.setState(state, { val: value, ack: true }); }
