@@ -41,9 +41,10 @@ let is_umCustomer = !1;
 let isp = null;
 let initiating = false;
 let init_done = !1;
-let data = {
-	data: ""
-};
+let data = [{
+	name: "data",
+	contents: ""
+}];
 const result = {
 	download_raw: Array(),
 	upload_raw: Array(),
@@ -210,9 +211,9 @@ class VodafoneSpeedtest extends utils.Adapter {
 		if (running != null)
 			return;
 		running = "upload";
-		data.data = "0";
+		data[0].contents = "0";
 		for (let i = 1; i < 1E7; i++) {
-			data.data += "0";
+			data[0].contents += "0";
 		}
 		bytes_loaded_last_section = 0;
 		bytes_loaded[0] = 0;
