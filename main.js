@@ -10,7 +10,7 @@ const utils = require("@iobroker/adapter-core");
 
 // Load your modules here, e.g.:
 //const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-const axios = require("axios").default;
+const { Curl } = require("node-libcurl");
 const querystring = require("querystring");
 const https = require("https");
 
@@ -229,21 +229,27 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 	pushData() {
 
-		axios({
-			method: "post",
-			url: "https://" + conf.server.testServers[0] + "/empty.txt",
-			data: data,
-			onUploadProgress: function (progressEvent) {
-				bytes_loaded[0] += progressEvent.loaded;
-				that.log.silly(JSON.stringify(progressEvent));
-			},
-		})
-			.then(function (response) {
-				that.log.silly(JSON.stringify(response));
-			})
-			.catch(function (error) {
-				that.log.silly(JSON.stringify(error));
-			});
+		const curl = new Curl();
+		curl.setOpt(Curl.option.URL, "https://" + conf.server.testServers[0] + "/empty.txt");
+		curl.setOpt(Curl.option.NOPROGRESS, false);
+		curl.setOpt(Curl.option.HTTPPOST, data);
+		curl.setProgressCallback((dltotal, dlnow, ultotal, ulnow) => {
+			bytes_loaded[0] += ulnow;
+			return 0;
+		});
+
+		curl.on("end", () => {
+			this.log.silly("Upload ended");
+			curl.close();
+			this.pushData();
+		});
+
+		curl.on("error", (error) => {
+			this.log.silly("Failed to download file" + JSON.stringify(error));
+			curl.close();
+		});
+
+		curl.perform();
 	}
 
 	init_sbc() {
@@ -305,6 +311,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		}
 		if (running == "upload") {
 			//bytesLoadedUntilNow += ((upload_xhr.socket !== "undefined") ? upload_xhr.socket.bytesWritten : 0);
+			bytesLoadedUntilNow += bytes_loaded[0];
 		}
 		that.log.silly(JSON.stringify(bytes_loaded));
 		that.log.silly(bytesLoadedUntilNow);
