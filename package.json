@@ -21,6 +21,7 @@
     "querystring": "^0.2.0"
   },
   "devDependencies": {
+    "@alcalzone/release-script": "^1.1.1",
     "@iobroker/testing": "^2.1.0",
     "@types/chai": "^4.2.11",
     "@types/chai-as-promised": "^7.1.2",
@@ -46,8 +47,9 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit",
     "test:integration": "mocha test/integration --exit",
-    "test": "npm run test:js && npm run test:package",
-    "lint": "eslint"
+    "test": "node node_modules/mocha/bin/mocha --exit",
+    "lint": "eslint",
+    "release": "release-script"
   },
   "bugs": {
     "url": "https://github.com/Peter Baumert/ioBroker.vodafone-speedtest/issues"
