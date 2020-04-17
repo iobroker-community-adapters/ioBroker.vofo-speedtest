@@ -227,8 +227,8 @@ class VodafoneSpeedtest extends utils.Adapter {
 		this.pushData();
 	}
 
-	pushData() {
-		const url = conf.server.testServers[0] + "/empty.txt";
+	pushData()  {
+		const url = "https://"+conf.server.testServers[0] + "/empty.txt";
 		bytes_loaded_push = 0;
 		upload_xhr.open("POST", url, !0);
 		upload_xhr.onerror = this.transferEnd;
