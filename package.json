@@ -18,7 +18,8 @@
   "dependencies": {
     "@iobroker/adapter-core": "^2.2.1",
     "querystring": "^0.2.0",
-    "xmlhttprequest": "^1.8.0"
+    "xmlhttprequest": "^1.8.0",
+    "axios": "^0.19.2"
   },
   "devDependencies": {
     "@iobroker/testing": "^2.1.0",
@@ -37,8 +38,8 @@
     "gulp": "^4.0.2",
     "mocha": "^7.1.1",
     "proxyquire": "^2.1.3",
-    "sinon-chai": "^3.5.0",
-    "sinon": "^8.1.1"
+    "sinon": "^8.1.1",
+    "sinon-chai": "^3.5.0"
   },
   "main": "main.js",
   "scripts": {
