@@ -62,7 +62,12 @@ jobs:
                   node-version: ${{ matrix.node-version }}
                   
             - name: Install libcurl4
+              if: startsWith(runner.OS, 'linux')
               run: sudo apt-get install libcurl4 libcurl4-openssl-dev
+
+            - name: Install curl
+              if: startsWith(runner.OS, 'macos')
+              run: brew install curl
 
             - name: Install Dependencies
               run: npm ci
