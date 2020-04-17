@@ -454,11 +454,11 @@ class VodafoneSpeedtest extends utils.Adapter {
 		});
 		this.create_state("Results.Last_Run", "Last_Run_Timestamp", new Date());
 
-		this.create_state("Results.download_MB", "download_MB", (result.download / 8));
-		this.create_state("Results.download_Mb", "download_Mb", result.download);
+		this.create_state("Results.download_MB", "download_MB", (result.download / 8 / 1000));
+		this.create_state("Results.download_Mb", "download_Mb", result.download / 1000);
 		
-		this.create_state("Results.upload_MB", "upload_MB", (result.upload / 8));
-		this.create_state("Results.upload_Mb", "upload_Mb", result.upload);
+		this.create_state("Results.upload_MB", "upload_MB", (result.upload / 8 / 1000));
+		this.create_state("Results.upload_Mb", "upload_Mb", result.upload / 1000);
 	}
 
 	stopDownloadTest() {
