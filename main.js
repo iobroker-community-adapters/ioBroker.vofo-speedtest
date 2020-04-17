@@ -299,7 +299,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			});
 		}
 		if (running == "upload") {
-			bytesLoadedUntilNow += ((upload_xhr.socket !== "undefined") ? upload_xhr.socket.bytesWritten : 0);
+			//bytesLoadedUntilNow += ((upload_xhr.socket !== "undefined") ? upload_xhr.socket.bytesWritten : 0);
 		}
 		that.log.silly(JSON.stringify(bytes_loaded));
 		that.log.silly(bytesLoadedUntilNow);
