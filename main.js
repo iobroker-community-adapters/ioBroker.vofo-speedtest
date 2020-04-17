@@ -227,24 +227,25 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 		timeStart = new Date();
 		timeSection = timeStart;
-		this.pushData();
+		this.pushData(0);
 	}
 
-	pushData() {
+	pushData(id) {
+		
 
 		const curl = new Curl();
 		curl.setOpt(Curl.option.URL, "https://" + conf.server.testServers[0] + "/empty.txt");
 		curl.setOpt(Curl.option.NOPROGRESS, false);
 		curl.setOpt(Curl.option.HTTPPOST, data);
 		curl.setProgressCallback((dltotal, dlnow, ultotal, ulnow) => {
-			bytes_loaded[0] += ulnow;
+			bytes_loaded[id] = ulnow;
 			return 0;
 		});
 
 		curl.on("end", () => {
 			this.log.silly("Upload ended");
 			curl.close();
-			this.pushData();
+			if (running == "upload") this.pushData(id+1);
 		});
 
 		curl.on("error", (error) => {
@@ -314,7 +315,9 @@ class VodafoneSpeedtest extends utils.Adapter {
 		}
 		if (running == "upload") {
 			//bytesLoadedUntilNow += ((upload_xhr.socket !== "undefined") ? upload_xhr.socket.bytesWritten : 0);
-			bytesLoadedUntilNow += bytes_loaded[0];
+			bytes_loaded.forEach(bl => {
+				bytesLoadedUntilNow += bl;
+			});
 		}
 		that.log.silly(JSON.stringify(bytes_loaded));
 		that.log.silly(bytesLoadedUntilNow);
@@ -494,7 +497,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			upload_streams[i].req.abort();
 		}
 		running = null;
-		data = "0";
+		data[0].contents = "";
 		that.result_from_arr(result.upload_raw, "upload", provider_upload, result.overall_time.upload, result.overall_bytes.upload);
 	}
 
