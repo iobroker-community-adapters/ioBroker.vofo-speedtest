@@ -10,7 +10,7 @@ const utils = require("@iobroker/adapter-core");
 
 // Load your modules here, e.g.:
 //const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-const axios = require("axios");
+const axios = require("axios").default;
 const querystring = require("querystring");
 const https = require("https");
 
@@ -235,9 +235,15 @@ class VodafoneSpeedtest extends utils.Adapter {
 			data: data,
 			onUploadProgress: function (progressEvent) {
 				bytes_loaded[0] += progressEvent.loaded;
-				this.log.silly(JSON.stringify(progressEvent));
+				that.log.silly(JSON.stringify(progressEvent));
 			},
-		});
+		})
+			.then(function (response) {
+				that.log.silly(JSON.stringify(response));
+			})
+			.catch(function (error) {
+				that.log.silly(JSON.stringify(error));
+			});
 	}
 
 	init_sbc() {
