@@ -60,7 +60,7 @@ const result = {
 };
 let stopHandler;
 
-const conf = JSON.parse('{"debug":false,"webench":[{"id":1,"url":"https://ref-large.system.info"},{"id":2,"url":"https://www.focus.de"},{"id":3,"url":"https://www.formel1.de"},{"id":4,"url":"https://www.chip.de"},{"id":5,"url":"https://www.wikipedia.org"}],"server":{"testServers":["speedtest-10g-ham-2.kabel-deutschland.de","speedtest-10g-fra-2.kabel-deutschland.de"],"pingServer":"https://speedtest-10g-ham-2.kabel-deutschland.de"}}');
+const conf = JSON.parse('{"debug":false,"webench":[{"id":1,"url":"https://ref-large.system.info"},{"id":2,"url":"https://www.focus.de"},{"id":3,"url":"https://www.formel1.de"},{"id":4,"url":"https://www.chip.de"},{"id":5,"url":"https://www.wikipedia.org"}],"server":{"testServers":["https://speedtest-10g-ham-2.kabel-deutschland.de","https://speedtest-10g-fra-2.kabel-deutschland.de"],"pingServer":"https://speedtest-10g-ham-2.kabel-deutschland.de"}}');
 
 
 class VodafoneSpeedtest extends utils.Adapter {
@@ -152,41 +152,33 @@ class VodafoneSpeedtest extends utils.Adapter {
 		if (running != null) return;
 		running = "download";
 		this.log.silly(conf.server.testServers);
+
 		conf.server.testServers.forEach(testServer => {
 			if (typeof bytes_loaded[testServer] == "undefined") { bytes_loaded[testServer] = []; }
 			for (let i = 0; i < num_download_streams; i++) {
 
 				bytes_loaded[testServer][i] = 0;
 
-				const options = {
-					hostname: testServer,
-					port: 443,
-					path: "/data.zero.bin.512M?" + Math.random(),
-					method: "GET",
-					rejectUnauthorized: false,
-					resolveWithFullResponse: true,
-				};
-
-				const req = https.request(options, res => {
-					res.on("data", d => {
-						//that.log.silly("evt: " + JSON.stringify(d));
-						bytes_loaded[testServer][i] += Buffer.byteLength(d, "utf8");
-					});
-					res.on("end", () => {
-					});
+				const curl = new Curl();
+				curl.setOpt(Curl.option.URL, testServer + "/data.zero.bin.512M?" + Math.random());
+				curl.setOpt(Curl.option.NOPROGRESS, false);
+				curl.setProgressCallback((dltotal, dlnow) => {
+					bytes_loaded[testServer][i] = dlnow;
+					return 0;
 				});
-
-				req.on("error", e => {
-					this.log.error("startDownload error: " + JSON.stringify(e));
+		
+				curl.on("end", () => {
+					that.log.silly("Download ended");
+					curl.close();
 				});
-
-				req.on("abort", e => {
-					this.log.error("startDownload abort: " + JSON.stringify(e));
+		
+				curl.on("error", (error) => {
+					that.log.silly("Failed to download file" + JSON.stringify(error));
+					curl.close();
 				});
-
+		
 				const downloadStream = {
-					options: options,
-					req: req
+					req: curl
 				};
 				download_streams.push(downloadStream);
 				//this.log.silly("starDownload: " + JSON.stringify(downloadStream));
@@ -203,7 +195,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		timeStart = new Date();
 		timeSection = timeStart;
 		for (let k = 0; k < download_streams.length; k++) {
-			download_streams[k].req.end();
+			download_streams[k].req.perform();
 		}
 	}
 
@@ -231,8 +223,6 @@ class VodafoneSpeedtest extends utils.Adapter {
 	}
 
 	pushData(id) {
-		
-
 		const curl = new Curl();
 		curl.setOpt(Curl.option.URL, "https://" + conf.server.testServers[0] + "/empty.txt");
 		curl.setOpt(Curl.option.NOPROGRESS, false);
@@ -245,11 +235,11 @@ class VodafoneSpeedtest extends utils.Adapter {
 		curl.on("end", () => {
 			this.log.silly("Upload ended");
 			curl.close();
-			if (running == "upload") this.pushData(id+1);
+			if (running == "upload") this.pushData(id + 1);
 		});
 
 		curl.on("error", (error) => {
-			this.log.silly("Failed to download file" + JSON.stringify(error));
+			this.log.silly("Failed to upload file" + JSON.stringify(error));
 			curl.close();
 		});
 
@@ -484,7 +474,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		stopHandler && clearTimeout(stopHandler);
 		stopHandler = null;
 		for (let i = 0; i < download_streams.length; i++) {
-			download_streams[i].req.abort();
+			download_streams[i].req.close();
 		}
 		running = null;
 		that.result_from_arr(result.download_raw, "download", provider_download, result.overall_time.download, result.overall_bytes.download);
