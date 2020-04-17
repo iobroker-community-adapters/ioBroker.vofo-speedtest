@@ -27,7 +27,6 @@ const ping_time = 8;
 const bytes_loaded = [];
 const download_streams = [];
 const upload_streams = [];
-const upload_xhr = new XMLHttpRequest();
 let bytes_loaded_last_section = 0;
 let bytes_loaded_push = 0;
 let running = null;
@@ -235,6 +234,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			url: "https://" + conf.server.testServers[0] + "/empty.txt",
 			data: data,
 			onUploadProgress: function (progressEvent) {
+				bytes_loaded[0] += progressEvent.loaded;
 				this.log.silly(JSON.stringify(progressEvent));
 			},
 		});
