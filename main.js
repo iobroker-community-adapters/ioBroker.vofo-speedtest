@@ -170,17 +170,14 @@ class VodafoneSpeedtest extends utils.Adapter {
 						bytes_loaded[testServer][i] += Buffer.byteLength(d, "utf8");
 					});
 					res.on("end", () => {
-						that.transferEnd();
 					});
 				});
 
 				req.on("error", e => {
-					that.transferEnd();
 					this.log.error("startDownload error: " + JSON.stringify(e));
 				});
 
 				req.on("abort", e => {
-					that.transferEnd();
 					this.log.error("startDownload abort: " + JSON.stringify(e));
 				});
 
@@ -231,53 +228,22 @@ class VodafoneSpeedtest extends utils.Adapter {
 	}
 
 	pushData() {
-		if (running != "upload")
-			return;
-
-		const options = {
-			hostname: conf.server.testServers[0],
-			port: 443,
-			path: "/empty.txt",
-			method: "POST",
-			rejectUnauthorized: false,
-			resolveWithFullResponse: true,
-			headers: {
-				"Content-Type": "text/plain;charset=UTF-8",
-				"Content-Length": Buffer.byteLength(data, "utf8")
-			}
-		};
-
-		const req = https.request(options, res => {
-			res.on("end", () => {
-				that.transferEnd();
-				that.pushData();
-			});
-		});
-		
-		req.on("error", e => {
-			that.transferEnd();
+		const url = conf.server.testServers[0] + "/empty.txt";
+		bytes_loaded_push = 0;
+		upload_xhr.open("POST", url, !0);
+		upload_xhr.onerror = this.transferEnd;
+		upload_xhr.onabort = this.transferEnd;
+		upload_xhr.onload = function () {
+			bytes_loaded[0] += bytes_loaded_push;
+			bytes_loaded_push = 0;
 			that.pushData();
-			// @ts-ignore
-			if (e.code != "HPE_UNEXPECTED_CONTENT_LENGTH") {
-				that.log.error("startUpload error: " + JSON.stringify(e));
-			}
-		});
-
-		req.on("abort", e => {
-			that.transferEnd();
-			that.log.error("startUpload abort: " + JSON.stringify(e));
-		});
-
-		const uploadStream = {
-			options: options,
-			req: req,
-			bwb: ((req.socket != null) ? req.socket.bytesWritten : 0)
 		};
-		upload_streams.push(uploadStream);
-		
-		req.end(data);
-		//this.log.silly(JSON.stringify(req.getHeaders()));
-		//this.log.silly("pushData: " + JSON.stringify(options));
+		upload_xhr.contentType = "application/octet-stream";
+		upload_xhr.responseType = "blob";
+		upload_xhr.upload.onprogress = function (evt) {
+			bytes_loaded_push = evt.loaded;
+		};
+		upload_xhr.send(data);
 	}
 
 	init_sbc() {
