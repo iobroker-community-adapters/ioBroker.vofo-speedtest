@@ -170,17 +170,17 @@ class VodafoneSpeedtest extends utils.Adapter {
 						bytes_loaded[testServer][i] += Buffer.byteLength(d, "utf8");
 					});
 					res.on("end", () => {
-						that.transferEnd;
+						that.transferEnd();
 					});
 				});
 
 				req.on("error", e => {
-					that.transferEnd;
+					that.transferEnd();
 					this.log.error("startDownload error: " + JSON.stringify(e));
 				});
 
 				req.on("abort", e => {
-					that.transferEnd;
+					that.transferEnd();
 					this.log.error("startDownload abort: " + JSON.stringify(e));
 				});
 
@@ -249,13 +249,13 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 		const req = https.request(options, res => {
 			res.on("end", () => {
-				that.transferEnd;
+				that.transferEnd();
 				that.pushData();
 			});
 		});
 		
 		req.on("error", e => {
-			that.transferEnd;
+			that.transferEnd();
 			that.pushData();
 			// @ts-ignore
 			if (e.code != "HPE_UNEXPECTED_CONTENT_LENGTH") {
@@ -264,7 +264,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		});
 
 		req.on("abort", e => {
-			that.transferEnd;
+			that.transferEnd();
 			that.log.error("startUpload abort: " + JSON.stringify(e));
 		});
 
