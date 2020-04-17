@@ -62,7 +62,7 @@ jobs:
                   node-version: ${{ matrix.node-version }}
                   
             - name: Install libcurl4
-              run: sudo apt-get install libcurl4
+              run: sudo apt-get install libcurl4 libcurl4-openssl-dev
 
             - name: Install Dependencies
               run: npm ci
