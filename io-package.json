@@ -1,75 +1,87 @@
 {
-	"common": {
-		"name": "vodafone-speedtest",
-		"version": "0.0.1",
-		"news": {
-			"0.0.1": {
-				"en": "initial release",
-				"de": "Erstveröffentlichung",
-				"ru": "Начальная версия",
-				"pt": "lançamento inicial",
-				"nl": "Eerste uitgave",
-				"fr": "Première version",
-				"it": "Versione iniziale",
-				"es": "Versión inicial",
-				"pl": "Pierwsze wydanie",
-				"zh-cn": "首次出版"
-			}
-		},
-		"title": "Vodafone Speedtest",
-		"titleLang": {
-			"en": "Vodafone Speedtest",
-			"de": "Vodafone Speedtest",
-			"ru": "Vodafone Speedtest",
-			"pt": "Vodafone Speedtest",
-			"nl": "Vodafone Speedtest",
-			"fr": "Vodafone Speedtest",
-			"it": "Vodafone Speedtest",
-			"es": "Vodafone Speedtest",
-			"pl": "Vodafone Speedtest",
-			"zh-cn": "沃达丰速度测试"
-		},
-		"desc": {
-			"en": "Speedtest of Vodafone.de",
-			"de": "Speedtest von Vodafone.de",
-			"ru": "Speedtest of Vodafone.de",
-			"pt": "Speedtest da Vodafone.de",
-			"nl": "Speedtest van Vodafone.de",
-			"fr": "Speedtest de Vodafone.de",
-			"it": "Speedtest di Vodafone.de",
-			"es": "Speedtest de Vodafone.de",
-			"pl": "Speedtest of Vodafone.de",
-			"zh-cn": "Vodafone.de的速度测试"
-		},
-		"authors": [
-			"Peter Baumert <muh@kuh.de>"
-		],
-		"keywords": [
-			"speedtest speed bandwidth"
-		],
-		"license": "MIT",
-		"platform": "Javascript/Node.js",
-		"main": "main.js",
-		"icon": "vodafone-speedtest.png",
-		"enabled": true,
-		"extIcon": "https://raw.githubusercontent.com/Peter Baumert/ioBroker.vodafone-speedtest/master/admin/vodafone-speedtest.png",
-		"readme": "https://github.com/Peter Baumert/ioBroker.vodafone-speedtest/blob/master/README.md",
-		"loglevel": "info",
-		"mode": "daemon",
-		"type": "network",
-		"compact": true,
-		"connectionType": "cloud",
-		"dataSource": "poll",
-		"materialize": true,
-		"dependencies": [
-			{
-				"js-controller": ">=1.4.2"
-			}
-		]
-	},
-	"native": {
-		"interval": 30
-	},
-	"objects": [],
-	"instanceObjects": []
+    "common": {
+        "name": "vodafone-speedtest",
+        "version": "0.0.2",
+        "news": {
+            "0.0.2": {
+                "en": "* (Peter Baumert) initial release\r\n\r\n## License\r\nMIT License\r\n\r\nCopyright (c) 2020 Peter Baumert <muh@kuh.de>\r\n\r\nPermission is hereby granted, free of charge, to any person obtaining a copy\r\nof this software and associated documentation files (the \"Software\"), to deal\r\nin the Software without restriction, including without limitation the rights\r\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\r\ncopies of the Software, and to permit persons to whom the Software is\r\nfurnished to do so, subject to the following conditions:\r\n\r\nThe above copyright notice and this permission notice shall be included in all\r\ncopies or substantial portions of the Software.\r\n\r\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\r\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\r\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\r\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\r\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\r\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\r\nSOFTWARE.",
+                "de": "* (Peter Baumert) Erstveröffentlichung\r\n\r\n## Lizenz\r\nMIT-Lizenz\r\n\r\nCopyright (c) 2020 Peter Baumert <muh@kuh.de>\r\n\r\nHiermit wird jeder Person, die eine Kopie erhält, kostenlos die Erlaubnis erteilt\r\ndieser Software und der dazugehörigen Dokumentationsdateien (die \"Software\") zu behandeln\r\nin der Software ohne Einschränkung, einschließlich ohne Einschränkung der Rechte\r\nzu verwenden, zu kopieren, zu ändern, zusammenzuführen, zu veröffentlichen, zu verteilen, Unterlizenzen zu vergeben und / oder zu verkaufen\r\nKopien der Software und um Personen zuzulassen, für die die Software bestimmt ist\r\ndafür eingerichtet, unter folgenden Bedingungen:\r\n\r\nDer oben genannte Copyright-Hinweis und dieser Erlaubnishinweis sind in allen enthalten\r\nKopien oder wesentliche Teile der Software.\r\n\r\nDIE SOFTWARE WIRD \"WIE BESEHEN\" OHNE JEGLICHE AUSDRÜCKLICHE ODER AUSDRÜCKLICHE GEWÄHRLEISTUNG ZUR VERFÜGUNG GESTELLT\r\nSTILLSCHWEIGEND, EINSCHLIESSLICH, ABER NICHT BESCHRÄNKT AUF DIE GARANTIEN DER MARKTGÄNGIGKEIT,\r\nEIGNUNG FÜR EINEN BESTIMMTEN ZWECK UND NICHTVERLETZUNG. In keinem Fall wird das\r\nAUTOREN ODER COPYRIGHT-INHABER HAFTEN FÜR ANSPRÜCHE, SCHÄDEN ODER ANDERE\r\nHAFTUNG, OB BEI VERTRAGS-, TORT- ODER ANDERWEITIGEN MASSNAHMEN AUS,\r\nAUS ODER IM ZUSAMMENHANG MIT DER SOFTWARE ODER DER NUTZUNG ODER ANDEREN HANDELN IN DER\r\nSOFTWARE.",
+                "ru": "* (Питер Баумерт) первый выпуск\r\n\r\n## Лицензия\r\nЛицензия MIT\r\n\r\nCopyright (c) 2020 Питер Баумерт <muh@kuh.de>\r\n\r\nТаким образом, разрешение предоставляется бесплатно любому лицу, получающему копию\r\nэтого программного обеспечения и связанных с ним файлов документации («Программное обеспечение»), чтобы иметь дело\r\nв Программном обеспечении без ограничений, в том числе без ограничения прав\r\nиспользовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и / или продавать\r\nкопии Программного обеспечения, а также разрешать лицам, которым\r\nпредоставлены для этого при соблюдении следующих условий:\r\n\r\nВышеуказанное уведомление об авторских правах и это уведомление о разрешении должны быть включены во все\r\nкопии или существенные части Программного обеспечения.\r\n\r\nПРОГРАММНОЕ ОБЕСПЕЧЕНИЕ ПРЕДОСТАВЛЯЕТСЯ «КАК ЕСТЬ», БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ, ЯВНЫХ ИЛИ ЯВНЫХ\r\nПОДРАЗУМЕВАЕМЫЙ, ВКЛЮЧАЯ, НО НЕ ОГРАНИЧИВАЯСЬ ГАРАНТИЙ ТОВАРНОГО ОБЕСПЕЧЕНИЯ,\r\nФИТНЕС ДЛЯ ОСОБЫХ ЦЕЛЕЙ И НЕФРИФРИНГЕНТОВ. НИ В КОЕМ СЛУЧАЕ\r\nАВТОРЫ ИЛИ АВТОРСКИЕ ПРАВ ЧЕЛОВЕКА НЕСУТ ОТВЕТСТВЕННОСТЬ ЗА ЛЮБОЙ ТРЕБОВАНИЕ, УЩЕРБ ИЛИ ДРУГОЕ\r\nОТВЕТСТВЕННОСТЬ, ДЕЙСТВУЮЩАЯ ЛИ В ДЕЙСТВИИ С ДОГОВОРОМ, ИСПЫТАНИЕМ ИЛИ ИНЫМ ОБРАЗОМ, возникающим из\r\nИЛИ ИЛИ В СВЯЗИ С ПРОГРАММНЫМ ОБЕСПЕЧЕНИЕМ ИЛИ ИСПОЛЬЗОВАНИЕМ ИЛИ ДРУГИМИ СДЕЛКАМИ В\r\nПРОГРАММНОГО ОБЕСПЕЧЕНИЯ.",
+                "pt": "* Lançamento inicial (Peter Baumert)\r\n\r\n## Licença\r\nLicença MIT\r\n\r\nDireitos autorais (c) 2020 Peter Baumert <muh@kuh.de>\r\n\r\nÉ concedida permissão, gratuitamente, a qualquer pessoa que obtenha uma cópia\r\ndeste software e arquivos de documentação associados (o \"Software\"), para lidar\r\nno Software sem restrição, incluindo, sem limitação, os direitos\r\nusar, copiar, modificar, mesclar, publicar, distribuir, sublicenciar e / ou vender\r\ncópias do Software e permitir pessoas a quem o Software está\r\nmobilado para fazê-lo, sujeito às seguintes condições:\r\n\r\nO aviso de direitos autorais acima e este aviso de permissão devem ser incluídos em todos\r\ncópias ou partes substanciais do Software.\r\n\r\nO SOFTWARE É FORNECIDO \"TAL COMO ESTÁ\", SEM GARANTIA DE QUALQUER TIPO, EXPRESSA OU\r\nIMPLÍCITA, INCLUINDO MAS NÃO SE LIMITANDO A GARANTIAS DE COMERCIALIZAÇÃO,\r\nAPTIDÃO PARA UM OBJETIVO ESPECÍFICO E NÃO INFRACÇÃO. EM NENHUM CASO A\r\nAUTORES OU TITULARES DE DIREITOS AUTORAIS SÃO RESPONSÁVEIS POR QUALQUER REIVINDICAÇÃO, DANOS OU OUTROS\r\nRESPONSABILIDADE, SEJA EM AÇÃO DE CONTRATO, TORT OU DE OUTRA FORMA, DECORRENTE DE,\r\nFORA OU EM CONEXÃO COM O SOFTWARE OU O USO OU OUTROS NEGÓCIOS NO\r\nPROGRAMAS.",
+                "nl": "* (Peter Baumert) eerste release\r\n\r\n## Licentie\r\nMIT-licentie\r\n\r\nCopyright (c) 2020 Peter Baumert <muh@kuh.de>\r\n\r\nHierbij wordt kosteloos toestemming verleend aan eenieder die een kopie verkrijgt\r\nvan deze software en bijbehorende documentatiebestanden (de \"Software\") om te behandelen\r\nin de Software zonder beperking, inclusief maar niet beperkt tot de rechten\r\ngebruiken, kopiëren, wijzigen, samenvoegen, publiceren, distribueren, in sublicentie geven en / of verkopen\r\nkopieën van de Software en om personen toe te staan aan wie de Software is\r\ndaartoe ingericht, onder de volgende voorwaarden:\r\n\r\nDe bovenstaande copyrightkennisgeving en deze toestemmingskennisgeving zullen in alles worden opgenomen\r\nkopieën of substantiële delen van de software.\r\n\r\nDE SOFTWARE WORDT GELEVERD \"AS IS\", ZONDER ENIGE GARANTIE, EXPLICIET OF\r\nIMPLICIET, INCLUSIEF MAAR NIET BEPERKT TOT DE GARANTIES VAN VERKOOPBAARHEID,\r\nGESCHIKTHEID VOOR EEN BEPAALD DOEL EN NIET-INBREUK. IN GEEN GEVAL ZAL DE\r\nAUTEURS OF AUTEURSRECHTHOUDERS ZIJN AANSPRAKELIJK VOOR ENIGE CLAIM, SCHADE OF ANDERE\r\nAANSPRAKELIJKHEID, OF IN EEN HANDEL VAN CONTRACT, ONMIDDELLIJK OF ANDERSZINS VOORTVLOEIT UIT,\r\nUIT OF IN VERBAND MET DE SOFTWARE OF HET GEBRUIK OF ANDERE DEALINGS IN DE\r\nSOFTWARE.",
+                "fr": "* (Peter Baumert) version initiale\r\n\r\n## Licence\r\nLicence MIT\r\n\r\nCopyright (c) 2020 Peter Baumert <muh@kuh.de>\r\n\r\nLa permission est accordée, sans frais, à toute personne obtenant une copie\r\nde ce logiciel et des fichiers de documentation associés (le \"Logiciel\"), pour traiter\r\ndans le Logiciel sans restriction, y compris sans limitation les droits\r\nutiliser, copier, modifier, fusionner, publier, distribuer, sous-licencier et / ou vendre\r\ndes copies du Logiciel et pour permettre aux personnes à qui le Logiciel est\r\nfourni à cet effet, sous réserve des conditions suivantes:\r\n\r\nL'avis de droit d'auteur ci-dessus et cet avis d'autorisation doivent être inclus dans tous les\r\ncopies ou parties substantielles du Logiciel.\r\n\r\nLE LOGICIEL EST FOURNI \"TEL QUEL\", SANS GARANTIE D'AUCUNE SORTE, EXPRESSE OU\r\nIMPLICITE, Y COMPRIS, MAIS SANS S'Y LIMITER, LES GARANTIES DE QUALITÉ MARCHANDE,\r\nADAPTATION À UN USAGE PARTICULIER ET NON-CONTREFAÇON. EN AUCUN CAS, LE\r\nLES AUTEURS OU LES DÉTENTEURS DE DROITS D'AUTEUR SONT RESPONSABLES DE TOUTES RÉCLAMATIONS, DOMMAGES OU AUTRES\r\nRESPONSABILITÉ, QUE CE SOIT DANS UNE ACTION DE CONTRAT, TORT OU AUTRE, DÉCOULANT DE,\r\nHORS OU EN LIEN AVEC LE LOGICIEL OU L'UTILISATION OU AUTRES OPÉRATIONS DANS LE\r\nLOGICIEL.",
+                "it": "* (Peter Baumert) versione iniziale\r\n\r\n## Licenza\r\nLicenza MIT\r\n\r\nCopyright (c) 2020 Peter Baumert <muh@kuh.de>\r\n\r\nL'autorizzazione è concessa, gratuitamente, a chiunque ne ottenga una copia\r\ndi questo software e file di documentazione associati (il \"Software\"), da trattare\r\nnel Software senza restrizioni, compresi senza limitazione i diritti\r\nper utilizzare, copiare, modificare, unire, pubblicare, distribuire, concedere in licenza e / o vendere\r\ncopie del Software e per consentire alle persone a cui si riferisce il Software\r\nfornito a tal fine, fatte salve le seguenti condizioni:\r\n\r\nLa suddetta nota sul copyright e questa nota di autorizzazione devono essere incluse in tutto\r\ncopie o parti sostanziali del software.\r\n\r\nIL SOFTWARE È FORNITO \"COSÌ COM'È\", SENZA ALCUN TIPO DI GARANZIA, ESPRESSA O\r\nIMPLICITO, COMPRESO MA NON LIMITATO ALLE GARANZIE DI COMMERCIABILITÀ,\r\nIDONEITÀ A UNO SCOPO PARTICOLARE E NON VIOLAZIONE. IN NESSUN CASO IL\r\nAUTORI O TITOLARI DEL COPYRIGHT SONO RESPONSABILI DI QUALSIASI RECLAMO, DANNI O ALTRO\r\nRESPONSABILITÀ, SE IN AZIONE DI CONTRATTO, TORT O ALTRO, DERIVANTE DA,\r\nFUORI O IN CONNESSIONE CON IL SOFTWARE O L'UTILIZZO O ALTRE OFFERTE NEL\r\nSOFTWARE.",
+                "es": "* (Peter Baumert) lanzamiento inicial\r\n\r\n## Licencia\r\nLicencia MIT\r\n\r\nCopyright (c) 2020 Peter Baumert <muh@kuh.de>\r\n\r\nPor la presente se otorga permiso, sin cargo, a cualquier persona que obtenga una copia\r\nde este software y los archivos de documentación asociados (el \"Software\"), para tratar\r\nen el Software sin restricción, incluidos, entre otros, los derechos\r\npara usar, copiar, modificar, fusionar, publicar, distribuir, sublicenciar y / o vender\r\ncopias del Software y para permitir a las personas a quienes pertenece el Software\r\namueblado para hacerlo, sujeto a las siguientes condiciones:\r\n\r\nEl aviso de copyright anterior y este aviso de permiso se incluirán en todos\r\ncopias o porciones sustanciales del Software.\r\n\r\nEL SOFTWARE SE PROPORCIONA \"TAL CUAL\", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O\r\nIMPLÍCITO, INCLUYENDO PERO NO LIMITADO A LAS GARANTÍAS DE COMERCIABILIDAD,\r\nAPTITUD PARA UN PROPÓSITO PARTICULAR Y NO INFRACCIÓN. EN NINGÚN CASO EL\r\nLOS AUTORES O LOS TITULARES DE LOS DERECHOS DE AUTOR SERÁN RESPONSABLES POR CUALQUIER RECLAMACIÓN, DAÑO U OTRO\r\nRESPONSABILIDAD, EN CASO DE ACCIÓN DE CONTRATO, TORTURA O DE OTRA MANERA, DERIVADA DE,\r\nFUERA DE O EN CONEXIÓN CON EL SOFTWARE O EL USO U OTRAS OFERTAS EN EL\r\nSOFTWARE.",
+                "pl": "* (Peter Baumert) pierwsze wydanie\r\n\r\nLicencja ##\r\nLicencja MIT\r\n\r\nCopyright (c) 2020 Peter Baumert <muh@kuh.de>\r\n\r\nNiniejszym udziela się bezpłatnie każdej osobie otrzymującej kopię\r\ntego oprogramowania i powiązanych plików dokumentacji („Oprogramowanie”), do czynienia\r\nw Oprogramowaniu bez ograniczeń, w tym bez ograniczeń praw\r\nużywać, kopiować, modyfikować, łączyć, publikować, dystrybuować, udzielać sublicencji i / lub sprzedawać\r\nkopie Oprogramowania oraz w celu umożliwienia osobom, dla których Oprogramowanie jest\r\ndostarczone w tym celu, z zastrzeżeniem następujących warunków:\r\n\r\nPowyższe powiadomienie o prawach autorskich i niniejsze powiadomienie o pozwoleniu będą zawarte we wszystkich\r\nkopie lub znaczne części oprogramowania.\r\n\r\nOPROGRAMOWANIE JEST DOSTARCZANE „W STANIE, W JAKIM JEST”, BEZ ŻADNEJ GWARANCJI, WYRAŹNEJ LUB\r\nDOROZUMIANE, W TYM ALE NIE OGRANICZONE DO GWARANCJI PRZYDATNOŚCI HANDLOWEJ,\r\nPRZYDATNOŚĆ DO KONKRETNEGO CELU I NIENARUSZANIA PRAW. W ŻADNYM WYPADKU\r\nAUTORZY LUB POSIADACZE PRAW AUTORSKICH PONOSZĄ ODPOWIEDZIALNOŚĆ ZA JAKIEKOLWIEK ROSZCZENIE, SZKODY LUB INNE\r\nODPOWIEDZIALNOŚĆ, NAWET W DZIAŁANIU UMOWY, TORTU LUB W INNY SPOSÓB, WYNIKAJĄCEGO Z,\r\nPOZA LUB W ZWIĄZKU Z OPROGRAMOWANIEM LUB UŻYTKOWANIEM LUB INNYMI DOSTĘPAMI W\r\nOPROGRAMOWANIE.",
+                "zh-cn": "*（Peter Baumert）初始版本\r\n\r\n＃＃ 执照\r\n麻省理工学院执照\r\n\r\n版权所有（c）2020 Peter Baumert <muh@kuh.de>\r\n\r\n特此授予获得副本的任何人免费的许可\r\n软件和相关文档文件（以下简称“软件”）的交易\r\n在软件中不受限制，包括但不限于权利\r\n使用，复制，修改，合并，发布，分发，再许可和/或出售\r\n本软件的副本，并允许本软件所针对的人\r\n具备以下条件：\r\n\r\n上述版权声明和此许可声明应包含在所有\r\n软件的副本或实质性部分。\r\n\r\n本软件按“原样”提供，没有任何形式的明示或明示担保。\r\n暗示（包括但不限于对适销性的保证），\r\n适用于特定目的和非侵权。在任何情况下都不会\r\n作者或版权持有人对任何索赔，损害或其他责任\r\n无论是由于合同，侵权或其他原因而引起的责任，\r\n与软件或软件的使用或其他处理无关或与之有关\r\n软件。"
+            },
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "Vodafone Speedtest",
+        "titleLang": {
+            "en": "Vodafone Speedtest",
+            "de": "Vodafone Speedtest",
+            "ru": "Vodafone Speedtest",
+            "pt": "Vodafone Speedtest",
+            "nl": "Vodafone Speedtest",
+            "fr": "Vodafone Speedtest",
+            "it": "Vodafone Speedtest",
+            "es": "Vodafone Speedtest",
+            "pl": "Vodafone Speedtest",
+            "zh-cn": "沃达丰速度测试"
+        },
+        "desc": {
+            "en": "Speedtest of Vodafone.de",
+            "de": "Speedtest von Vodafone.de",
+            "ru": "Speedtest of Vodafone.de",
+            "pt": "Speedtest da Vodafone.de",
+            "nl": "Speedtest van Vodafone.de",
+            "fr": "Speedtest de Vodafone.de",
+            "it": "Speedtest di Vodafone.de",
+            "es": "Speedtest de Vodafone.de",
+            "pl": "Speedtest of Vodafone.de",
+            "zh-cn": "Vodafone.de的速度测试"
+        },
+        "authors": [
+            "Peter Baumert <muh@kuh.de>"
+        ],
+        "keywords": [
+            "speedtest speed bandwidth"
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "main.js",
+        "icon": "vodafone-speedtest.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/Peter Baumert/ioBroker.vodafone-speedtest/master/admin/vodafone-speedtest.png",
+        "readme": "https://github.com/Peter Baumert/ioBroker.vodafone-speedtest/blob/master/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "network",
+        "compact": true,
+        "connectionType": "cloud",
+        "dataSource": "poll",
+        "materialize": true,
+        "dependencies": [
+            {
+                "js-controller": ">=1.4.2"
+            }
+        ]
+    },
+    "native": {
+        "interval": 30
+    },
+    "objects": [],
+    "instanceObjects": []
 }
