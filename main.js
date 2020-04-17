@@ -13,35 +13,32 @@ const utils = require("@iobroker/adapter-core");
 const { Curl } = require("node-libcurl");
 const querystring = require("querystring");
 const https = require("https");
+const state_attr = require(__dirname + "/lib/state_attr.js");
 
 let that = null;
 
 const num_download_streams = 6;
-const download_time = 10;
+let download_time = 10;
 const download_interval_time = 750;
 const upload_time = 12;
 const upload_interval_time = 750;
 const ping_interval_time = 1000;
-const webench_time = 30;
 const ping_time = 8;
 const bytes_loaded = [];
 const download_streams = [];
 const upload_streams = [];
 let bytes_loaded_last_section = 0;
-let bytes_loaded_push = 0;
 let running = null;
 let timeSection = null;
 let timeStart = null;
-let timeEnd = null;
-let remote_port = null;
+let retry_download = !1;
+const remote_port = null;
 let provider_download = 0;
 let provider_upload = 0;
-let currentSpeedtestId = null;
-let is_umCustomer = !1;
-let isp = null;
 let initiating = false;
 let init_done = !1;
-let data = [{
+let timer;
+const data = [{
 	name: "data",
 	contents: ""
 }];
@@ -74,9 +71,6 @@ class VodafoneSpeedtest extends utils.Adapter {
 			name: "vodafone-speedtest",
 		});
 		this.on("ready", this.onReady.bind(this));
-		this.on("objectChange", this.onObjectChange.bind(this));
-		this.on("stateChange", this.onStateChange.bind(this));
-		// this.on("message", this.onMessage.bind(this));
 		this.on("unload", this.onUnload.bind(this));
 	}
 
@@ -96,45 +90,23 @@ class VodafoneSpeedtest extends utils.Adapter {
 	onUnload(callback) {
 		try {
 			this.log.info("cleaned everything up...");
+			if (typeof stopHandler === "number") {
+				clearTimeout(stopHandler);
+				stopHandler = null;
+			}
+			if (typeof timer === "number") {
+				clearTimeout(timer);
+				timer = null;
+			}
 			callback();
 		} catch (e) {
 			callback();
 		}
 	}
 
-	/**
-	 * Is called if a subscribed object changes
-	 * @param {string} id
-	 * @param {ioBroker.Object | null | undefined} obj
-	 */
-	onObjectChange(id, obj) {
-		if (obj) {
-			// The object was changed
-			this.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
-		} else {
-			// The object was deconsted
-			this.log.info(`object ${id} deconsted`);
-		}
-	}
-
-	/**
-	 * Is called if a subscribed state changes
-	 * @param {string} id
-	 * @param {ioBroker.State | null | undefined} state
-	 */
-	onStateChange(id, state) {
-		if (state) {
-			// The state was changed
-			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-		} else {
-			// The state was deconsted
-			this.log.info(`state ${id} deconsted`);
-		}
-	}
-
 	updateData() {
 		this.doSpeedtest();
-		//this.timer = setTimeout(() => this.updateData(), this.config.interval * 60000);
+		timer = setTimeout(() => this.updateData(), this.config.interval * 60000);
 	}
 
 	doSpeedtest() {
@@ -182,7 +154,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 				};
 				*/
 				const options = {
-					hostname: testServer.replace("https://",""),
+					hostname: testServer.replace("https://", ""),
 					port: 443,
 					path: "/data.zero.bin.512M?" + Math.random(),
 					method: "GET",
@@ -218,7 +190,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 		this.interval(this.transferEnd, download_interval_time, this.intervalRoundTrips(download_time, download_interval_time));
 		if (typeof stopHandler === "number") {
-			console.debug("resetting Timeout download");
+			this.log.debug("resetting Timeout download");
 			clearTimeout(stopHandler);
 			stopHandler = null;
 		}
@@ -303,9 +275,19 @@ class VodafoneSpeedtest extends utils.Adapter {
 					const args = JSON.parse(data);
 					provider_download = args.downstreamSpeed;
 					provider_upload = args.upstreamSpeed;
-					currentSpeedtestId = args.speedtestId;
-					is_umCustomer = args.isCustomer;
-					isp = args.isp;
+					this.create_state("modem", "modem");
+					this.create_state("modem.vendor", "vendor", args.vendor);
+					this.create_state("modem.code", "code", args.modemType.code);
+					this.create_state("modem.name", "name", args.modemType.name);
+					this.create_state("modem.text", "text", args.modemType.text);
+					this.create_state("isCustomer", "isCustomer", args.isCustomer);
+					this.create_state("isp", "isp", args.isp);
+					this.create_state("ip", "ip", args.clientIp);
+					this.create_state("ipCountry", "ipCountry", args.ipCountry);
+					this.create_state("downstreamSpeed", "downstreamSpeed", args.downstreamSpeed);
+					this.create_state("upstreamSpeed", "upstreamSpeed", args.upstreamSpeed);
+					this.create_state("downstreamBooked", "downstreamBooked", args.downstreamBooked);
+					this.create_state("upstreamBooked", "upstreamBooked", args.upstreamBooked);
 					init_done = !0;
 					initiating = false;
 					this.log.debug("SBC-Init (Success):" + JSON.stringify(args));
@@ -430,17 +412,21 @@ class VodafoneSpeedtest extends utils.Adapter {
 						case "download":
 							result.download = args.value;
 							if (parseInt(args.value, 10) == 0) {
-								if (false /*_$.retry.download == !1*/) {
-									/*this.log.debug('second download test');
-									retry.download = !0;
+								if (retry_download == !1) {
+									that.log.debug("second download test");
+									retry_download = !0;
 									download_time = 5;
-									startDownload()*/
+									that.startDownload();
 								} else {
-									this.log.debug("retry error");
+									that.log.error("retry error");
 								}
 							} else {
 								setTimeout(() => this.run("upload"), 500);
 							}
+							break;
+						case "upload":
+							result.upload = args.value;
+							this.writeResult();
 							break;
 					}
 					this.log.debug("result:" + JSON.stringify(args));
@@ -456,50 +442,23 @@ class VodafoneSpeedtest extends utils.Adapter {
 		req.write(data);
 		req.end();
 		this.log.silly("result start:" + JSON.stringify(data));
+	}
 
-		/*success: function (args) {
-			switch (args.type) {
-				case 'download':
-					_$.result.download = args.value;
-					if (parseInt(args.value, 10) == 0) {
-						if (_$.retry.download == !1) {
-							_$.log('second download test');
-							_$.retry.download = !0;
-							download_time = 5;
-							_$.startDownload()
-						} else {
-							_$.config.callback_error(500)
-						}
-					} else {
-						_$.config.callback_progress('download_finished', _$.result.download);
-						window.setTimeout(function () {
-							_$.run('upload')
-						}, 500)
-					}
-					break;
-				case 'upload':
-					_$.result.upload = args.value;
-					_$.config.callback_progress('upload_finished', _$.result.upload);
-					window.setTimeout(function () {
-						_$.run('ping')
-					}, 500);
-					break;
-				case 'ping':
-					_$.result.ping = args.value;
-					_$.result.jitter = args.jitter;
-					_$.config.callback_progress('ping_finished', _$.result.ping);
-					if (_$.webench_active === !0) {
-						window.setTimeout(function () {
-							_$.run('webench')
-						}, 500)
-					} else {
-						window.setTimeout(function () {
-							_$.config.callback_progress('finished')
-						}, 500)
-					}
-					break
-			}
-		}*/
+	writeResult() {
+		this.extendObject("Results", {
+			type: "channel",
+			common: {
+				name: "Test results of latest run",
+			},
+			native: {},
+		});
+		this.create_state("Results.Last_Run", "Last_Run_Timestamp", new Date());
+
+		this.create_state("Results.download_MB", "download_MB", (result.download / 8));
+		this.create_state("Results.download_Mb", "download_Mb", result.download);
+		
+		this.create_state("Results.upload_MB", "upload_MB", (result.upload / 8));
+		this.create_state("Results.upload_Mb", "upload_Mb", result.upload);
 	}
 
 	stopDownloadTest() {
@@ -531,7 +490,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 					setTimeout(intervalClosure, w);
 					try {
 						func.call(null);
-						console.debug("interval: #" + t + " @" + new Date());
+						that.log.debug("interval: #" + t + " @" + new Date());
 					} catch (e) {
 						t = 0;
 						throw e.toString();
@@ -545,6 +504,53 @@ class VodafoneSpeedtest extends utils.Adapter {
 	intervalRoundTrips(runtime, interval) {
 		return Math.round((runtime * 1000) / interval) + 1;
 	}
+
+	async create_state(state, name, value) {
+		this.log.debug("Create_state called for : " + state + " with value : " + value);
+
+		try {
+			// Try to get details from state lib, if not use defaults. throw warning if states is not known in attribute list
+			if ((state_attr[name] === undefined)) { this.log.warn("State attribute definition missing for + " + name); }
+			const writable = (state_attr[name] !== undefined) ? state_attr[name].write || false : false;
+			const state_name = (state_attr[name] !== undefined) ? state_attr[name].name || name : name;
+			const role = (state_attr[name] !== undefined) ? state_attr[name].role || "state" : "state";
+			const type = (state_attr[name] !== undefined) ? state_attr[name].type || "mixed" : "mixed";
+			const unit = (state_attr[name] !== undefined) ? state_attr[name].unit || "" : "";
+			this.log.debug("Write value : " + writable);
+
+			if (type == "device") {
+				await this.extendObjectAsync(state, {
+					type: "device",
+					common: {
+						name: state_name
+					},
+					native: {}
+				});
+			}
+
+			await this.extendObjectAsync(state, {
+				type: "state",
+				common: {
+					name: state_name,
+					role: role,
+					type: type,
+					unit: unit,
+					write: writable
+				},
+				native: {},
+			});
+
+			// Only set value if input != null
+			if (value !== null) { await this.setState(state, { val: value, ack: true }); }
+
+			// Subscribe on state changes if writable
+			if (writable === true) { this.subscribeStates(state); }
+
+		} catch (error) {
+			this.log.error("Create state error = " + error);
+		}
+	}
+
 }
 
 
