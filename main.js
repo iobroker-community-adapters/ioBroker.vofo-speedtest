@@ -60,7 +60,7 @@ const result = {
 };
 let stopHandler;
 
-const conf = JSON.parse('{"debug":false,"webench":[{"id":1,"url":"https://ref-large.system.info"},{"id":2,"url":"https://www.focus.de"},{"id":3,"url":"https://www.formel1.de"},{"id":4,"url":"https://www.chip.de"},{"id":5,"url":"https://www.wikipedia.org"}],"server":{"testServers":["https://speedtest-10g-ham-2.kabel-deutschland.de","https://speedtest-10g-fra-2.kabel-deutschland.de"],"pingServer":"https://speedtest-10g-ham-2.kabel-deutschland.de"}}');
+const conf = JSON.parse('{"debug":false,"webench":[{"id":1,"url":"https://ref-large.system.info"},{"id":2,"url":"https://www.focus.de"},{"id":3,"url":"https://www.formel1.de"},{"id":4,"url":"https://www.chip.de"},{"id":5,"url":"https://www.wikipedia.org"}],"server":{"testServers":["https://speedtest-10g-ham-2.kabel-deutschland.de","https://speedtest-10g-fra-2.kabel-deutschland.de","https://speedtest-10g-drs-1.kabel-deutschland.de"],"pingServer":"https://speedtest-10g-ham-2.kabel-deutschland.de"}}');
 
 
 class VodafoneSpeedtest extends utils.Adapter {
@@ -159,7 +159,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 				bytes_loaded[testServer][i] = 0;
 
-				const curl = new Curl();
+				/*const curl = new Curl();
 				curl.setOpt(Curl.option.URL, testServer + "/data.zero.bin.512M?" + Math.random());
 				curl.setOpt(Curl.option.NOPROGRESS, false);
 				curl.setProgressCallback((dltotal, dlnow) => {
@@ -180,6 +180,37 @@ class VodafoneSpeedtest extends utils.Adapter {
 				const downloadStream = {
 					req: curl
 				};
+				*/
+				const options = {
+					hostname: testServer.replace("https://",""),
+					port: 443,
+					path: "/data.zero.bin.512M?" + Math.random(),
+					method: "GET",
+					rejectUnauthorized: false,
+					resolveWithFullResponse: true,
+				};
+
+				const req = https.request(options, res => {
+					res.on("data", d => {
+						//that.log.silly("evt: " + JSON.stringify(d));
+						bytes_loaded[testServer][i] += Buffer.byteLength(d, "utf8");
+					});
+					res.on("end", () => {
+					});
+				});
+
+				req.on("error", e => {
+					this.log.error("startDownload error: " + JSON.stringify(e));
+				});
+
+				req.on("abort", e => {
+					this.log.error("startDownload abort: " + JSON.stringify(e));
+				});
+
+				const downloadStream = {
+					options: options,
+					req: req
+				};
 				download_streams.push(downloadStream);
 				//this.log.silly("starDownload: " + JSON.stringify(downloadStream));
 			}
@@ -195,7 +226,8 @@ class VodafoneSpeedtest extends utils.Adapter {
 		timeStart = new Date();
 		timeSection = timeStart;
 		for (let k = 0; k < download_streams.length; k++) {
-			download_streams[k].req.perform();
+			//download_streams[k].req.perform();
+			download_streams[k].req.end();
 		}
 	}
 
@@ -474,7 +506,8 @@ class VodafoneSpeedtest extends utils.Adapter {
 		stopHandler && clearTimeout(stopHandler);
 		stopHandler = null;
 		for (let i = 0; i < download_streams.length; i++) {
-			download_streams[i].req.close();
+			//download_streams[i].req.close();
+			download_streams[i].req.abort();
 		}
 		running = null;
 		that.result_from_arr(result.download_raw, "download", provider_download, result.overall_time.download, result.overall_bytes.download);
