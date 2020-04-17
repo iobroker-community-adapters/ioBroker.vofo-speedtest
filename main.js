@@ -224,7 +224,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 	pushData(id) {
 		const curl = new Curl();
-		curl.setOpt(Curl.option.URL, "https://" + conf.server.testServers[0] + "/empty.txt");
+		curl.setOpt(Curl.option.URL, conf.server.testServers[0] + "/empty.txt");
 		curl.setOpt(Curl.option.NOPROGRESS, false);
 		curl.setOpt(Curl.option.HTTPPOST, data);
 		curl.setProgressCallback((dltotal, dlnow, ultotal, ulnow) => {
