@@ -18,7 +18,7 @@ Implements same technique as https://speedtest.vodafone.de
 
 ## Changelog
 
-### __WORK IN PROGRESS__
+### 0.0.1 (2020-04-18)
 * (Peter Baumert) initial release
 
 ## License
