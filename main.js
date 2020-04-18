@@ -277,9 +277,9 @@ class VodafoneSpeedtest extends utils.Adapter {
 					provider_upload = args.upstreamSpeed;
 					this.create_state("modem", "modem");
 					this.create_state("modem.vendor", "vendor", args.vendor);
-					this.create_state("modem.code", "code", args.modemType.code);
-					this.create_state("modem.name", "name", args.modemType.name);
-					this.create_state("modem.text", "text", args.modemType.text);
+					this.create_state("modem.code", "code", (args.modemType != null ? args.modemType.code : null));
+					this.create_state("modem.name", "name", (args.modemType != null ? args.modemType.name : null));
+					this.create_state("modem.text", "text", (args.modemType != null ? args.modemType.text : null));
 					this.create_state("isCustomer", "isCustomer", args.isCustomer);
 					this.create_state("isp", "isp", args.isp);
 					this.create_state("ip", "ip", args.clientIp);

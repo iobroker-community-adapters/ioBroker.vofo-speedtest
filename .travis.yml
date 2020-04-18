@@ -10,7 +10,7 @@ node_js:
 before_install:
   - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then CC=gcc-6; fi'
   - 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then CXX=g++-6; fi'
-  - sudo apt-get -y install libcurl
+  - 'if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then  choco install curl; fi'
 before_script:
   - export NPMVERSION=$(echo "$($(which npm) -v)"|cut -c1)
   - 'if [[ $NPMVERSION == 5 ]]; then npm install -g npm@5; fi'
@@ -25,3 +25,6 @@ addons:
       - g++-6
       - libcurl4
       - libcurl4-openssl-dev
+  homebrew:
+    packages:
+      - curl
