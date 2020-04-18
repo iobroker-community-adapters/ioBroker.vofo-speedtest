@@ -18,13 +18,13 @@ Implements same technique as https://speedtest.vodafone.de
 
 ## Changelog
 
-### 0.0.2 (2020-04-17)
+### __WORK IN PROGRESS__
 * (Peter Baumert) initial release
 
 ## License
 MIT License
 
-Copyright (c) 2020 Peter Baumert <muh@kuh.de>
+Copyright (c) 2020 Peter Baumert <ioBroker.vodafone-speedtest@outlook.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
