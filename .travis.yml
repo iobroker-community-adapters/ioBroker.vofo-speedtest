@@ -4,7 +4,6 @@ os:
   - windows
 language: node_js
 node_js:
-  - '8'
   - '10'
   - '12'
 before_install:
@@ -23,8 +22,8 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-6
-      - libcurl4
-      - libcurl4-openssl-dev
+      - libcurl
+      - libcurl-dev
   homebrew:
     packages:
       - curl
