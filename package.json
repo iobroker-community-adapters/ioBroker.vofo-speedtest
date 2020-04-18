@@ -1,10 +1,10 @@
 {
   "name": "iobroker.vodafone-speedtest",
-  "version": "0.0.2",
+  "version": "0.0.0",
   "description": "Speedtest of Vodafone.de",
   "author": {
     "name": "Peter Baumert",
-    "email": "muh@kuh.de"
+    "email": "ioBroker.vodafone-speedtest@outlook.com"
   },
   "homepage": "https://github.com/peterbaumert/ioBroker.vodafone-speedtest",
   "license": "MIT",
