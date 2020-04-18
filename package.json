@@ -6,14 +6,14 @@
     "name": "Peter Baumert",
     "email": "muh@kuh.de"
   },
-  "homepage": "https://github.com/Peter Baumert/ioBroker.vodafone-speedtest",
+  "homepage": "https://github.com/peterbaumert/ioBroker.vodafone-speedtest",
   "license": "MIT",
   "keywords": [
     "speedtest speed bandwidth"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Peter Baumert/ioBroker.vodafone-speedtest"
+    "url": "https://github.com/peterbaumert/ioBroker.vodafone-speedtest"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.2.1",
@@ -52,7 +52,7 @@
     "release": "release-script"
   },
   "bugs": {
-    "url": "https://github.com/Peter Baumert/ioBroker.vodafone-speedtest/issues"
+    "url": "https://github.com/peterbaumert/ioBroker.vodafone-speedtest/issues"
   },
   "readmeFilename": "README.md"
 }
