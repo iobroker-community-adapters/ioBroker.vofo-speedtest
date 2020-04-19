@@ -22,6 +22,9 @@
 		function load(settings, onChange) {
 			// example: select elements with id=key and class=value and insert value
 			if (!settings) return;
+			fillSelectIPs('#bindAddress', settings.bindAddress, false, true, function () {
+                $('#bindAddress').select();
+            });
 			$('.value').each(function () {
 				var $key = $(this);
 				var id = $key.attr('id');
@@ -75,14 +78,17 @@
 
 		<!-- For example columns with settings: -->
 		<div class="row">
-			<div class="col s6 input-field">
-				<input type="checkbox" class="value" id="option1" />
-				<label for="option1" class="translate">option1</label>
+			<div class="input-field col s12 m6 l5">
+				<select id="bindAddress" class="value"></select>
+				<label for="bindAddress" class="translate">Local Address</label>
 			</div>
-
-			<div class="col s6 input-field">
-				<input type="text" class="value" id="option2" />
-				<label for="option2" class="translate">option2</label>
+			<div class="col s12 m6 l5 input-field">
+				<input type="number" class="value" id="interval" />
+				<label for="interval" class="translate">Speedtest Interval</label>
+			</div>
+			<div class="col s12 input-field">
+				<input type="checkbox" class="value" id="useCurl" />
+				<label for="useCurl" class="translate">Use curl for download too (for some better performance)</label>
 			</div>
 		</div>
 

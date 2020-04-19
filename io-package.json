@@ -68,7 +68,9 @@
         ]
     },
     "native": {
-        "interval": 30
+        "interval": 30,
+        "bindAddress": "0.0.0.0",
+        "useCurl": false
     },
     "objects": [],
     "instanceObjects": []
