@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "vodafone-speedtest",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "news": {
+            "0.0.2": {
+                "en": "* Added actual settings in Admin interface\r\n* first version ready for testing",
+                "de": "* Aktuelle Einstellungen in der Admin-Oberfläche hinzugefügt\r\n* erste Version zum Testen bereit",
+                "ru": "* Добавлены актуальные настройки в интерфейсе администратора\r\n* первая версия готова к тестированию",
+                "pt": "* Adicionadas configurações reais na interface do administrador\r\n* primeira versão pronta para teste",
+                "nl": "* Werkelijke instellingen toegevoegd in de beheerdersinterface\r\n* eerste versie klaar om te testen",
+                "fr": "* Ajout des paramètres réels dans l'interface d'administration\r\n* première version prête pour les tests",
+                "it": "* Aggiunte impostazioni effettive nell'interfaccia di amministrazione\r\n* prima versione pronta per il test",
+                "es": "* Se agregó la configuración real en la interfaz de administración\r\n* primera versión lista para probar",
+                "pl": "* Dodano aktualne ustawienia w interfejsie administratora\r\n* pierwsza wersja gotowa do testowania",
+                "zh-cn": "*在管理界面中添加了实际设置\r\n*准备测试的第一个版本"
+            },
             "0.0.1": {
                 "en": "* (Peter Baumert) initial release\r\n\r\n## License\r\nMIT License\r\n\r\nCopyright (c) 2020 Peter Baumert <ioBroker.vodafone-speedtest@outlook.com>\r\n\r\nPermission is hereby granted, free of charge, to any person obtaining a copy\r\nof this software and associated documentation files (the \"Software\"), to deal\r\nin the Software without restriction, including without limitation the rights\r\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\r\ncopies of the Software, and to permit persons to whom the Software is\r\nfurnished to do so, subject to the following conditions:\r\n\r\nThe above copyright notice and this permission notice shall be included in all\r\ncopies or substantial portions of the Software.\r\n\r\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\r\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\r\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\r\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\r\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\r\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\r\nSOFTWARE.",
                 "de": "* (Peter Baumert) Erstveröffentlichung\r\n\r\n## Lizenz\r\nMIT-Lizenz\r\n\r\nCopyright (c) 2020 Peter Baumert <ioBroker.vodafone-speedtest@outlook.com>\r\n\r\nHiermit wird jeder Person, die eine Kopie erhält, kostenlos die Erlaubnis erteilt\r\ndieser Software und der dazugehörigen Dokumentationsdateien (die \"Software\") zu behandeln\r\nin der Software ohne Einschränkung, einschließlich ohne Einschränkung der Rechte\r\nzu verwenden, zu kopieren, zu ändern, zusammenzuführen, zu veröffentlichen, zu verteilen, Unterlizenzen zu vergeben und / oder zu verkaufen\r\nKopien der Software und um Personen zuzulassen, für die die Software bestimmt ist\r\ndafür eingerichtet, unter folgenden Bedingungen:\r\n\r\nDer oben genannte Copyright-Hinweis und dieser Erlaubnishinweis sind in allen enthalten\r\nKopien oder wesentliche Teile der Software.\r\n\r\nDIE SOFTWARE WIRD \"WIE BESEHEN\" OHNE JEGLICHE AUSDRÜCKLICHE ODER AUSDRÜCKLICHE GEWÄHRLEISTUNG ZUR VERFÜGUNG GESTELLT\r\nSTILLSCHWEIGEND, EINSCHLIESSLICH, ABER NICHT BESCHRÄNKT AUF DIE GARANTIEN DER MARKTGÄNGIGKEIT,\r\nEIGNUNG FÜR EINEN BESTIMMTEN ZWECK UND NICHTVERLETZUNG. In keinem Fall wird das\r\nAUTOREN ODER COPYRIGHT-INHABER HAFTEN FÜR ANSPRÜCHE, SCHÄDEN ODER ANDERE\r\nHAFTUNG, OB BEI VERTRAGS-, TORT- ODER ANDERWEITIGEN MASSNAHMEN AUS,\r\nAUS ODER IM ZUSAMMENHANG MIT DER SOFTWARE ODER DER NUTZUNG ODER ANDEREN HANDELN IN DER\r\nSOFTWARE.",
