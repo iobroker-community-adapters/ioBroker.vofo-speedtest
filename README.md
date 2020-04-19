@@ -5,8 +5,8 @@
 [![Downloads](https://img.shields.io/npm/dm/iobroker.vodafone-speedtest.svg)](https://www.npmjs.com/package/iobroker.vodafone-speedtest)
 ![Number of Installations (latest)](http://iobroker.live/badges/vodafone-speedtest-installed.svg)
 ![Number of Installations (stable)](http://iobroker.live/badges/vodafone-speedtest-stable.svg)
-[![Dependency Status](https://img.shields.io/david/Peter Baumert/iobroker.vodafone-speedtest.svg)](https://david-dm.org/Peter Baumert/iobroker.vodafone-speedtest)
-[![Known Vulnerabilities](https://snyk.io/test/github/Peter Baumert/ioBroker.vodafone-speedtest/badge.svg)](https://snyk.io/test/github/Peter Baumert/ioBroker.vodafone-speedtest)
+[![Dependency Status](https://img.shields.io/david/peterbaumert/iobroker.vodafone-speedtest.svg)](https://david-dm.org/peterbaumert/iobroker.vodafone-speedtest)
+[![Known Vulnerabilities](https://snyk.io/test/github/peterbaumert/ioBroker.vodafone-speedtest/badge.svg)](https://snyk.io/test/github/peterbaumert/ioBroker.vodafone-speedtest)
 
 [![NPM](https://nodei.co/npm/iobroker.vodafone-speedtest.png?downloads=true)](https://nodei.co/npm/iobroker.vodafone-speedtest/)
 
