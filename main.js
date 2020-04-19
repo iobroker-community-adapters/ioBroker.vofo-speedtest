@@ -9,7 +9,6 @@
 const utils = require("@iobroker/adapter-core");
 
 // Load your modules here, e.g.:
-//const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const { Curl } = require("node-libcurl");
 const querystring = require("querystring");
 const https = require("https");
