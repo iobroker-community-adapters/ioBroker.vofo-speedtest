@@ -1,4 +1,4 @@
-![Logo](admin/vodafone-speedtest.png | width=100)
+![Logo](admin/vodafone-speedtest.png?s=200)
 # ioBroker.vodafone-speedtest
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.vodafone-speedtest.svg)](https://www.npmjs.com/package/iobroker.vodafone-speedtest)
