@@ -16,6 +16,7 @@ const state_attr = require(__dirname + "/lib/state_attr.js");
 
 let that = null;
 
+let useCurl = false;
 const num_download_streams = 6;
 let download_time = 10;
 const download_interval_time = 750;
@@ -79,6 +80,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 	async onReady() {
 		this.setState("info.connection", false, true);
 		that = this;
+		useCurl = this.config.useCurl;
 		this.updateData();
 	}
 
@@ -131,7 +133,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 				bytes_loaded[testServer][i] = 0;
 
 				let downloadStream;
-				if (this.config.useCurl) {
+				if (useCurl) {
 					const curl = new Curl();
 					curl.setOpt(Curl.option.URL, testServer + "/data.zero.bin.512M?" + Math.random());
 					curl.setOpt(Curl.option.NOPROGRESS, false);
@@ -200,7 +202,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		timeStart = new Date();
 		timeSection = timeStart;
 		for (let k = 0; k < download_streams.length; k++) {
-			if (this.config.useCurl) {
+			if (useCurl) {
 				download_streams[k].req.perform();
 			} else {
 				download_streams[k].req.end();
@@ -469,7 +471,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		stopHandler && clearTimeout(stopHandler);
 		stopHandler = null;
 		for (let i = 0; i < download_streams.length; i++) {
-			if (this.config.useCurl) {
+			if (useCurl) {
 				download_streams[i].req.close();
 			} else {
 				download_streams[i].req.abort();
