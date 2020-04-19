@@ -22,8 +22,8 @@ let download_time = 10;
 const download_interval_time = 750;
 const upload_time = 12;
 const upload_interval_time = 750;
-const ping_interval_time = 1000;
-const ping_time = 8;
+//const ping_interval_time = 1000;
+//const ping_time = 8;
 const bytes_loaded = [];
 const download_streams = [];
 const upload_streams = [];
@@ -131,58 +131,61 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 				bytes_loaded[testServer][i] = 0;
 
-				/*const curl = new Curl();
-				curl.setOpt(Curl.option.URL, testServer + "/data.zero.bin.512M?" + Math.random());
-				curl.setOpt(Curl.option.NOPROGRESS, false);
-				curl.setProgressCallback((dltotal, dlnow) => {
-					bytes_loaded[testServer][i] = dlnow;
-					return 0;
-				});
-		
-				curl.on("end", () => {
-					that.log.silly("Download ended");
-					curl.close();
-				});
-		
-				curl.on("error", (error) => {
-					that.log.silly("Failed to download file" + JSON.stringify(error));
-					curl.close();
-				});
-		
-				const downloadStream = {
-					req: curl
-				};
-				*/
-				const options = {
-					hostname: testServer.replace("https://", ""),
-					port: 443,
-					path: "/data.zero.bin.512M?" + Math.random(),
-					method: "GET",
-					rejectUnauthorized: false,
-					resolveWithFullResponse: true,
-				};
-
-				const req = https.request(options, res => {
-					res.on("data", d => {
-						//that.log.silly("evt: " + JSON.stringify(d));
-						bytes_loaded[testServer][i] += Buffer.byteLength(d, "utf8");
+				let downloadStream;
+				if (this.config.useCurl) {
+					const curl = new Curl();
+					curl.setOpt(Curl.option.URL, testServer + "/data.zero.bin.512M?" + Math.random());
+					curl.setOpt(Curl.option.NOPROGRESS, false);
+					curl.setProgressCallback((dltotal, dlnow) => {
+						bytes_loaded[testServer][i] = dlnow;
+						return 0;
 					});
-					res.on("end", () => {
+
+					curl.on("end", () => {
+						that.log.silly("Download ended");
+						curl.close();
 					});
-				});
 
-				req.on("error", e => {
-					this.log.error("startDownload error: " + JSON.stringify(e));
-				});
+					curl.on("error", (error) => {
+						that.log.silly("Failed to download file" + JSON.stringify(error));
+						curl.close();
+					});
 
-				req.on("abort", e => {
-					this.log.warn("startDownload abort: " + JSON.stringify(e));
-				});
+					downloadStream = {
+						req: curl
+					};
+				} else {
+					const options = {
+						hostname: testServer.replace("https://", ""),
+						port: 443,
+						path: "/data.zero.bin.512M?" + Math.random(),
+						method: "GET",
+						rejectUnauthorized: false,
+						resolveWithFullResponse: true,
+					};
 
-				const downloadStream = {
-					options: options,
-					req: req
-				};
+					const req = https.request(options, res => {
+						res.on("data", d => {
+							//that.log.silly("evt: " + JSON.stringify(d));
+							bytes_loaded[testServer][i] += Buffer.byteLength(d, "utf8");
+						});
+						res.on("end", () => {
+						});
+					});
+
+					req.on("error", e => {
+						this.log.error("startDownload error: " + JSON.stringify(e));
+					});
+
+					req.on("abort", e => {
+						this.log.warn("startDownload abort: " + JSON.stringify(e));
+					});
+
+					downloadStream = {
+						options: options,
+						req: req
+					};
+				}
 				download_streams.push(downloadStream);
 				//this.log.silly("starDownload: " + JSON.stringify(downloadStream));
 			}
@@ -198,8 +201,11 @@ class VodafoneSpeedtest extends utils.Adapter {
 		timeStart = new Date();
 		timeSection = timeStart;
 		for (let k = 0; k < download_streams.length; k++) {
-			//download_streams[k].req.perform();
-			download_streams[k].req.end();
+			if (this.config.useCurl) {
+				download_streams[k].req.perform();
+			} else {
+				download_streams[k].req.end();
+			}
 		}
 	}
 
@@ -318,7 +324,6 @@ class VodafoneSpeedtest extends utils.Adapter {
 			});
 		}
 		if (running == "upload") {
-			//bytesLoadedUntilNow += ((upload_xhr.socket !== "undefined") ? upload_xhr.socket.bytesWritten : 0);
 			bytes_loaded.forEach(bl => {
 				bytesLoadedUntilNow += bl;
 			});
@@ -465,8 +470,11 @@ class VodafoneSpeedtest extends utils.Adapter {
 		stopHandler && clearTimeout(stopHandler);
 		stopHandler = null;
 		for (let i = 0; i < download_streams.length; i++) {
-			//download_streams[i].req.close();
-			download_streams[i].req.abort();
+			if (this.config.useCurl) {
+				download_streams[i].req.close();
+			} else {
+				download_streams[i].req.abort();
+			}
 		}
 		running = null;
 		that.result_from_arr(result.download_raw, "download", provider_download, result.overall_time.download, result.overall_bytes.download);
