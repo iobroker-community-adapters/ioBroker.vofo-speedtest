@@ -18,6 +18,10 @@ Implements same technique as https://speedtest.vodafone.de
 
 ## Changelog
 
+### __WORK IN PROGRESS__
+* Added actual settings in Admin interface
+* first version ready for testing
+
 ### 0.0.1 (2020-04-18)
 * (Peter Baumert) initial release
 
