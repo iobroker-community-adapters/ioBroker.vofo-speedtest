@@ -57,8 +57,8 @@ const result = {
 };
 let stopHandler;
 
-const conf = JSON.parse('{"debug":false,"webench":[{"id":1,"url":"https://ref-large.system.info"},{"id":2,"url":"https://www.focus.de"},{"id":3,"url":"https://www.formel1.de"},{"id":4,"url":"https://www.chip.de"},{"id":5,"url":"https://www.wikipedia.org"}],"server":{"testServers":["https://speedtest-10g-ham-2.kabel-deutschland.de","https://speedtest-10g-fra-2.kabel-deutschland.de","https://speedtest-10g-drs-1.kabel-deutschland.de"],"pingServer":"https://speedtest-10g-ham-2.kabel-deutschland.de"}}');
-
+//const conf = JSON.parse('{"debug":false,"webench":[{"id":1,"url":"https://ref-large.system.info"},{"id":2,"url":"https://www.focus.de"},{"id":3,"url":"https://www.formel1.de"},{"id":4,"url":"https://www.chip.de"},{"id":5,"url":"https://www.wikipedia.org"}],"server":{"testServers":["https://speedtest-10g-ham-2.kabel-deutschland.de","https://speedtest-10g-fra-2.kabel-deutschland.de","https://speedtest-10g-drs-1.kabel-deutschland.de"],"pingServer":"https://speedtest-10g-ham-2.kabel-deutschland.de"}}');
+let conf = "";
 
 class VodafoneSpeedtest extends utils.Adapter {
 
@@ -106,15 +106,51 @@ class VodafoneSpeedtest extends utils.Adapter {
 	}
 
 	updateData() {
+		this.getConfig();
 		this.doSpeedtest();
 		timer = setTimeout(() => this.updateData(), this.config.interval * 60000);
+	}
+
+	getConfig() {
+		const options = {
+			hostname: "speedtest.vodafone.de",
+			port: 443,
+			path: "/",
+			method: "GET",
+			rejectUnauthorized: false,
+			resolveWithFullResponse: true,
+		};
+
+		const req = https.request(options, res => {
+			let page = "";
+			res.on("data", d => {
+				page += d;
+			});
+			res.on("end", () => {
+				if (res.statusCode == 200) {
+					const regex = /<script>.*(unitymedia\.speedtest\.config.*};).*<\/script>/s;
+					const settings = page.match(regex);
+					if (settings != null) eval("conf = {"+settings[1]+"}");
+				} else {
+					that.log.error("Couldnt get Speedtest Config");
+				}
+			});
+		});
+
+		req.on("error", e => {
+			this.log.error("getConfig error: " + JSON.stringify(e));
+		});
+
+		req.on("abort", e => {
+			this.log.warn("getConfig abort: " + JSON.stringify(e));
+		});
 	}
 
 	doSpeedtest() {
 		if (!initiating && !init_done) this.init_sbc();
 		this.log.silly("doSpeedtest " + init_done);
-		if (!init_done) {
-			setTimeout(() => this.doSpeedtest(), 5000);
+		if (!init_done || conf == "") {
+			setTimeout(() => this.doSpeedtest(), 1000);
 			return;
 		}
 		this.startDownload();
