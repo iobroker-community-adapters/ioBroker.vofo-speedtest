@@ -128,7 +128,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			});
 			res.on("end", () => {
 				if (res.statusCode == 200) {
-					const regex = /<script>.*(unitymedia\.speedtest\.config.*};).*<\/script>/s;
+					const regex = /<script>.*unitymedia\.speedtest\.config = {.*(server: {.*},).*};.*<\/script>/s;
 					const settings = page.match(regex);
 					if (settings != null) eval("conf = {"+settings[1]+"}");
 				} else {
