@@ -25,8 +25,8 @@ const upload_interval_time = 750;
 //const ping_interval_time = 1000;
 //const ping_time = 8;
 const bytes_loaded = [];
-const download_streams = [];
-const upload_streams = [];
+let download_streams = [];
+let upload_streams = [];
 let bytes_loaded_last_section = 0;
 let running = null;
 let timeSection = null;
@@ -297,6 +297,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 					this.create_state("upstreamBooked", "upstreamBooked", args.upstreamBooked);
 					init_done = !0;
 					initiating = false;
+					this.setState("info.connection", true, true);
 					this.log.debug("SBC-Init (Success):" + JSON.stringify(args));
 				} else {
 					initiating = false;
@@ -477,6 +478,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 				download_streams[i].req.abort();
 			}
 		}
+		download_streams = [];
 		running = null;
 		that.result_from_arr(result.download_raw, "download", provider_download, result.overall_time.download, result.overall_bytes.download);
 	}
@@ -489,6 +491,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		}
 		running = null;
 		data[0].contents = "";
+		upload_streams = [];
 		that.result_from_arr(result.upload_raw, "upload", provider_upload, result.overall_time.upload, result.overall_bytes.upload);
 	}
 
