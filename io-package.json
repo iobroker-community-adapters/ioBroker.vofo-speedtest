@@ -77,7 +77,10 @@
             {
                 "js-controller": ">=1.4.2"
             }
-        ]
+        ],
+        "osDependencies": {
+            "linux": ["curl"]
+        }
     },
     "native": {
         "interval": 30,
