@@ -144,6 +144,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		req.on("abort", e => {
 			this.log.warn("getConfig abort: " + JSON.stringify(e));
 		});
+		req.end();
 	}
 
 	doSpeedtest() {
