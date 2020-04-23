@@ -186,7 +186,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 					});
 
 					curl.on("error", (error) => {
-						that.log.silly("Failed to download file" + JSON.stringify(error));
+						that.log.silly("Failed to download file" + error);
 						curl.close();
 					});
 
@@ -273,7 +273,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 	pushData(id) {
 		const curl = new Curl();
-		curl.setOpt(Curl.option.URL, "/empty.txt");
+		curl.setOpt(Curl.option.URL, conf.server.testServers[0] + "/empty.txt");
 		curl.setOpt(Curl.option.NOPROGRESS, false);
 		curl.setOpt(Curl.option.SSL_VERIFYPEER, false);
 		curl.setOpt(Curl.option.HTTPPOST, data);
@@ -289,7 +289,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		});
 
 		curl.on("error", (error) => {
-			this.log.silly("Failed to upload file: " + JSON.stringify(error));
+			this.log.silly("Failed to upload file: " + error);
 			curl.close();
 		});
 
