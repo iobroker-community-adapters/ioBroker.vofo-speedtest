@@ -174,6 +174,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 					const curl = new Curl();
 					curl.setOpt(Curl.option.URL, testServer + "/data.zero.bin.512M?" + Math.random());
 					curl.setOpt(Curl.option.NOPROGRESS, false);
+					curl.setOpt(Curl.option.SSL_VERIFYPEER, false);
 					curl.setProgressCallback((dltotal, dlnow) => {
 						bytes_loaded[testServer][i] = dlnow;
 						return 0;
@@ -272,8 +273,9 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 	pushData(id) {
 		const curl = new Curl();
-		curl.setOpt(Curl.option.URL, conf.server.testServers[0] + "/empty.txt");
+		curl.setOpt(Curl.option.URL, "/empty.txt");
 		curl.setOpt(Curl.option.NOPROGRESS, false);
+		curl.setOpt(Curl.option.SSL_VERIFYPEER, false);
 		curl.setOpt(Curl.option.HTTPPOST, data);
 		curl.setProgressCallback((dltotal, dlnow, ultotal, ulnow) => {
 			bytes_loaded[id] = ulnow;
@@ -287,7 +289,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		});
 
 		curl.on("error", (error) => {
-			this.log.silly("Failed to upload file" + JSON.stringify(error));
+			this.log.silly("Failed to upload file: " + JSON.stringify(error));
 			curl.close();
 		});
 
