@@ -37,7 +37,7 @@ let provider_download = 0;
 let provider_upload = 0;
 let initiating = false;
 let init_done = !1;
-let timer;
+let timers = [];
 const data = [{
 	name: "data",
 	contents: ""
@@ -57,8 +57,8 @@ const result = {
 };
 let stopHandler;
 
-//const conf = JSON.parse('{"debug":false,"webench":[{"id":1,"url":"https://ref-large.system.info"},{"id":2,"url":"https://www.focus.de"},{"id":3,"url":"https://www.formel1.de"},{"id":4,"url":"https://www.chip.de"},{"id":5,"url":"https://www.wikipedia.org"}],"server":{"testServers":["https://speedtest-10g-ham-2.kabel-deutschland.de","https://speedtest-10g-fra-2.kabel-deutschland.de","https://speedtest-10g-drs-1.kabel-deutschland.de"],"pingServer":"https://speedtest-10g-ham-2.kabel-deutschland.de"}}');
-let conf = "";
+// eslint-disable-next-line prefer-const
+let conf = JSON.parse('{"debug":false,"webench":[{"id":1,"url":"https://ref-large.system.info"},{"id":2,"url":"https://www.focus.de"},{"id":3,"url":"https://www.formel1.de"},{"id":4,"url":"https://www.chip.de"},{"id":5,"url":"https://www.wikipedia.org"}],"server":{"testServers":["https://speedtest-10g-ham-2.kabel-deutschland.de","https://speedtest-10g-fra-2.kabel-deutschland.de","https://speedtest-10g-drs-1.kabel-deutschland.de"],"pingServer":"https://speedtest-10g-ham-2.kabel-deutschland.de"}}');
 
 class VodafoneSpeedtest extends utils.Adapter {
 
@@ -95,10 +95,10 @@ class VodafoneSpeedtest extends utils.Adapter {
 				clearTimeout(stopHandler);
 				stopHandler = null;
 			}
-			if (typeof timer === "number") {
+			timers.forEach(timer => {
 				clearTimeout(timer);
-				timer = null;
-			}
+			});
+			timers = [];
 			callback();
 		} catch (e) {
 			callback();
@@ -108,7 +108,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 	updateData() {
 		this.getConfig();
 		this.doSpeedtest();
-		timer = setTimeout(() => this.updateData(), this.config.interval * 60000);
+		timers["updateData"] = setTimeout(() => this.updateData(), this.config.interval * 60000);
 	}
 
 	getConfig() {
@@ -150,8 +150,8 @@ class VodafoneSpeedtest extends utils.Adapter {
 	doSpeedtest() {
 		if (!initiating && !init_done) this.init_sbc();
 		this.log.silly("doSpeedtest " + init_done);
-		if (!init_done || conf == "") {
-			setTimeout(() => this.doSpeedtest(), 1000);
+		if (!init_done) {
+			timers["doSpeedtest"] = setTimeout(() => this.doSpeedtest(), 1000);
 			return;
 		}
 		this.startDownload();
@@ -465,7 +465,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 									that.log.error("retry error");
 								}
 							} else {
-								setTimeout(() => this.run("upload"), 500);
+								timers["result_from_arr"] = setTimeout(() => this.run("upload"), 500);
 							}
 							break;
 						case "upload":
@@ -536,7 +536,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		const intervalClosure = function (w, t) {
 			return function () {
 				if (typeof t === "undefined" || t-- > 0) {
-					setTimeout(intervalClosure, w);
+					timers["interval1"] = setTimeout(intervalClosure, w);
 					try {
 						func.call(null);
 						that.log.debug("interval: #" + t + " @" + new Date());
@@ -547,7 +547,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 				}
 			};
 		}(wait, times);
-		setTimeout(intervalClosure, wait);
+		timers["interval2"] = setTimeout(intervalClosure, wait);
 	}
 
 	intervalRoundTrips(runtime, interval) {
