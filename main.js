@@ -25,8 +25,8 @@ const upload_interval_time = 750;
 //const ping_interval_time = 1000;
 //const ping_time = 8;
 const bytes_loaded = [];
-const download_streams = [];
-const upload_streams = [];
+let download_streams = [];
+let upload_streams = [];
 let bytes_loaded_last_section = 0;
 let running = null;
 let timeSection = null;
@@ -37,7 +37,7 @@ let provider_download = 0;
 let provider_upload = 0;
 let initiating = false;
 let init_done = !1;
-let timer;
+let timers = [];
 const data = [{
 	name: "data",
 	contents: ""
@@ -57,8 +57,8 @@ const result = {
 };
 let stopHandler;
 
-const conf = JSON.parse('{"debug":false,"webench":[{"id":1,"url":"https://ref-large.system.info"},{"id":2,"url":"https://www.focus.de"},{"id":3,"url":"https://www.formel1.de"},{"id":4,"url":"https://www.chip.de"},{"id":5,"url":"https://www.wikipedia.org"}],"server":{"testServers":["https://speedtest-10g-ham-2.kabel-deutschland.de","https://speedtest-10g-fra-2.kabel-deutschland.de","https://speedtest-10g-drs-1.kabel-deutschland.de"],"pingServer":"https://speedtest-10g-ham-2.kabel-deutschland.de"}}');
-
+// eslint-disable-next-line prefer-const
+let conf = JSON.parse('{"debug":false,"webench":[{"id":1,"url":"https://ref-large.system.info"},{"id":2,"url":"https://www.focus.de"},{"id":3,"url":"https://www.formel1.de"},{"id":4,"url":"https://www.chip.de"},{"id":5,"url":"https://www.wikipedia.org"}],"server":{"testServers":["https://speedtest-10g-ham-2.kabel-deutschland.de","https://speedtest-10g-fra-2.kabel-deutschland.de","https://speedtest-10g-drs-1.kabel-deutschland.de"],"pingServer":"https://speedtest-10g-ham-2.kabel-deutschland.de"}}');
 
 class VodafoneSpeedtest extends utils.Adapter {
 
@@ -95,10 +95,10 @@ class VodafoneSpeedtest extends utils.Adapter {
 				clearTimeout(stopHandler);
 				stopHandler = null;
 			}
-			if (typeof timer === "number") {
+			timers.forEach(timer => {
 				clearTimeout(timer);
-				timer = null;
-			}
+			});
+			timers = [];
 			callback();
 		} catch (e) {
 			callback();
@@ -106,15 +106,52 @@ class VodafoneSpeedtest extends utils.Adapter {
 	}
 
 	updateData() {
+		this.getConfig();
 		this.doSpeedtest();
-		timer = setTimeout(() => this.updateData(), this.config.interval * 60000);
+		timers["updateData"] = setTimeout(() => this.updateData(), this.config.interval * 60000);
+	}
+
+	getConfig() {
+		const options = {
+			hostname: "speedtest.vodafone.de",
+			port: 443,
+			path: "/",
+			method: "GET",
+			rejectUnauthorized: false,
+			resolveWithFullResponse: true,
+		};
+
+		const req = https.request(options, res => {
+			let page = "";
+			res.on("data", d => {
+				page += d;
+			});
+			res.on("end", () => {
+				if (res.statusCode == 200) {
+					const regex = /<script>.*unitymedia\.speedtest\.config = {.*(server: {.*},).*};.*<\/script>/s;
+					const settings = page.match(regex);
+					if (settings != null) eval("conf = {"+settings[1]+"}");
+				} else {
+					that.log.error("Couldnt get Speedtest Config");
+				}
+			});
+		});
+
+		req.on("error", e => {
+			this.log.error("getConfig error: " + JSON.stringify(e));
+		});
+
+		req.on("abort", e => {
+			this.log.warn("getConfig abort: " + JSON.stringify(e));
+		});
+		req.end();
 	}
 
 	doSpeedtest() {
 		if (!initiating && !init_done) this.init_sbc();
 		this.log.silly("doSpeedtest " + init_done);
 		if (!init_done) {
-			setTimeout(() => this.doSpeedtest(), 5000);
+			timers["doSpeedtest"] = setTimeout(() => this.doSpeedtest(), 1000);
 			return;
 		}
 		this.startDownload();
@@ -137,6 +174,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 					const curl = new Curl();
 					curl.setOpt(Curl.option.URL, testServer + "/data.zero.bin.512M?" + Math.random());
 					curl.setOpt(Curl.option.NOPROGRESS, false);
+					curl.setOpt(Curl.option.SSL_VERIFYPEER, false);
 					curl.setProgressCallback((dltotal, dlnow) => {
 						bytes_loaded[testServer][i] = dlnow;
 						return 0;
@@ -148,7 +186,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 					});
 
 					curl.on("error", (error) => {
-						that.log.silly("Failed to download file" + JSON.stringify(error));
+						that.log.silly("Failed to download file" + error);
 						curl.close();
 					});
 
@@ -237,6 +275,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		const curl = new Curl();
 		curl.setOpt(Curl.option.URL, conf.server.testServers[0] + "/empty.txt");
 		curl.setOpt(Curl.option.NOPROGRESS, false);
+		curl.setOpt(Curl.option.SSL_VERIFYPEER, false);
 		curl.setOpt(Curl.option.HTTPPOST, data);
 		curl.setProgressCallback((dltotal, dlnow, ultotal, ulnow) => {
 			bytes_loaded[id] = ulnow;
@@ -250,7 +289,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		});
 
 		curl.on("error", (error) => {
-			this.log.silly("Failed to upload file" + JSON.stringify(error));
+			this.log.silly("Failed to upload file: " + error);
 			curl.close();
 		});
 
@@ -297,6 +336,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 					this.create_state("upstreamBooked", "upstreamBooked", args.upstreamBooked);
 					init_done = !0;
 					initiating = false;
+					this.setState("info.connection", true, true);
 					this.log.debug("SBC-Init (Success):" + JSON.stringify(args));
 				} else {
 					initiating = false;
@@ -427,7 +467,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 									that.log.error("retry error");
 								}
 							} else {
-								setTimeout(() => this.run("upload"), 500);
+								timers["result_from_arr"] = setTimeout(() => this.run("upload"), 500);
 							}
 							break;
 						case "upload":
@@ -477,6 +517,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 				download_streams[i].req.abort();
 			}
 		}
+		download_streams = [];
 		running = null;
 		that.result_from_arr(result.download_raw, "download", provider_download, result.overall_time.download, result.overall_bytes.download);
 	}
@@ -489,6 +530,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		}
 		running = null;
 		data[0].contents = "";
+		upload_streams = [];
 		that.result_from_arr(result.upload_raw, "upload", provider_upload, result.overall_time.upload, result.overall_bytes.upload);
 	}
 
@@ -496,7 +538,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		const intervalClosure = function (w, t) {
 			return function () {
 				if (typeof t === "undefined" || t-- > 0) {
-					setTimeout(intervalClosure, w);
+					timers["interval1"] = setTimeout(intervalClosure, w);
 					try {
 						func.call(null);
 						that.log.debug("interval: #" + t + " @" + new Date());
@@ -507,7 +549,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 				}
 			};
 		}(wait, times);
-		setTimeout(intervalClosure, wait);
+		timers["interval2"] = setTimeout(intervalClosure, wait);
 	}
 
 	intervalRoundTrips(runtime, interval) {
