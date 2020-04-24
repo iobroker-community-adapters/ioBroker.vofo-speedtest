@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "vodafone-speedtest",
-        "version": "0.0.2",
+        "version": "0.0.3",
         "news": {
+            "0.0.3": {
+                "en": "* Implemented feedback from Forum and github issue",
+                "de": "* Feedback vom Forum und Github-Problem implementiert",
+                "ru": "* Реализована обратная связь с форума и проблема с github",
+                "pt": "* Feedback implementado do Fórum e do github",
+                "nl": "* Geïmplementeerde feedback van forum- en github-probleem",
+                "fr": "* Implémentation des commentaires du forum et du problème de github",
+                "it": "* Implementato feedback dal problema Forum e github",
+                "es": "* Implementado los comentarios del foro y el problema de github",
+                "pl": "* Wdrożono informacje zwrotne z forum i github",
+                "zh-cn": "*实现了来自论坛和github问题的反馈"
+            },
             "0.0.2": {
                 "en": "* Added actual settings in Admin interface\r\n* first version ready for testing",
                 "de": "* Aktuelle Einstellungen in der Admin-Oberfläche hinzugefügt\r\n* erste Version zum Testen bereit",
@@ -79,7 +91,9 @@
             }
         ],
         "osDependencies": {
-            "linux": ["curl"]
+            "linux": [
+                "curl"
+            ]
         }
     },
     "native": {

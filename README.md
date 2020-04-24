@@ -18,7 +18,7 @@ Implements same technique as https://speedtest.vodafone.de
 
 ## Changelog
 
-### __WORK IN PROGRESS__
+### 0.0.3 (2020-04-24)
 * Implemented feedback from Forum and github issue
 
 ### 0.0.2 (2020-04-19)
