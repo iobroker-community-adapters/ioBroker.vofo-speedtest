@@ -505,6 +505,8 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 		this.create_state("Results.upload_MB", "upload_MB", (result.upload / 8 / 1000));
 		this.create_state("Results.upload_Mb", "upload_Mb", result.upload / 1000);
+
+		this.log.info("Vodafone-Speedtest finished with "+result.download / 1000+"mbit download speed and "+result.upload / 1000+"mbit upload speed.")
 	}
 
 	stopDownloadTest() {
@@ -541,7 +543,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 					timers["interval1"] = setTimeout(intervalClosure, w);
 					try {
 						func.call(null);
-						that.log.debug("interval: #" + t + " @" + new Date());
+						that.log.silly("interval: #" + t + " @" + new Date());
 					} catch (e) {
 						t = 0;
 						throw e.toString();
