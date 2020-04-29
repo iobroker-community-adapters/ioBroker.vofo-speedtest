@@ -78,7 +78,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	async onReady() {
-		this.setState("info.connection", false, true);
+		//this.setState("info.connection", false, true);
 		that = this;
 		useCurl = this.config.useCurl;
 		this.updateData();
@@ -108,7 +108,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 	updateData() {
 		this.getConfig();
 		this.doSpeedtest();
-		timers["updateData"] = setTimeout(() => this.updateData(), this.config.interval * 60000);
+		//timers["updateData"] = setTimeout(() => this.updateData(), this.config.interval * 60000);
 	}
 
 	getConfig() {
@@ -335,7 +335,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 					this.create_state("upstreamBooked", "upstreamBooked", args.upstreamBooked);
 					init_done = !0;
 					initiating = false;
-					this.setState("info.connection", true, true);
+					//this.setState("info.connection", true, true);
 					this.log.debug("SBC-Init (Success):" + JSON.stringify(args));
 				} else {
 					initiating = false;
@@ -505,7 +505,10 @@ class VodafoneSpeedtest extends utils.Adapter {
 		this.create_state("Results.upload_MB", "upload_MB", (result.upload / 8 / 1000));
 		this.create_state("Results.upload_Mb", "upload_Mb", result.upload / 1000);
 
-		this.log.info("Vodafone-Speedtest finished with "+result.download / 1000+"mbit download speed and "+result.upload / 1000+"mbit upload speed.")
+		this.log.info("Vodafone-Speedtest finished with "+result.download / 1000+"mbit download speed and "+result.upload / 1000+"mbit upload speed.");
+		if (this.stop) {
+			this.stop();
+		}
 	}
 
 	stopDownloadTest() {
