@@ -9,7 +9,7 @@
 const utils = require("@iobroker/adapter-core");
 
 // Load your modules here, e.g.:
-const { Curl } = require("node-libcurl");
+const { Curl, CurlFeature } = require("node-libcurl");
 const querystring = require("querystring");
 const https = require("https");
 const state_attr = require(__dirname + "/lib/state_attr.js");
@@ -175,6 +175,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 					curl.setOpt(Curl.option.URL, testServer + "/data.zero.bin.512M?" + Math.random());
 					curl.setOpt(Curl.option.NOPROGRESS, false);
 					curl.setOpt(Curl.option.SSL_VERIFYPEER, false);
+					curl.enable(CurlFeature.NoStorage);
 					curl.setProgressCallback((dltotal, dlnow) => {
 						bytes_loaded[testServer][i] = dlnow;
 						return 0;
@@ -252,10 +253,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		if (running != null)
 			return;
 		running = "upload";
-		data[0].contents = "0";
-		for (let i = 1; i < 1E7; i++) {
-			data[0].contents += "0";
-		}
+		data[0].contents = "0".repeat(1E7);
 		bytes_loaded_last_section = 0;
 		bytes_loaded[0] = 0;
 		this.interval(this.transferEnd, upload_interval_time, this.intervalRoundTrips(upload_time, upload_interval_time));
@@ -276,6 +274,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		curl.setOpt(Curl.option.URL, conf.server.testServers[0] + "/empty.txt");
 		curl.setOpt(Curl.option.NOPROGRESS, false);
 		curl.setOpt(Curl.option.SSL_VERIFYPEER, false);
+		curl.enable(CurlFeature.NoStorage);
 		curl.setOpt(Curl.option.HTTPPOST, data);
 		curl.setProgressCallback((dltotal, dlnow, ultotal, ulnow) => {
 			bytes_loaded[id] = ulnow;
