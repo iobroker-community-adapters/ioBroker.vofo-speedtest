@@ -36,6 +36,8 @@ const remote_port = null;
 let provider_download = 0;
 let provider_upload = 0;
 let initiating = false;
+let gotConfig = false;
+let retries = 20;
 let init_done = !1;
 let timers = [];
 const data = [{
@@ -130,7 +132,10 @@ class VodafoneSpeedtest extends utils.Adapter {
 				if (res.statusCode == 200) {
 					const regex = /<script>.*unitymedia\.speedtest\.config = {.*(server: {.*},).*};.*<\/script>/s;
 					const settings = page.match(regex);
-					if (settings != null) eval("conf = {"+settings[1]+"}");
+					if (settings != null) {
+						eval("conf = {" + settings[1] + "}");
+						gotConfig = true;
+					}
 				} else {
 					that.log.error("Couldnt get Speedtest Config");
 				}
@@ -150,9 +155,13 @@ class VodafoneSpeedtest extends utils.Adapter {
 	doSpeedtest() {
 		if (!initiating && !init_done) this.init_sbc();
 		this.log.silly("doSpeedtest " + init_done);
-		if (!init_done) {
-			timers["doSpeedtest"] = setTimeout(() => this.doSpeedtest(), 1000);
-			return;
+		if (!init_done || !gotConfig) {
+			if (retries-- > 0) {
+				timers["doSpeedtest"] = setTimeout(() => this.doSpeedtest(), 1000);
+				return;
+			} else {
+				this.log.error("doSpeedtest: init_done=" + init_done + " gotConfig=" + gotConfig);
+			}
 		}
 		this.startDownload();
 	}
@@ -505,7 +514,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		this.create_state("Results.upload_MB", "upload_MB", (result.upload / 8 / 1000));
 		this.create_state("Results.upload_Mb", "upload_Mb", result.upload / 1000);
 
-		this.log.info("Vodafone-Speedtest finished with "+result.download / 1000+"mbit download speed and "+result.upload / 1000+"mbit upload speed.");
+		this.log.info("Vodafone-Speedtest finished with " + result.download / 1000 + "mbit download speed and " + result.upload / 1000 + "mbit upload speed.");
 		if (this.stop) {
 			this.stop();
 		}
