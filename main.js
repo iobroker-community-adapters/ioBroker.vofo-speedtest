@@ -130,7 +130,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 				if (res.statusCode == 200) {
 					const regex = /<script>.*unitymedia\.speedtest\.config = {.*(server: {.*},).*};.*<\/script>/s;
 					const settings = page.match(regex);
-					if (settings != null) eval("conf = {"+settings[1]+"}");
+					if (settings != null) eval("conf = {" + settings[1] + "}");
 				} else {
 					that.log.error("Couldnt get Speedtest Config");
 				}
@@ -252,10 +252,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		if (running != null)
 			return;
 		running = "upload";
-		data[0].contents = "0";
-		for (let i = 1; i < 1E7; i++) {
-			data[0].contents += "0";
-		}
+		data[0].contents = "0".repeat(1E7);
 		bytes_loaded_last_section = 0;
 		bytes_loaded[0] = 0;
 		this.interval(this.transferEnd, upload_interval_time, this.intervalRoundTrips(upload_time, upload_interval_time));
@@ -506,7 +503,20 @@ class VodafoneSpeedtest extends utils.Adapter {
 		this.create_state("Results.upload_MB", "upload_MB", (result.upload / 8 / 1000));
 		this.create_state("Results.upload_Mb", "upload_Mb", result.upload / 1000);
 
-		this.log.info("Vodafone-Speedtest finished with "+result.download / 1000+"mbit download speed and "+result.upload / 1000+"mbit upload speed.")
+		this.log.info("Vodafone-Speedtest finished with " + result.download / 1000 + "mbit download speed and " + result.upload / 1000 + "mbit upload speed.")
+
+
+
+		if (!global.gc) {
+			this.log.error("Garbage collection is not exposed");
+
+		} else {
+			this.log.error("Manual gc bef"+ process.memoryUsage().rss /1024 /1024 + "MB");
+			global.gc();
+			this.log.error("Manual gc aft"+ process.memoryUsage().rss /1024 /1024 + "MB");
+		}
+
+
 	}
 
 	stopDownloadTest() {
