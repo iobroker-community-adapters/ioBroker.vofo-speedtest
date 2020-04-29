@@ -506,19 +506,6 @@ class VodafoneSpeedtest extends utils.Adapter {
 		this.create_state("Results.upload_Mb", "upload_Mb", result.upload / 1000);
 
 		this.log.info("Vodafone-Speedtest finished with " + result.download / 1000 + "mbit download speed and " + result.upload / 1000 + "mbit upload speed.")
-
-
-
-		if (!global.gc) {
-			this.log.error("Garbage collection is not exposed");
-
-		} else {
-			this.log.error("Manual gc bef"+ process.memoryUsage().rss /1024 /1024 + "MB");
-			global.gc();
-			this.log.error("Manual gc aft"+ process.memoryUsage().rss /1024 /1024 + "MB");
-		}
-
-
 	}
 
 	stopDownloadTest() {
