@@ -227,7 +227,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 					});
 
 					req.on("abort", e => {
-						this.log.warn("startDownload abort: " + JSON.stringify(e));
+						this.log.silly("startDownload abort: " + JSON.stringify(e));
 					});
 
 					downloadStream = {

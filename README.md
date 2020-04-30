@@ -18,6 +18,10 @@ Implements same technique as https://speedtest.vodafone.de
 
 ## Changelog
 
+### __WORK IN PROGRESS__
+* Changed Adapter start type to scheduled (reinstallation might be needed)
+* Bug fixes and feedback implementation
+
 ### 0.0.3 (2020-04-24)
 * Implemented feedback from Forum and github issue
 
