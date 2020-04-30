@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "vodafone-speedtest",
-        "version": "0.0.3",
+        "version": "0.0.4",
         "news": {
+            "0.0.4": {
+                "en": "* Changed Adapter start type to scheduled (reinstallation might be needed)\r\n* Bug fixes and feedback implementation",
+                "de": "* Der Starttyp des Adapters wurde in \"Geplant\" geändert (eine Neuinstallation ist möglicherweise erforderlich.)\r\n* Fehlerbehebungen und Feedback-Implementierung",
+                "ru": "* Изменен тип запуска адаптера на запланированный (может потребоваться переустановка)\r\n* Исправление ошибок и реализация отзывов",
+                "pt": "* Tipo de início do adaptador alterado para agendado (pode ser necessário reinstalar)\r\n* Correções de erros e implementação de feedback",
+                "nl": "* Het starttype van de adapter is gewijzigd in gepland (herinstallatie kan nodig zijn)\r\n* Bugfixes en feedback implementatie",
+                "fr": "* Changement du type de démarrage de l'adaptateur en planifié (une réinstallation peut être nécessaire)\r\n* Correction de bugs et implémentation de commentaires",
+                "it": "* Modificato il tipo di avvio dell'adattatore in base alla pianificazione (potrebbe essere necessaria la reinstallazione)\r\n* Correzioni di bug e implementazione del feedback",
+                "es": "* Se cambió el tipo de inicio del adaptador a programado (podría ser necesaria la reinstalación)\r\n* Corrección de errores e implementación de comentarios",
+                "pl": "* Zmieniono typ uruchomienia adaptera na zaplanowany (konieczna może być ponowna instalacja)\r\n* Poprawki błędów i wdrożenie opinii",
+                "zh-cn": "*将适配器启动类型更改为计划的（可能需要重新安装）\r\n*错误修复和反馈实施"
+            },
             "0.0.3": {
                 "en": "* Implemented feedback from Forum and github issue",
                 "de": "* Feedback vom Forum und Github-Problem implementiert",
