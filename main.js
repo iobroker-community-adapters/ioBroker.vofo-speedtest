@@ -121,6 +121,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			method: "GET",
 			rejectUnauthorized: false,
 			resolveWithFullResponse: true,
+			timeout: 60000,
 		};
 
 		const req = https.request(options, res => {
@@ -161,6 +162,9 @@ class VodafoneSpeedtest extends utils.Adapter {
 				return;
 			} else {
 				this.log.error("doSpeedtest: init_done=" + init_done + " gotConfig=" + gotConfig);
+				if (this.stop) {
+					this.stop();
+				}
 			}
 		}
 		this.startDownload();
