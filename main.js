@@ -41,6 +41,7 @@ let gotConfig = false;
 let retries = 20;
 let init_done = !1;
 let timers = [];
+const isWin = process.platform === "win32";
 const ping_time = 8;
 const data = [{
 	name: "data",
@@ -305,9 +306,12 @@ class VodafoneSpeedtest extends utils.Adapter {
 			stopHandler = null;
 		}
 		stopHandler = setTimeout(this.stopPingTest, ping_time * 1000);
-		ping.promise.probe(conf.server.testServers[0].replace("https://", ""), {
-			timeout: 1
-		})
+		const options = {
+			timeout: 1,
+			extra: ["-c", "5"],
+		};
+		if (isWin) options.extra = ["-n" , "5"];
+		ping.promise.probe(conf.server.testServers[0].replace("https://", ""), options)
 			.then((res) => {
 				result.ping.min = res.min;
 				result.ping.max = res.max;
