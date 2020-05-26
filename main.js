@@ -12,6 +12,7 @@ const utils = require("@iobroker/adapter-core");
 const { Curl, CurlFeature } = require("node-libcurl");
 const querystring = require("querystring");
 const https = require("https");
+const ping = require("ping");
 const state_attr = require(__dirname + "/lib/state_attr.js");
 
 let that = null;
@@ -40,6 +41,7 @@ let gotConfig = false;
 let retries = 20;
 let init_done = !1;
 let timers = [];
+const ping_time = 8;
 const data = [{
 	name: "data",
 	contents: ""
@@ -48,11 +50,21 @@ const result = {
 	download_raw: Array(),
 	upload_raw: Array(),
 	ping_raw: Array(),
-	overall_time: Array(),
-	overall_bytes: Array(),
+	overall_time: {
+		ping: 0
+	},
+	overall_bytes: {
+		upload: 0,
+		download: 0,
+	},
 	download: 0,
 	upload: 0,
-	ping: 0,
+	ping: {
+		min: 0,
+		max: 0,
+		avg: 0,
+		packetLoss: 0,
+	},
 	jitter: 0,
 	webench: Array(),
 	webench_result: 0,
@@ -282,6 +294,36 @@ class VodafoneSpeedtest extends utils.Adapter {
 		this.pushData(0);
 	}
 
+	startPing() {
+		if (running != null)
+			return;
+		timeStart = new Date();
+		running = "ping";
+		if (typeof stopHandler === "number") {
+			this.log.debug("resetting Timeout ping");
+			clearTimeout(stopHandler);
+			stopHandler = null;
+		}
+		stopHandler = setTimeout(this.stopPingTest, ping_time * 1000);
+		ping.promise.probe(conf.server.testServers[0].replace("https://", ""), {
+			timeout: 1
+		})
+			.then((res) => {
+				result.ping.min = res.min;
+				result.ping.max = res.max;
+				result.ping.avg = res.avg;
+				result.ping.packetLoss = res.packetLoss;
+				this.stopPingTest();
+			});
+	}
+
+	stopPingTest() {
+		running = null;
+		const now = new Date();
+		result.overall_time.ping = now.getTime() - timeStart.getTime();
+		this.writeResult();
+	}
+
 	pushData(id) {
 		const curl = new Curl();
 		curl.setOpt(Curl.option.URL, conf.server.testServers[0] + "/empty.txt");
@@ -422,11 +464,11 @@ class VodafoneSpeedtest extends utils.Adapter {
 			case "upload":
 				this.startUpload();
 				break;
+			case "ping":
+				this.startPing();
+				break;
 			/*case 'upload_ws':
 				startUploadWS();
-				break;
-			case 'ping':
-				startPing();
 				break;
 			case 'webench':
 				startWebench();
@@ -484,7 +526,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 							break;
 						case "upload":
 							result.upload = args.value;
-							this.writeResult();
+							timers["result_from_arr"] = setTimeout(() => this.run("ping"), 500);
 							break;
 					}
 					this.log.debug("result:" + JSON.stringify(args));
@@ -517,6 +559,28 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 		this.create_state("Results.upload_MB", "upload_MB", (result.upload / 8 / 1000));
 		this.create_state("Results.upload_Mb", "upload_Mb", result.upload / 1000);
+
+		const download_calc = result.download_raw.reduce((acc, c) => acc + c, 0) / result.download_raw.length;
+		const upload_calc = result.upload_raw.reduce((acc, c) => acc + c, 0) / result.upload_raw.length;
+
+		this.create_state("Results.download_MB_calc", "download_MB_calc", (download_calc / 8 / 1000));
+		this.create_state("Results.download_Mb_calc", "download_Mb_calc", download_calc / 1000);
+
+		this.create_state("Results.upload_MB_calc", "upload_MB_calc", (upload_calc / 8 / 1000));
+		this.create_state("Results.upload_Mb_calc", "upload_Mb_calc", upload_calc / 1000);
+
+		this.extendObject("Results.ping", {
+			type: "channel",
+			common: {
+				name: "Ping results of latest run",
+			},
+			native: {},
+		});
+
+		this.create_state("Results.ping.min", "min", result.ping.min);
+		this.create_state("Results.ping.max", "max", result.ping.max);
+		this.create_state("Results.ping.avg", "avg", result.ping.avg);
+		this.create_state("Results.ping.packetLoss", "packetLoss", result.ping.packetLoss);
 
 		this.log.info("Vodafone-Speedtest finished with " + result.download / 1000 + "mbit download speed and " + result.upload / 1000 + "mbit upload speed.");
 		if (this.stop) {
