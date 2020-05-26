@@ -305,7 +305,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			stopHandler = null;
 		}
 		stopHandler = setTimeout(this.stopPingTest, ping_time * 1000);
-		ping.promise.probe(conf.server.pingserver.replace("https://", ""), {
+		ping.promise.probe(conf.server.testServers[0].replace("https://", ""), {
 			timeout: 1
 		})
 			.then((res) => {
