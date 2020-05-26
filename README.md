@@ -18,7 +18,7 @@ Implements same technique as https://speedtest.vodafone.de
 
 ## Changelog
 
-### __WORK IN PROGRESS__
+### 0.0.5 (2020-05-26)
 * Added ping results
 * Added calculated values by actual raw data
 
