@@ -309,11 +309,10 @@ class VodafoneSpeedtest extends utils.Adapter {
 			timeout: 1
 		})
 			.then((res) => {
-				this.log.error(res);
 				result.ping.min = res.min;
 				result.ping.max = res.max;
 				result.ping.avg = res.avg;
-				result.ping.packetLoss = res.min.packetLoss;
+				result.ping.packetLoss = res.packetLoss;
 				this.stopPingTest();
 			});
 	}
@@ -579,7 +578,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		});
 
 		this.create_state("Results.ping.min", "min", result.ping.min);
-		this.create_state("Results.ping.max", "max", result.ping.may);
+		this.create_state("Results.ping.max", "max", result.ping.max);
 		this.create_state("Results.ping.avg", "avg", result.ping.avg);
 		this.create_state("Results.ping.packetLoss", "packetLoss", result.ping.packetLoss);
 
