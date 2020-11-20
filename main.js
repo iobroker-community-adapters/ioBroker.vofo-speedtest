@@ -73,7 +73,7 @@ const result = {
 let stopHandler;
 
 // eslint-disable-next-line prefer-const
-let conf = JSON.parse('{"debug":false,"webench":[{"id":1,"url":"https://ref-large.system.info"},{"id":2,"url":"https://www.focus.de"},{"id":3,"url":"https://www.formel1.de"},{"id":4,"url":"https://www.chip.de"},{"id":5,"url":"https://www.wikipedia.org"}],"server":{"testServers":["https://speedtest-56.speedtest.vodafone-ip.de","https://speedtest-60.speedtest.vodafone-ip.de","pingServer":"https://speedtest-56.speedtest.vodafone-ip.de"}}');
+let conf = JSON.parse('{"debug":false,"webench":[{"id":1,"url":"https://ref-large.system.info"},{"id":2,"url":"https://www.focus.de"},{"id":3,"url":"https://www.formel1.de"},{"id":4,"url":"https://www.chip.de"},{"id":5,"url":"https://www.wikipedia.org"}],"server":{"testServers":["https://speedtest-56.speedtest.vodafone-ip.de","https://speedtest-60.speedtest.vodafone-ip.de"],"pingServer":"https://speedtest-56.speedtest.vodafone-ip.de"}}');
 
 class VodafoneSpeedtest extends utils.Adapter {
 
@@ -241,7 +241,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 
 					req.on("error", e => {
 						if (e.code != "ECONNRESET") {
-							this.log.error("startDownload error: " + JSON.stringify(e));
+						this.log.error("startDownload error: " + JSON.stringify(e));
 						}
 					});
 
@@ -312,7 +312,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			timeout: 1,
 			extra: ["-c", "5"],
 		};
-		if (isWin) options.extra = ["-n", "5"];
+		if (isWin) options.extra = ["-n" , "5"];
 		ping.promise.probe(conf.server.testServers[0].replace("https://", ""), options)
 			.then((res) => {
 				result.ping.min = res.min;
