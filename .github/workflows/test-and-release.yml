@@ -40,8 +40,8 @@ jobs:
     # - name: Lint TypeScript code
     #   run: npm run lint
 
-    - name: Typecheck TypeScript code
-      run: npm run check
+    #- name: Typecheck TypeScript code
+    #  run: npm run check
 
   # Deploys the final package to NPM and Github Actions
   deploy:
