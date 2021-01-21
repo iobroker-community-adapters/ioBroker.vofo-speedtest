@@ -26,7 +26,7 @@ When the adapter crashes or an other Code error happens, this error message that
 
 ## Changelog
 
-### __WORK IN PROGRESS__
+### 0.0.7 (2021-01-21)
 * Added Sentry.io Integration
 
 ### 0.0.5 (2020-05-26)
