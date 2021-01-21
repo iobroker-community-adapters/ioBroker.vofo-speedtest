@@ -1,6 +1,6 @@
 {
   "name": "iobroker.vodafone-speedtest",
-  "version": "0.0.6",
+  "version": "0.0.5",
   "description": "Speedtest of Vodafone.de",
   "author": {
     "name": "Peter Baumert",
