@@ -119,6 +119,11 @@
             "linux": [
                 "curl"
             ]
+        },
+        "plugins": {
+            "sentry": {
+                "dsn": "https://64bf66cd21d4485eb4ff8867bb0124d5@o508406.ingest.sentry.io/5602321"
+            }
         }
     },
     "native": {

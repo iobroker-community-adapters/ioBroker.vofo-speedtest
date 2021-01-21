@@ -81,10 +81,12 @@ class VodafoneSpeedtest extends utils.Adapter {
 	 * @param {Partial<ioBroker.AdapterOptions>} [options={}]
 	 */
 	constructor(options) {
+		// @ts-ignore
 		super({
 			...options,
 			name: "vodafone-speedtest",
 		});
+
 		this.on("ready", this.onReady.bind(this));
 		this.on("unload", this.onUnload.bind(this));
 	}
@@ -97,6 +99,16 @@ class VodafoneSpeedtest extends utils.Adapter {
 		that = this;
 		useCurl = this.config.useCurl;
 		this.updateData();
+	}
+
+	async errorHandling (codePart, error) {
+		this.log.error(`[${codePart}] error: ${error.message}, stack: ${error.stack}`);
+		if (this.supportsFeature && this.supportsFeature("PLUGINS")) {
+			const sentryInstance = this.getPluginInstance("sentry");
+			if (sentryInstance) {
+				sentryInstance.getSentryObject().captureException(error);
+			}
+		}
 	}
 
 	/**
@@ -240,8 +252,9 @@ class VodafoneSpeedtest extends utils.Adapter {
 					});
 
 					req.on("error", e => {
+						// @ts-ignore
 						if (e.code != "ECONNRESET") {
-						this.log.error("startDownload error: " + JSON.stringify(e));
+							this.log.error("startDownload error: " + JSON.stringify(e));
 						}
 					});
 
