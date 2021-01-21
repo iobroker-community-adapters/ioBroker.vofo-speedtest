@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "vodafone-speedtest",
-        "version": "0.0.5",
+        "version": "0.0.6",
         "news": {
+            "0.0.6": {
+                "en": "Added Sentry.io Integration",
+                "de": "Sentry.io Integration hinzugefügt",
+                "ru": "Добавлена интеграция с Sentry.io",
+                "pt": "Adicionado Integração Sentry.io",
+                "nl": "Sentry.io-integratie toegevoegd",
+                "fr": "Ajout de l'intégration Sentry.io",
+                "it": "Aggiunta integrazione Sentry.io",
+                "es": "Integración Sentry.io agregada",
+                "pl": "Dodano integrację Sentry.io",
+                "zh-cn": "添加了Sentry.io集成"
+            },
             "0.0.5": {
                 "en": "* Added ping results\r\n* Added calculated values by actual raw data",
                 "de": "* Ping-Ergebnisse hinzugefügt\r\n* Berechnete Werte durch tatsächliche Rohdaten hinzugefügt",
