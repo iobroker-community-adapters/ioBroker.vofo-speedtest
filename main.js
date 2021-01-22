@@ -340,7 +340,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		running = null;
 		const now = new Date();
 		result.overall_time.ping = now.getTime() - timeStart.getTime();
-		this.writeResult();
+		that.writeResult();
 	}
 
 	pushData(id) {
