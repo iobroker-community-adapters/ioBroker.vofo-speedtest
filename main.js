@@ -571,7 +571,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 			},
 			native: {},
 		});
-		this.create_state("Results.Last_Run", "Last_Run_Timestamp", JSON.stringify(new Date()));
+		this.create_state("Results.Last_Run", "Last_Run_Timestamp", new Date().getTime());
 
 		this.create_state("Results.download_MB", "download_MB", (result.download / 8 / 1000));
 		this.create_state("Results.download_Mb", "download_Mb", result.download / 1000);
