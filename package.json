@@ -16,7 +16,7 @@
     "url": "https://github.com/peterbaumert/ioBroker.vodafone-speedtest"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.4.0",
+    "@iobroker/adapter-core": "^2.5.0",
     "node-libcurl": "^2.3.3",
     "ping": "^0.2.3",
     "querystring": "^0.2.1"
