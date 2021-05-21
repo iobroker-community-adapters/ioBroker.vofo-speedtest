@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "vodafone-speedtest",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "news": {
+            "0.0.7": {
+                "en": "Fixed some vulnerabilities in dev-dependencies\nFixed js-controller 3* issues\nFixed node 16 compatability",
+                "de": "Einige Schwachstellen in Dev-Abhängigkeiten wurden behoben\nProbleme mit js-controller 3 * behoben\nKompatibilität mit Knoten 16 behoben",
+                "ru": "Исправлены некоторые уязвимости в dev-зависимостях\nИсправлены проблемы с js-контроллером 3 *\nСовместимость с фиксированным узлом 16",
+                "pt": "Corrigidas algumas vulnerabilidades nas dependências de desenvolvimento\nProblemas de js-controller 3 * corrigidos\nCompatibilidade do nó 16 corrigido",
+                "nl": "Enkele kwetsbaarheden in dev-afhankelijkheden opgelost\nProblemen met js-controller 3 * opgelost\nCompatibiliteit met knooppunt 16 opgelost",
+                "fr": "Correction de certaines vulnérabilités dans les dépendances de développement\nProblèmes résolus avec js-controller 3 *\nCompatibilité du nœud fixe 16",
+                "it": "Risolte alcune vulnerabilità nelle dipendenze dev\nRisolti i problemi con js-controller 3 *\nRisolto il problema con la compatibilità del nodo 16",
+                "es": "Se corrigieron algunas vulnerabilidades en las dependencias de desarrollo.\nSe corrigieron problemas de js-controller 3 *\nCompatibilidad del nodo fijo 16",
+                "pl": "Naprawiono niektóre luki w zależnościach od programistów\nNaprawiono problemy z kontrolerem js 3 *\nNaprawiono kompatybilność z węzłem 16",
+                "zh-cn": "修复了开发人员依存关系中的一些漏洞\n修复了js-controller 3 *问题\n固定节点16兼容性"
+            },
             "0.0.6": {
                 "en": "Added Sentry.io Integration",
                 "de": "Sentry.io Integration hinzugefügt",
