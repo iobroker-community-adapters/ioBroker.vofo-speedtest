@@ -75,7 +75,7 @@ let stopHandler;
 // eslint-disable-next-line prefer-const
 let conf = JSON.parse('{"debug":false,"webench":[{"id":1,"url":"https://ref-large.system.info"},{"id":2,"url":"https://www.focus.de"},{"id":3,"url":"https://www.formel1.de"},{"id":4,"url":"https://www.chip.de"},{"id":5,"url":"https://www.wikipedia.org"}],"server":{"testServers":["https://speedtest-56.speedtest.vodafone-ip.de","https://speedtest-60.speedtest.vodafone-ip.de"],"pingServer":"https://speedtest-56.speedtest.vodafone-ip.de"}}');
 
-class VodafoneSpeedtest extends utils.Adapter {
+class VofoSpeedtest extends utils.Adapter {
 
 	/**
 	 * @param {Partial<ioBroker.AdapterOptions>} [options={}]
@@ -84,7 +84,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		// @ts-ignore
 		super({
 			...options,
-			name: "vodafone-speedtest",
+			name: "vofo-speedtest",
 		});
 
 		this.on("ready", this.onReady.bind(this));
@@ -601,7 +601,7 @@ class VodafoneSpeedtest extends utils.Adapter {
 		this.create_state("Results.ping.avg", "avg", parseInt(result.ping.avg));
 		this.create_state("Results.ping.packetLoss", "packetLoss", parseInt(result.ping.packetLoss));
 
-		this.log.info("Vodafone-Speedtest finished with " + result.download / 1000 + "mbit download speed and " + result.upload / 1000 + "mbit upload speed.");
+		this.log.info("Vofo-Speedtest finished with " + result.download / 1000 + "mbit download speed and " + result.upload / 1000 + "mbit upload speed.");
 		if (this.stop) {
 			this.stop();
 		}
@@ -711,8 +711,8 @@ if (module.parent) {
 	/**
 	 * @param {Partial<ioBroker.AdapterOptions>} [options={}]
 	 */
-	module.exports = (options) => new VodafoneSpeedtest(options);
+	module.exports = (options) => new VofoSpeedtest(options);
 } else {
 	// otherwise start the instance directly
-	new VodafoneSpeedtest();
+	new VofoSpeedtest();
 }

@@ -2,17 +2,17 @@
 "use strict";
 
 systemDictionary = {
-	"vodafone-speedtest adapter settings": {
-		"en": "Adapter settings for vodafone-speedtest",
-		"de": "Adaptereinstellungen für vodafone-speedtest",
-		"ru": "Настройки адаптера для vodafone-speedtest",
-		"pt": "Configurações do adaptador para vodafone-speedtest",
-		"nl": "Adapterinstellingen voor vodafone-speedtest",
-		"fr": "Paramètres d'adaptateur pour vodafone-speedtest",
-		"it": "Impostazioni dell'adattatore per vodafone-speedtest",
-		"es": "Ajustes del adaptador para vodafone-speedtest",
-		"pl": "Ustawienia adaptera dla vodafone-speedtest",
-		"zh-cn": "vodafone-speedtest的适配器设置"
+	"vofo-speedtest adapter settings": {
+		"en": "Adapter settings for vofo-speedtest",
+		"de": "Adaptereinstellungen für vofo-speedtest",
+		"ru": "Настройки адаптера для vofo-speedtest",
+		"pt": "Configurações do adaptador para vofo-speedtest",
+		"nl": "Adapterinstellingen voor vofo-speedtest",
+		"fr": "Paramètres d'adaptateur pour vofo-speedtest",
+		"it": "Impostazioni dell'adattatore per vofo-speedtest",
+		"es": "Ajustes del adaptador para vofo-speedtest",
+		"pl": "Ustawienia adaptera dla vofo-speedtest",
+		"zh-cn": "vofo-speedtest的适配器设置"
 	},
 	"option1": {
 		"en": "option1",

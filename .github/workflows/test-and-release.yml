@@ -133,8 +133,8 @@ jobs:
           npm i -g @sentry/cli
           export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
           export SENTRY_ORG=peterbaumert
-          export SENTRY_PROJECT=vodafone-speedtest
-          export SENTRY_VERSION=vodafone-speedtest@${{ steps.extract_release.outputs.VERSION }}
+          export SENTRY_PROJECT=vofo-speedtest
+          export SENTRY_VERSION=vofo-speedtest@${{ steps.extract_release.outputs.VERSION }}
           sentry-cli releases new $SENTRY_VERSION
           sentry-cli releases finalize $SENTRY_VERSION
 
