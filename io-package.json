@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "vofo-speedtest",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "news": {
+            "0.0.8": {
+                "en": "Renamed Adapter due to legal reasons\nFixed some dependencies",
+                "de": "Adapter aus rechtlichen Gründen umbenannt\nEinige Abhängigkeiten behoben",
+                "ru": "Адаптер переименован по юридическим причинам\nИсправлены некоторые зависимости",
+                "pt": "Adaptador renomeado devido a razões legais\nAlgumas dependências corrigidas",
+                "nl": "Om juridische redenen omgedoopt tot Adapter\nEnkele afhankelijkheden opgelost",
+                "fr": "Adaptateur renommé pour des raisons juridiques\nCorrection de certaines dépendances",
+                "it": "Adattatore rinominato per motivi legali\nRisolte alcune dipendenze",
+                "es": "Adaptador renombrado por razones legales\nSe corrigieron algunas dependencias",
+                "pl": "Zmieniono nazwę adaptera ze względów prawnych\nNaprawiono niektóre zależności",
+                "zh-cn": "由于法律原因重命名适配器\n修复了一些依赖"
+            },
             "0.0.7": {
                 "en": "Fixed some vulnerabilities in dev-dependencies\nFixed js-controller 3* issues\nFixed node 16 compatability",
                 "de": "Einige Schwachstellen in Dev-Abhängigkeiten wurden behoben\nProbleme mit js-controller 3 * behoben\nKompatibilität mit Knoten 16 behoben",
