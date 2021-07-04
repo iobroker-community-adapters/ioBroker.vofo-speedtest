@@ -117,7 +117,7 @@ class VofoSpeedtest extends utils.Adapter {
 	 */
 	onUnload(callback) {
 		try {
-			this.log.info("cleaned everything up...");
+			this.log.info("starting cleanup...");
 			if (typeof stopHandler === "number") {
 				clearTimeout(stopHandler);
 				stopHandler = null;
@@ -126,6 +126,7 @@ class VofoSpeedtest extends utils.Adapter {
 				clearTimeout(timer);
 			});
 			timers = [];
+			this.log.info("cleaned everything up...");
 			callback();
 		} catch (e) {
 			callback();
@@ -513,6 +514,7 @@ class VofoSpeedtest extends utils.Adapter {
 			method: "POST",
 			rejectUnauthorized: false,
 			resolveWithFullResponse: true,
+			timeout: 60000,
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
 				"Content-Length": Buffer.byteLength(data, "utf8")
