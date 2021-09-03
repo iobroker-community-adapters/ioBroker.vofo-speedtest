@@ -334,6 +334,13 @@ class VofoSpeedtest extends utils.Adapter {
 				result.ping.avg = res.avg;
 				result.ping.packetLoss = res.packetLoss;
 				this.stopPingTest();
+			}).catch((error) => {
+				console.error(error);
+				result.ping.min = 999;
+				result.ping.max = 999;
+				result.ping.avg = 999;
+				result.ping.packetLoss = 999;
+				this.stopPingTest();
 			});
 	}
 
