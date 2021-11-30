@@ -10,19 +10,14 @@ const utils = require("@iobroker/adapter-core");
 
 // Load your modules here, e.g.:
 const { Curl, CurlFeature } = require("node-libcurl");
-const querystring = require("querystring");
 const https = require("https");
 const ping = require("ping");
+const uuid = require("uuid");
 const state_attr = require(__dirname + "/lib/state_attr.js");
 
 let that = null;
 
 let useCurl = false;
-const num_download_streams = 6;
-let download_time = 10;
-const download_interval_time = 750;
-const upload_time = 12;
-const upload_interval_time = 750;
 //const ping_interval_time = 1000;
 //const ping_time = 8;
 const bytes_loaded = [];
@@ -33,16 +28,11 @@ let running = null;
 let timeSection = null;
 let timeStart = null;
 let retry_download = !1;
-const remote_port = null;
+let remote_port = 0;
 let provider_download = 0;
 let provider_upload = 0;
-let initiating = false;
-let gotConfig = false;
-let retries = 20;
-let init_done = !1;
 let timers = [];
 const isWin = process.platform === "win32";
-const ping_time = 8;
 const data = [{
 	name: "data",
 	contents: ""
@@ -61,10 +51,10 @@ const result = {
 	download: 0,
 	upload: 0,
 	ping: {
-		min: 0,
-		max: 0,
-		avg: 0,
-		packetLoss: 0,
+		min: "987",
+		max: "987",
+		avg: "987",
+		packetLoss: "987",
 	},
 	jitter: 0,
 	webench: Array(),
@@ -72,8 +62,70 @@ const result = {
 };
 let stopHandler;
 
-// eslint-disable-next-line prefer-const
-let conf = JSON.parse('{"debug":false,"webench":[{"id":1,"url":"https://ref-large.system.info"},{"id":2,"url":"https://www.focus.de"},{"id":3,"url":"https://www.formel1.de"},{"id":4,"url":"https://www.chip.de"},{"id":5,"url":"https://www.wikipedia.org"}],"server":{"testServers":["https://speedtest-56.speedtest.vodafone-ip.de","https://speedtest-60.speedtest.vodafone-ip.de"],"pingServer":"https://speedtest-56.speedtest.vodafone-ip.de"}}');
+let conf = {
+	"data": {
+		"version": "0.28.9",
+		"remotePortDetectionUrl": "https://rpd.speedtest.vodafone-ip.de",
+		"ipDetectionUrl": {
+			"ipv4": "https://ip4.system.info",
+			"ipv6": "https://speedtest-21v6.vodafone.anw.net/empty.txt"
+		},
+		"download": {
+			"numStreams": 6,
+			"duration": 10,
+			"interval": 0.75
+		},
+		"upload": {
+			"duration": 12,
+			"interval": 0.75,
+			"maxBytes": 10485760
+		},
+		"ping": {
+			"duration": 8,
+			"interval": 1
+		},
+		"cpuBenchmark": false,
+		"webBenchmark": false,
+		"tcpRetrans": false,
+		"connection": {
+			"ip": "127.0.0.1",
+			"ipVersion": "v4"
+		}
+	}
+};
+let init = {
+	"data": {
+		"speedtest": {
+			"id": "XXXXXXXXX",
+			"servers": {
+				"downloadServers": {
+					"dualstack": [
+						"https://speedtest-60.speedtest.vodafone-ip.de/data.zero.bin.512M",
+						"https://speedtest-53.speedtest.vodafone-ip.de/data.zero.bin.512M"
+					],
+					"ipv6": [
+						"https://speedtest-60v6.speedtest.vodafone-ip.de/data.zero.bin.512M",
+						"https://speedtest-53v6.speedtest.vodafone-ip.de/data.zero.bin.512M"
+					]
+				},
+				"uploadServer": {
+					"dualstack": "https://speedtest-60.speedtest.vodafone-ip.de/empty.txt",
+					"ipv6": "https://speedtest-60v6.speedtest.vodafone-ip.de/empty.txt"
+				},
+				"pingServer": {
+					"dualstack": "https://speedtest-60.speedtest.vodafone-ip.de",
+					"ipv6": "https://speedtest-60v6.speedtest.vodafone-ip.de"
+				},
+				"wsPingServer": {
+					"dualstack": "wss://speedtest-21.vodafone.anw.net/ping/",
+					"ipv6": "wss://speedtest-21v6.vodafone.anw.net/ping/"
+				}
+			}
+		}
+	}
+};
+let apikeyfile = "";
+let xapikey = "";
 
 class VofoSpeedtest extends utils.Adapter {
 
@@ -101,7 +153,7 @@ class VofoSpeedtest extends utils.Adapter {
 		this.updateData();
 	}
 
-	async errorHandling (codePart, error) {
+	async errorHandling(codePart, error) {
 		this.log.error(`[${codePart}] error: ${error.message}, stack: ${error.stack}`);
 		if (this.supportsFeature && this.supportsFeature("PLUGINS")) {
 			const sentryInstance = this.getPluginInstance("sentry");
@@ -134,12 +186,11 @@ class VofoSpeedtest extends utils.Adapter {
 	}
 
 	updateData() {
-		this.getConfig();
-		this.doSpeedtest();
+		this.getApiKeyFile();
 		//timers["updateData"] = setTimeout(() => this.updateData(), this.config.interval * 60000);
 	}
 
-	getConfig() {
+	getApiKeyFile() {
 		const options = {
 			hostname: "speedtest.vodafone.de",
 			port: 443,
@@ -157,12 +208,98 @@ class VofoSpeedtest extends utils.Adapter {
 			});
 			res.on("end", () => {
 				if (res.statusCode == 200) {
-					const regex = /<script>.*unitymedia\.speedtest\.config = {.*(server: {.*},).*};.*<\/script>/s;
+					////<script src="/_next/static/chunks/_app-784-16521bb81c5071f679b8.js" defer="">
+					const regex = /<script src="(\/_next\/static\/chunks\/pages\/_app-[0-9a-z]+\.js)" defer="">/s;
 					const settings = page.match(regex);
 					if (settings != null) {
-						eval("conf = {" + settings[1] + "}");
-						gotConfig = true;
+						apikeyfile = settings[1];
+						this.getApiKey();
 					}
+				} else {
+					that.log.error("Couldnt get .js file for API Key");
+				}
+			});
+		});
+
+		req.on("error", e => {
+			this.log.error("getApiKeyFile error: " + JSON.stringify(e));
+		});
+
+		req.on("abort", e => {
+			this.log.warn("getApiKeyFile abort: " + JSON.stringify(e));
+		});
+		req.end();
+
+	}
+
+	getApiKey() {
+		const options = {
+			hostname: "speedtest.vodafone.de",
+			port: 443,
+			path: apikeyfile,
+			method: "GET",
+			rejectUnauthorized: false,
+			resolveWithFullResponse: true,
+			timeout: 60000,
+		};
+
+		const req = https.request(options, res => {
+			let page = "";
+			res.on("data", d => {
+				page += d;
+			});
+			res.on("end", () => {
+				if (res.statusCode == 200) {
+					//r = null !== (e = "eiquo8HuP0aeDoinono2nao4keip1the") ? e : ""
+					const regex = /r=null!==\(e="([a-zA-Z0-9]*)"\)/s;
+					const settings = page.match(regex);
+					if (settings != null) {
+						xapikey = settings[1];
+						this.getConfig();
+					}
+				} else {
+					that.log.error("Couldnt get API Key");
+				}
+			});
+		});
+
+		req.on("error", e => {
+			this.log.error("getApiKey error: " + JSON.stringify(e));
+		});
+
+		req.on("abort", e => {
+			this.log.warn("getApiKey abort: " + JSON.stringify(e));
+		});
+		req.end();
+
+	}
+
+	getConfig() {
+		//r = null !== (e = "eiquo8HuP0aeDoinono2nao4keip1the") ? e : ""
+		//
+		const options = {
+			hostname: "api.speedtest.vodafone.anw.net",
+			port: 443,
+			path: "/v0/config/",
+			method: "GET",
+			rejectUnauthorized: false,
+			resolveWithFullResponse: true,
+			timeout: 60000,
+			headers: {
+				"X-APIKEY": xapikey,
+			}
+		};
+
+		const req = https.request(options, res => {
+			let page = "";
+			res.on("data", d => {
+				page += d;
+			});
+			res.on("end", () => {
+				if (res.statusCode == 200) {
+					//https://speedtest-60.speedtest.vodafone-ip.de/data.zero.bin.512M?0.9984625503642759
+					conf = JSON.parse(page);
+					this.getRemotePort();
 				} else {
 					that.log.error("Couldnt get Speedtest Config");
 				}
@@ -179,39 +316,136 @@ class VofoSpeedtest extends utils.Adapter {
 		req.end();
 	}
 
-	doSpeedtest() {
-		if (!initiating && !init_done) this.init_sbc();
-		this.log.silly("doSpeedtest " + init_done);
-		if (!init_done || !gotConfig) {
-			if (retries-- > 0) {
-				timers["doSpeedtest"] = setTimeout(() => this.doSpeedtest(), 1000);
-				return;
-			} else {
-				this.log.error("doSpeedtest: init_done=" + init_done + " gotConfig=" + gotConfig);
-				if (this.stop) {
-					this.stop();
+	getRemotePort() {
+		//r = null !== (e = "eiquo8HuP0aeDoinono2nao4keip1the") ? e : ""
+		//
+		const options = {
+			hostname: "rpd.speedtest.vodafone-ip.de",
+			port: 443,
+			path: "/",
+			method: "GET",
+			rejectUnauthorized: false,
+			resolveWithFullResponse: true,
+			timeout: 60000,
+		};
+
+		const req = https.request(options, res => {
+			let page = "";
+			res.on("data", d => {
+				page += d;
+			});
+			res.on("end", () => {
+				if (res.statusCode == 200) {
+					const d = JSON.parse(page);
+					if (d != "") {
+						remote_port = d.port;
+						this.init_sbc();
+					}
+				} else {
+					that.log.error("Couldnt get Remote Port");
 				}
+			});
+		});
+
+		req.on("error", e => {
+			this.log.error("getRemotePort error: " + JSON.stringify(e));
+		});
+
+		req.on("abort", e => {
+			this.log.warn("getRemotePort abort: " + JSON.stringify(e));
+		});
+		req.end();
+	}
+
+	init_sbc() {
+		const options = {
+			hostname: "api.speedtest.vodafone.anw.net",
+			port: 443,
+			path: "/v0/init/",
+			method: "POST",
+			rejectUnauthorized: false,
+			resolveWithFullResponse: true,
+			timeout: 60000,
+			headers: {
+				"Content-Type": "application/json; charset=utf-8",
+				"X-APIKEY": xapikey
 			}
-		}
-		this.startDownload();
+		};
+
+		const req = https.request(options, res => {
+			let data = "";
+			res.on("data", d => {
+				data += d;
+			});
+			res.on("end", () => {
+				if (res.statusCode == 200) {
+					const args = JSON.parse(data);
+					init = args;
+					provider_download = args.data.modem.provisionedDownloadSpeed;
+					provider_upload = args.data.modem.provisionedUploadSpeed;
+					this.create_state("modem", "modem");
+					this.create_state("modem.vendor", "vendor", args.data.modem.vendor);
+					this.create_state("modem.code", "code", (args.data.modem.code != null ? args.data.modem.code : null));
+					this.create_state("modem.name", "name", (args.data.modem.name != null ? args.data.modem.name : null));
+					this.create_state("modem.text", "text", (args.data.modem.type != null ? args.data.modem.type : null));
+					this.create_state("isCustomer", "isCustomer", args.data.connection.isCustomer);
+					this.create_state("isp", "isp", args.data.connection.isp);
+					this.create_state("ip", "ip", args.data.connection.ip);
+					this.create_state("ipCountry", "ipCountry", args.data.connection.ipCountry);
+					this.create_state("downstreamSpeed", "downstreamSpeed", args.data.modem.provisionedDownloadSpeed);
+					this.create_state("upstreamSpeed", "upstreamSpeed", args.data.modem.provisionedUploadSpeed);
+					this.create_state("downstreamBooked", "downstreamBooked", args.data.modem.bookedDownloadSpeedMax);
+					this.create_state("upstreamBooked", "upstreamBooked", args.data.modem.bookedUploadSpeedMax);
+					//this.setState("info.connection", true, true);
+					this.log.debug("SBC-Init (Success):" + JSON.stringify(args));
+					this.startDownload();
+				} else {
+					this.log.error("init_sbc: Unknown Error");
+				}
+			});
+		});
+
+		req.on("error", e => {
+			this.log.error("init_sbc: " + JSON.stringify(e));
+		});
+		const toSend = JSON.stringify({
+			"uuid": uuid.v1(),
+			"remotePort": remote_port,
+			"deviceInfo": {
+				"model": null,
+				"systemVersion": "10",
+				"systemName": "Windows",
+				"displayResolution": {
+					"width": 1920,
+					"height": 1080
+				},
+				"networkInterfaceTypes": [],
+				"userDefinedName": "speedtest.vodafone.de"
+			},
+			"clientBundleId": "@visonum/network-quality-sdk",
+			"clientVersion": "1.2.1"
+		});
+		req.write(toSend);
+		req.end();
+		this.log.silly("init_sbc: " + JSON.stringify(options));
 	}
 
 	startDownload() {
 		this.log.silly("startDownload start: " + running);
 		if (running != null) return;
 		running = "download";
-		this.log.silly(conf.server.testServers);
+		//this.log.silly(init.data.speedtest.servers);
 
-		conf.server.testServers.forEach(testServer => {
+		init.data.speedtest.servers.downloadServers.dualstack.forEach(testServer => {
 			if (typeof bytes_loaded[testServer] == "undefined") { bytes_loaded[testServer] = []; }
-			for (let i = 0; i < num_download_streams; i++) {
+			for (let i = 0; i < conf.data.download.numStreams; i++) {
 
 				bytes_loaded[testServer][i] = 0;
 
 				let downloadStream;
 				if (useCurl) {
 					const curl = new Curl();
-					curl.setOpt(Curl.option.URL, testServer + "/data.zero.bin.512M?" + Math.random());
+					curl.setOpt(Curl.option.URL, testServer + Math.random());
 					curl.setOpt(Curl.option.NOPROGRESS, false);
 					curl.setOpt(Curl.option.SSL_VERIFYPEER, false);
 					curl.enable(CurlFeature.NoStorage);
@@ -235,7 +469,7 @@ class VofoSpeedtest extends utils.Adapter {
 					};
 				} else {
 					const options = {
-						hostname: testServer.replace("https://", ""),
+						hostname: testServer.replace("https://", "").replace("/data.zero.bin.512M", ""),
 						port: 443,
 						path: "/data.zero.bin.512M?" + Math.random(),
 						method: "GET",
@@ -273,13 +507,13 @@ class VofoSpeedtest extends utils.Adapter {
 			}
 		});
 
-		this.interval(this.transferEnd, download_interval_time, this.intervalRoundTrips(download_time, download_interval_time));
+		this.interval(this.transferEnd, conf.data.download.interval * 1000, this.intervalRoundTrips(conf.data.download.duration, conf.data.download.interval * 1000));
 		if (typeof stopHandler === "number") {
 			this.log.debug("resetting Timeout download");
 			clearTimeout(stopHandler);
 			stopHandler = null;
 		}
-		stopHandler = setTimeout(this.stopDownloadTest, download_time * 1000);
+		stopHandler = setTimeout(this.stopDownloadTest, conf.data.download.duration * 1000);
 		timeStart = new Date();
 		timeSection = timeStart;
 		for (let k = 0; k < download_streams.length; k++) {
@@ -298,20 +532,20 @@ class VofoSpeedtest extends utils.Adapter {
 		data[0].contents = "0".repeat(1E7);
 		bytes_loaded_last_section = 0;
 		bytes_loaded[0] = 0;
-		this.interval(this.transferEnd, upload_interval_time, this.intervalRoundTrips(upload_time, upload_interval_time));
+		this.interval(this.transferEnd, conf.data.upload.interval * 1000, this.intervalRoundTrips(conf.data.upload.duration, conf.data.upload.interval * 1000));
 		if (typeof stopHandler === "number") {
 			this.log.silly("resetting Timeout upload");
 			clearTimeout(stopHandler);
 			stopHandler = null;
 		}
-		stopHandler = setTimeout(this.stopUploadTest, upload_time * 1000);
+		stopHandler = setTimeout(this.stopUploadTest, conf.data.upload.duration * 1000);
 
 		timeStart = new Date();
 		timeSection = timeStart;
 		this.pushData(0);
 	}
 
-	startPing() {
+	async startPing() {
 		if (running != null)
 			return;
 		timeStart = new Date();
@@ -321,27 +555,18 @@ class VofoSpeedtest extends utils.Adapter {
 			clearTimeout(stopHandler);
 			stopHandler = null;
 		}
-		stopHandler = setTimeout(this.stopPingTest, ping_time * 1000);
+		stopHandler = setTimeout(this.stopPingTest, conf.data.ping.duration * 1000);
 		const options = {
-			timeout: 1,
+			timeout: conf.data.ping.interval,
 			extra: ["-c", "5"],
 		};
-		if (isWin) options.extra = ["-n" , "5"];
-		ping.promise.probe(conf.server.testServers[0].replace("https://", ""), options)
-			.then((res) => {
-				result.ping.min = res.min;
-				result.ping.max = res.max;
-				result.ping.avg = res.avg;
-				result.ping.packetLoss = res.packetLoss;
-				this.stopPingTest();
-			}).catch((error) => {
-				console.error(error);
-				result.ping.min = 999;
-				result.ping.max = 999;
-				result.ping.avg = 999;
-				result.ping.packetLoss = 999;
-				this.stopPingTest();
-			});
+		if (isWin) options.extra = ["-n", "5"];
+		const res = await ping.promise.probe(init.data.speedtest.servers.pingServer.dualstack.replace("https://", ""), options);
+		result.ping.min = res.min;
+		result.ping.max = res.max;
+		result.ping.avg = res.avg;
+		result.ping.packetLoss = res.packetLoss;
+		this.stopPingTest();
 	}
 
 	stopPingTest() {
@@ -353,7 +578,7 @@ class VofoSpeedtest extends utils.Adapter {
 
 	pushData(id) {
 		const curl = new Curl();
-		curl.setOpt(Curl.option.URL, conf.server.testServers[0] + "/empty.txt");
+		curl.setOpt(Curl.option.URL, init.data.speedtest.servers.uploadServer.dualstack);
 		curl.setOpt(Curl.option.NOPROGRESS, false);
 		curl.setOpt(Curl.option.SSL_VERIFYPEER, false);
 		curl.enable(CurlFeature.NoStorage);
@@ -377,70 +602,12 @@ class VofoSpeedtest extends utils.Adapter {
 		curl.perform();
 	}
 
-	init_sbc() {
-		initiating = true;
-		const options = {
-			hostname: "speedtest.vodafone.de",
-			port: 443,
-			path: "/ajax/speedtest-init/?port=" + remote_port,
-			method: "GET",
-			rejectUnauthorized: false,
-			resolveWithFullResponse: true,
-			timeout: 60000,
-			headers: {
-				"Content-Type": "application/json; charset=utf-8",
-			}
-		};
-
-		const req = https.request(options, res => {
-			let data = "";
-			res.on("data", d => {
-				data += d;
-			});
-			res.on("end", () => {
-				if (res.statusCode == 200) {
-					const args = JSON.parse(data);
-					provider_download = args.downstreamSpeed;
-					provider_upload = args.upstreamSpeed;
-					this.create_state("modem", "modem");
-					this.create_state("modem.vendor", "vendor", args.vendor);
-					this.create_state("modem.code", "code", (args.modemType != null ? args.modemType.code : null));
-					this.create_state("modem.name", "name", (args.modemType != null ? args.modemType.name : null));
-					this.create_state("modem.text", "text", (args.modemType != null ? args.modemType.text : null));
-					this.create_state("isCustomer", "isCustomer", args.isCustomer);
-					this.create_state("isp", "isp", args.isp);
-					this.create_state("ip", "ip", args.clientIp);
-					this.create_state("ipCountry", "ipCountry", args.ipCountry);
-					this.create_state("downstreamSpeed", "downstreamSpeed", args.downstreamSpeed);
-					this.create_state("upstreamSpeed", "upstreamSpeed", args.upstreamSpeed);
-					this.create_state("downstreamBooked", "downstreamBooked", args.downstreamBooked);
-					this.create_state("upstreamBooked", "upstreamBooked", args.upstreamBooked);
-					init_done = !0;
-					initiating = false;
-					//this.setState("info.connection", true, true);
-					this.log.debug("SBC-Init (Success):" + JSON.stringify(args));
-				} else {
-					initiating = false;
-					this.log.error("init_sbc: Unknown Error");
-				}
-			});
-		});
-
-		req.on("error", e => {
-			initiating = false;
-			this.log.error("init_sbc: " + JSON.stringify(e));
-		});
-		req.end();
-		this.log.silly("init_sbc: " + JSON.stringify(options));
-	}
-
-
 	getBytesUntilNow() {
 		let bytesLoadedUntilNow = 0;
 		that.log.silly("gbun " + running);
 		if (running == "download") {
-			conf.server.testServers.forEach(testServer => {
-				for (let i = 0; i < num_download_streams; i++) {
+			init.data.speedtest.servers.downloadServers.dualstack.forEach(testServer => {
+				for (let i = 0; i < conf.data.download.numStreams; i++) {
 					bytesLoadedUntilNow += bytes_loaded[testServer][i];
 				}
 			});
@@ -468,8 +635,8 @@ class VofoSpeedtest extends utils.Adapter {
 		if (newBytes > 0 && newTime > 0) {
 			timeSection = now;
 			bytes_loaded_last_section = bytesLoadedUntilNow;
-			that.log.silly("dit/2: " + download_interval_time / 2);
-			if (newTime > download_interval_time / 2) {
+			that.log.silly("dit/2: " + conf.data.download.interval * 1000 / 2);
+			if (newTime > conf.data.download.interval * 1000 / 2) {
 				that.log.silly("running: " + running);
 				if (running == "download") {
 					result.download_raw.push(newSpeed);
@@ -504,27 +671,26 @@ class VofoSpeedtest extends utils.Adapter {
 	}
 
 	result_from_arr(arr, type, ref, time, bytes) {
-		let data = querystring.stringify({
-			values: arr,
-			type: type,
-			ref: ref,
-			time: time,
-			bytes: bytes
+		const data = JSON.stringify({
+			"speedtestId": init.data.speedtest.id,
+			"intermediateValues": arr,
+			"transferDuration": time,
+			"transferredBytes": bytes
 		});
 
-		data = data.replace(/values=/g, "values%5B%5D=");
-
+		//https://api.speedtest.vodafone.anw.net/v0/calc/download/
 		const options = {
-			hostname: "speedtest.vodafone.de",
+			hostname: "api.speedtest.vodafone.anw.net",
 			port: 443,
-			path: "/ajax/result/",
-			method: "POST",
+			path: "/v0/calc/" + type + "/",
+			method: "PUT",
 			rejectUnauthorized: false,
 			resolveWithFullResponse: true,
 			timeout: 60000,
 			headers: {
-				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
-				"Content-Length": Buffer.byteLength(data, "utf8")
+				"Content-Type": "application/json",
+				"Content-Length": Buffer.byteLength(data, "utf8"),
+				"X-APIKEY": xapikey
 			}
 		};
 
@@ -536,14 +702,13 @@ class VofoSpeedtest extends utils.Adapter {
 			res.on("end", () => {
 				if (res.statusCode == 200) {
 					const args = JSON.parse(data);
-					switch (args.type) {
+					switch (type) {
 						case "download":
-							result.download = args.value;
-							if (parseInt(args.value, 10) == 0) {
+							result.download = args.data.value;
+							if (parseInt(args.data.value, 10) == 0) {
 								if (retry_download == !1) {
 									that.log.debug("second download test");
 									retry_download = !0;
-									download_time = 5;
 									that.startDownload();
 								} else {
 									that.log.error("retry error");
@@ -553,7 +718,7 @@ class VofoSpeedtest extends utils.Adapter {
 							}
 							break;
 						case "upload":
-							result.upload = args.value;
+							result.upload = args.data.value;
 							timers["result_from_arr"] = setTimeout(() => this.run("ping"), 500);
 							break;
 					}
@@ -653,7 +818,8 @@ class VofoSpeedtest extends utils.Adapter {
 						that.log.silly("interval: #" + t + " @" + new Date());
 					} catch (e) {
 						t = 0;
-						throw e.toString();
+						that.log.error(e);
+						throw e;
 					}
 				}
 			};
