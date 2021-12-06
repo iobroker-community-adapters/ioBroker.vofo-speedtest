@@ -251,7 +251,7 @@ class VofoSpeedtest extends utils.Adapter {
 			res.on("end", () => {
 				if (res.statusCode == 200) {
 					//r = null !== (e = "eiquo8HuP0aeDoinono2nao4keip1the") ? e : ""
-					const regex = /r=null!==\(e="([a-zA-Z0-9]*)"\)/s;
+					const regex = /[a-z]=null!==\([a-z]="([a-zA-Z0-9]*)"\)/s;
 					const settings = page.match(regex);
 					if (settings != null) {
 						xapikey = settings[1];
@@ -445,7 +445,7 @@ class VofoSpeedtest extends utils.Adapter {
 				let downloadStream;
 				if (useCurl) {
 					const curl = new Curl();
-					curl.setOpt(Curl.option.URL, testServer + Math.random());
+					curl.setOpt(Curl.option.URL, testServer + "?" + Math.random());
 					curl.setOpt(Curl.option.NOPROGRESS, false);
 					curl.setOpt(Curl.option.SSL_VERIFYPEER, false);
 					curl.enable(CurlFeature.NoStorage);
