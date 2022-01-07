@@ -1,6 +1,6 @@
 {
   "name": "iobroker.vofo-speedtest",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Speedtest of Vodafone.de",
   "author": {
     "name": "Peter Baumert",
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@alcalzone/release-script": "^3.4.2",
+    "@alcalzone/release-script-plugin-iobroker": "^3.0.0",
     "@iobroker/testing": "^2.5.2",
     "@types/chai": "^4.3.0",
     "@types/chai-as-promised": "^7.1.4",

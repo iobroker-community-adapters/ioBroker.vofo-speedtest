@@ -1,159 +1,159 @@
 {
-    "common": {
-        "name": "vofo-speedtest",
-        "version": "0.0.8",
-        "news": {
-            "0.0.8": {
-                "en": "Renamed Adapter due to legal reasons\nFixed some dependencies",
-                "de": "Adapter aus rechtlichen Gründen umbenannt\nEinige Abhängigkeiten behoben",
-                "ru": "Адаптер переименован по юридическим причинам\nИсправлены некоторые зависимости",
-                "pt": "Adaptador renomeado devido a razões legais\nAlgumas dependências corrigidas",
-                "nl": "Om juridische redenen omgedoopt tot Adapter\nEnkele afhankelijkheden opgelost",
-                "fr": "Adaptateur renommé pour des raisons juridiques\nCorrection de certaines dépendances",
-                "it": "Adattatore rinominato per motivi legali\nRisolte alcune dipendenze",
-                "es": "Adaptador renombrado por razones legales\nSe corrigieron algunas dependencias",
-                "pl": "Zmieniono nazwę adaptera ze względów prawnych\nNaprawiono niektóre zależności",
-                "zh-cn": "由于法律原因重命名适配器\n修复了一些依赖"
-            },
-            "0.0.7": {
-                "en": "Fixed some vulnerabilities in dev-dependencies\nFixed js-controller 3* issues\nFixed node 16 compatability",
-                "de": "Einige Schwachstellen in Dev-Abhängigkeiten wurden behoben\nProbleme mit js-controller 3 * behoben\nKompatibilität mit Knoten 16 behoben",
-                "ru": "Исправлены некоторые уязвимости в dev-зависимостях\nИсправлены проблемы с js-контроллером 3 *\nСовместимость с фиксированным узлом 16",
-                "pt": "Corrigidas algumas vulnerabilidades nas dependências de desenvolvimento\nProblemas de js-controller 3 * corrigidos\nCompatibilidade do nó 16 corrigido",
-                "nl": "Enkele kwetsbaarheden in dev-afhankelijkheden opgelost\nProblemen met js-controller 3 * opgelost\nCompatibiliteit met knooppunt 16 opgelost",
-                "fr": "Correction de certaines vulnérabilités dans les dépendances de développement\nProblèmes résolus avec js-controller 3 *\nCompatibilité du nœud fixe 16",
-                "it": "Risolte alcune vulnerabilità nelle dipendenze dev\nRisolti i problemi con js-controller 3 *\nRisolto il problema con la compatibilità del nodo 16",
-                "es": "Se corrigieron algunas vulnerabilidades en las dependencias de desarrollo.\nSe corrigieron problemas de js-controller 3 *\nCompatibilidad del nodo fijo 16",
-                "pl": "Naprawiono niektóre luki w zależnościach od programistów\nNaprawiono problemy z kontrolerem js 3 *\nNaprawiono kompatybilność z węzłem 16",
-                "zh-cn": "修复了开发人员依存关系中的一些漏洞\n修复了js-controller 3 *问题\n固定节点16兼容性"
-            },
-            "0.0.6": {
-                "en": "Added Sentry.io Integration",
-                "de": "Sentry.io Integration hinzugefügt",
-                "ru": "Добавлена интеграция с Sentry.io",
-                "pt": "Adicionado Integração Sentry.io",
-                "nl": "Sentry.io-integratie toegevoegd",
-                "fr": "Ajout de l'intégration Sentry.io",
-                "it": "Aggiunta integrazione Sentry.io",
-                "es": "Integración Sentry.io agregada",
-                "pl": "Dodano integrację Sentry.io",
-                "zh-cn": "添加了Sentry.io集成"
-            },
-            "0.0.5": {
-                "en": "* Added ping results\r\n* Added calculated values by actual raw data",
-                "de": "* Ping-Ergebnisse hinzugefügt\r\n* Berechnete Werte durch tatsächliche Rohdaten hinzugefügt",
-                "ru": "* Добавлены результаты пинга\r\n* Добавлены рассчитанные значения по фактическим необработанным данным",
-                "pt": "* Adicionado resultados de ping\r\n* Valores calculados adicionados por dados brutos reais",
-                "nl": "* Ping-resultaten toegevoegd\r\n* Berekende waarden toegevoegd door werkelijke onbewerkte gegevens",
-                "fr": "* Résultats de ping ajoutés\r\n* Ajout des valeurs calculées par les données brutes réelles",
-                "it": "* Aggiunti i risultati del ping\r\n* Aggiunti valori calcolati dai dati grezzi effettivi",
-                "es": "* Resultados de ping agregados\r\n* Se agregaron valores calculados por datos sin procesar reales",
-                "pl": "* Dodano wyniki ping\r\n* Dodano obliczone wartości według rzeczywistych surowych danych",
-                "zh-cn": "*添加了ping结果\r\n*通过实际原始数据添加计算值"
-            },
-            "0.0.4": {
-                "en": "* Changed Adapter start type to scheduled (reinstallation might be needed)\r\n* Bug fixes and feedback implementation",
-                "de": "* Der Starttyp des Adapters wurde in \"Geplant\" geändert (eine Neuinstallation ist möglicherweise erforderlich.)\r\n* Fehlerbehebungen und Feedback-Implementierung",
-                "ru": "* Изменен тип запуска адаптера на запланированный (может потребоваться переустановка)\r\n* Исправление ошибок и реализация отзывов",
-                "pt": "* Tipo de início do adaptador alterado para agendado (pode ser necessário reinstalar)\r\n* Correções de erros e implementação de feedback",
-                "nl": "* Het starttype van de adapter is gewijzigd in gepland (herinstallatie kan nodig zijn)\r\n* Bugfixes en feedback implementatie",
-                "fr": "* Changement du type de démarrage de l'adaptateur en planifié (une réinstallation peut être nécessaire)\r\n* Correction de bugs et implémentation de commentaires",
-                "it": "* Modificato il tipo di avvio dell'adattatore in base alla pianificazione (potrebbe essere necessaria la reinstallazione)\r\n* Correzioni di bug e implementazione del feedback",
-                "es": "* Se cambió el tipo de inicio del adaptador a programado (podría ser necesaria la reinstalación)\r\n* Corrección de errores e implementación de comentarios",
-                "pl": "* Zmieniono typ uruchomienia adaptera na zaplanowany (konieczna może być ponowna instalacja)\r\n* Poprawki błędów i wdrożenie opinii",
-                "zh-cn": "*将适配器启动类型更改为计划的（可能需要重新安装）\r\n*错误修复和反馈实施"
-            },
-            "0.0.3": {
-                "en": "* Implemented feedback from Forum and github issue",
-                "de": "* Feedback vom Forum und Github-Problem implementiert",
-                "ru": "* Реализована обратная связь с форума и проблема с github",
-                "pt": "* Feedback implementado do Fórum e do github",
-                "nl": "* Geïmplementeerde feedback van forum- en github-probleem",
-                "fr": "* Implémentation des commentaires du forum et du problème de github",
-                "it": "* Implementato feedback dal problema Forum e github",
-                "es": "* Implementado los comentarios del foro y el problema de github",
-                "pl": "* Wdrożono informacje zwrotne z forum i github",
-                "zh-cn": "*实现了来自论坛和github问题的反馈"
-            },
-            "0.0.2": {
-                "en": "* Added actual settings in Admin interface\r\n* first version ready for testing",
-                "de": "* Aktuelle Einstellungen in der Admin-Oberfläche hinzugefügt\r\n* erste Version zum Testen bereit",
-                "ru": "* Добавлены актуальные настройки в интерфейсе администратора\r\n* первая версия готова к тестированию",
-                "pt": "* Adicionadas configurações reais na interface do administrador\r\n* primeira versão pronta para teste",
-                "nl": "* Werkelijke instellingen toegevoegd in de beheerdersinterface\r\n* eerste versie klaar om te testen",
-                "fr": "* Ajout des paramètres réels dans l'interface d'administration\r\n* première version prête pour les tests",
-                "it": "* Aggiunte impostazioni effettive nell'interfaccia di amministrazione\r\n* prima versione pronta per il test",
-                "es": "* Se agregó la configuración real en la interfaz de administración\r\n* primera versión lista para probar",
-                "pl": "* Dodano aktualne ustawienia w interfejsie administratora\r\n* pierwsza wersja gotowa do testowania",
-                "zh-cn": "*在管理界面中添加了实际设置\r\n*准备测试的第一个版本"
-            }
-        },
-        "title": "Vofo Speedtest",
-        "titleLang": {
-            "en": "Vofo Speedtest",
-            "de": "Vofo Speedtest",
-            "ru": "Vofo Speedtest",
-            "pt": "Vofo Speedtest",
-            "nl": "Vofo Speedtest",
-            "fr": "Vofo Speedtest",
-            "it": "Vofo Speedtest",
-            "es": "Vofo Speedtest",
-            "pl": "Vofo Speedtest",
-            "zh-cn": "沃达丰速度测试"
-        },
-        "desc": {
-            "en": "Speedtest of Vodafone.de",
-            "de": "Speedtest von Vodafone.de",
-            "ru": "Speedtest of Vodafone.de",
-            "pt": "Speedtest da Vodafone.de",
-            "nl": "Speedtest van Vodafone.de",
-            "fr": "Speedtest de Vodafone.de",
-            "it": "Speedtest di Vodafone.de",
-            "es": "Speedtest de Vodafone.de",
-            "pl": "Speedtest of Vodafone.de",
-            "zh-cn": "Vodafone.de的速度测试"
-        },
-        "authors": [
-            "Peter Baumert <ioBroker.vofo-speedtest@outlook.com>"
-        ],
-        "keywords": [
-            "speedtest speed bandwidth"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "main": "main.js",
-        "icon": "vofo-speedtest.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/peterbaumert/ioBroker.vofo-speedtest/master/admin/vofo-speedtest.png",
-        "readme": "https://github.com/peterbaumert/ioBroker.vofo-speedtest/blob/master/README.md",
-        "loglevel": "info",
-        "mode": "schedule",
-        "schedule": "11,41 * * * *",
-        "type": "network",
-        "compact": true,
-        "connectionType": "cloud",
-        "dataSource": "poll",
-        "materialize": true,
-        "dependencies": [
-            {
-                "js-controller": ">=1.4.2"
-            }
-        ],
-        "osDependencies": {
-            "linux": [
-                "curl"
-            ]
-        },
-        "plugins": {
-            "sentry": {
-                "dsn": "https://64bf66cd21d4485eb4ff8867bb0124d5@o508406.ingest.sentry.io/5602321"
-            }
-        }
+  "common": {
+    "name": "vofo-speedtest",
+    "version": "0.0.10",
+    "news": {
+      "0.0.10": {
+        "en": "Fix version numbers",
+        "de": "Versionsnummern korrigieren",
+        "ru": "Исправить номера версий",
+        "pt": "Corrigir números de versão",
+        "nl": "Versienummers herstellen",
+        "fr": "Correction des numéros de version",
+        "it": "Correggi i numeri di versione",
+        "es": "Corregir números de versión",
+        "pl": "Napraw numery wersji",
+        "zh-cn": "修复版本号"
+      },
+      "0.0.8": {
+        "en": "Renamed Adapter due to legal reasons\nFixed some dependencies",
+        "de": "Adapter aus rechtlichen Gründen umbenannt\nEinige Abhängigkeiten behoben",
+        "ru": "Адаптер переименован по юридическим причинам\nИсправлены некоторые зависимости",
+        "pt": "Adaptador renomeado devido a razões legais\nAlgumas dependências corrigidas",
+        "nl": "Om juridische redenen omgedoopt tot Adapter\nEnkele afhankelijkheden opgelost",
+        "fr": "Adaptateur renommé pour des raisons juridiques\nCorrection de certaines dépendances",
+        "it": "Adattatore rinominato per motivi legali\nRisolte alcune dipendenze",
+        "es": "Adaptador renombrado por razones legales\nSe corrigieron algunas dependencias",
+        "pl": "Zmieniono nazwę adaptera ze względów prawnych\nNaprawiono niektóre zależności",
+        "zh-cn": "由于法律原因重命名适配器\n修复了一些依赖"
+      },
+      "0.0.7": {
+        "en": "Fixed some vulnerabilities in dev-dependencies\nFixed js-controller 3* issues\nFixed node 16 compatability",
+        "de": "Einige Schwachstellen in Dev-Abhängigkeiten wurden behoben\nProbleme mit js-controller 3 * behoben\nKompatibilität mit Knoten 16 behoben",
+        "ru": "Исправлены некоторые уязвимости в dev-зависимостях\nИсправлены проблемы с js-контроллером 3 *\nСовместимость с фиксированным узлом 16",
+        "pt": "Corrigidas algumas vulnerabilidades nas dependências de desenvolvimento\nProblemas de js-controller 3 * corrigidos\nCompatibilidade do nó 16 corrigido",
+        "nl": "Enkele kwetsbaarheden in dev-afhankelijkheden opgelost\nProblemen met js-controller 3 * opgelost\nCompatibiliteit met knooppunt 16 opgelost",
+        "fr": "Correction de certaines vulnérabilités dans les dépendances de développement\nProblèmes résolus avec js-controller 3 *\nCompatibilité du nœud fixe 16",
+        "it": "Risolte alcune vulnerabilità nelle dipendenze dev\nRisolti i problemi con js-controller 3 *\nRisolto il problema con la compatibilità del nodo 16",
+        "es": "Se corrigieron algunas vulnerabilidades en las dependencias de desarrollo.\nSe corrigieron problemas de js-controller 3 *\nCompatibilidad del nodo fijo 16",
+        "pl": "Naprawiono niektóre luki w zależnościach od programistów\nNaprawiono problemy z kontrolerem js 3 *\nNaprawiono kompatybilność z węzłem 16",
+        "zh-cn": "修复了开发人员依存关系中的一些漏洞\n修复了js-controller 3 *问题\n固定节点16兼容性"
+      },
+      "0.0.6": {
+        "en": "Added Sentry.io Integration",
+        "de": "Sentry.io Integration hinzugefügt",
+        "ru": "Добавлена интеграция с Sentry.io",
+        "pt": "Adicionado Integração Sentry.io",
+        "nl": "Sentry.io-integratie toegevoegd",
+        "fr": "Ajout de l'intégration Sentry.io",
+        "it": "Aggiunta integrazione Sentry.io",
+        "es": "Integración Sentry.io agregada",
+        "pl": "Dodano integrację Sentry.io",
+        "zh-cn": "添加了Sentry.io集成"
+      },
+      "0.0.5": {
+        "en": "* Added ping results\r\n* Added calculated values by actual raw data",
+        "de": "* Ping-Ergebnisse hinzugefügt\r\n* Berechnete Werte durch tatsächliche Rohdaten hinzugefügt",
+        "ru": "* Добавлены результаты пинга\r\n* Добавлены рассчитанные значения по фактическим необработанным данным",
+        "pt": "* Adicionado resultados de ping\r\n* Valores calculados adicionados por dados brutos reais",
+        "nl": "* Ping-resultaten toegevoegd\r\n* Berekende waarden toegevoegd door werkelijke onbewerkte gegevens",
+        "fr": "* Résultats de ping ajoutés\r\n* Ajout des valeurs calculées par les données brutes réelles",
+        "it": "* Aggiunti i risultati del ping\r\n* Aggiunti valori calcolati dai dati grezzi effettivi",
+        "es": "* Resultados de ping agregados\r\n* Se agregaron valores calculados por datos sin procesar reales",
+        "pl": "* Dodano wyniki ping\r\n* Dodano obliczone wartości według rzeczywistych surowych danych",
+        "zh-cn": "*添加了ping结果\r\n*通过实际原始数据添加计算值"
+      },
+      "0.0.4": {
+        "en": "* Changed Adapter start type to scheduled (reinstallation might be needed)\r\n* Bug fixes and feedback implementation",
+        "de": "* Der Starttyp des Adapters wurde in \"Geplant\" geändert (eine Neuinstallation ist möglicherweise erforderlich.)\r\n* Fehlerbehebungen und Feedback-Implementierung",
+        "ru": "* Изменен тип запуска адаптера на запланированный (может потребоваться переустановка)\r\n* Исправление ошибок и реализация отзывов",
+        "pt": "* Tipo de início do adaptador alterado para agendado (pode ser necessário reinstalar)\r\n* Correções de erros e implementação de feedback",
+        "nl": "* Het starttype van de adapter is gewijzigd in gepland (herinstallatie kan nodig zijn)\r\n* Bugfixes en feedback implementatie",
+        "fr": "* Changement du type de démarrage de l'adaptateur en planifié (une réinstallation peut être nécessaire)\r\n* Correction de bugs et implémentation de commentaires",
+        "it": "* Modificato il tipo di avvio dell'adattatore in base alla pianificazione (potrebbe essere necessaria la reinstallazione)\r\n* Correzioni di bug e implementazione del feedback",
+        "es": "* Se cambió el tipo de inicio del adaptador a programado (podría ser necesaria la reinstalación)\r\n* Corrección de errores e implementación de comentarios",
+        "pl": "* Zmieniono typ uruchomienia adaptera na zaplanowany (konieczna może być ponowna instalacja)\r\n* Poprawki błędów i wdrożenie opinii",
+        "zh-cn": "*将适配器启动类型更改为计划的（可能需要重新安装）\r\n*错误修复和反馈实施"
+      },
+      "0.0.3": {
+        "en": "* Implemented feedback from Forum and github issue",
+        "de": "* Feedback vom Forum und Github-Problem implementiert",
+        "ru": "* Реализована обратная связь с форума и проблема с github",
+        "pt": "* Feedback implementado do Fórum e do github",
+        "nl": "* Geïmplementeerde feedback van forum- en github-probleem",
+        "fr": "* Implémentation des commentaires du forum et du problème de github",
+        "it": "* Implementato feedback dal problema Forum e github",
+        "es": "* Implementado los comentarios del foro y el problema de github",
+        "pl": "* Wdrożono informacje zwrotne z forum i github",
+        "zh-cn": "*实现了来自论坛和github问题的反馈"
+      }
     },
-    "native": {
-        "bindAddress": "0.0.0.0",
-        "useCurl": false
+    "title": "Vofo Speedtest",
+    "titleLang": {
+      "en": "Vofo Speedtest",
+      "de": "Vofo Speedtest",
+      "ru": "Vofo Speedtest",
+      "pt": "Vofo Speedtest",
+      "nl": "Vofo Speedtest",
+      "fr": "Vofo Speedtest",
+      "it": "Vofo Speedtest",
+      "es": "Vofo Speedtest",
+      "pl": "Vofo Speedtest",
+      "zh-cn": "沃达丰速度测试"
     },
-    "objects": [],
-    "instanceObjects": []
+    "desc": {
+      "en": "Speedtest of Vodafone.de",
+      "de": "Speedtest von Vodafone.de",
+      "ru": "Speedtest of Vodafone.de",
+      "pt": "Speedtest da Vodafone.de",
+      "nl": "Speedtest van Vodafone.de",
+      "fr": "Speedtest de Vodafone.de",
+      "it": "Speedtest di Vodafone.de",
+      "es": "Speedtest de Vodafone.de",
+      "pl": "Speedtest of Vodafone.de",
+      "zh-cn": "Vodafone.de的速度测试"
+    },
+    "authors": [
+      "Peter Baumert <ioBroker.vofo-speedtest@outlook.com>"
+    ],
+    "keywords": [
+      "speedtest speed bandwidth"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "vofo-speedtest.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/peterbaumert/ioBroker.vofo-speedtest/master/admin/vofo-speedtest.png",
+    "readme": "https://github.com/peterbaumert/ioBroker.vofo-speedtest/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "schedule",
+    "schedule": "11,41 * * * *",
+    "type": "network",
+    "compact": true,
+    "connectionType": "cloud",
+    "dataSource": "poll",
+    "materialize": true,
+    "dependencies": [
+      {
+        "js-controller": ">=1.4.2"
+      }
+    ],
+    "osDependencies": {
+      "linux": [
+        "curl"
+      ]
+    },
+    "plugins": {
+      "sentry": {
+        "dsn": "https://64bf66cd21d4485eb4ff8867bb0124d5@o508406.ingest.sentry.io/5602321"
+      }
+    }
+  },
+  "native": {
+    "bindAddress": "0.0.0.0",
+    "useCurl": false
+  },
+  "objects": [],
+  "instanceObjects": []
 }
