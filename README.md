@@ -71,7 +71,7 @@ Vodafone is a trademark of Vodafone GmbH. I am in no way endorsed by or affiliat
 ## License
 MIT License
 
-Copyright (c) 2021 Peter Baumert
+Copyright (c) 2020-2022 Peter Baumert
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
