@@ -250,7 +250,7 @@ class VofoSpeedtest extends utils.Adapter {
 			});
 			res.on("end", () => {
 				if (res.statusCode == 200) {
-					//r = null !== (e = "eiquo8HuP0aeDoinono2nao4keip1the") ? e : ""
+					// 32 char long API key like "eiquo8HuP0aeDoinono2nao4keip1the"
 					const regex = /"([a-zA-Z0-9]{32})"/s;
 					const settings = page.match(regex);
 					if (settings != null) {
