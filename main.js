@@ -251,11 +251,13 @@ class VofoSpeedtest extends utils.Adapter {
 			res.on("end", () => {
 				if (res.statusCode == 200) {
 					//r = null !== (e = "eiquo8HuP0aeDoinono2nao4keip1the") ? e : ""
-					const regex = /[a-z]=null!==\([a-z]="([a-zA-Z0-9]*)"\)/s;
+					const regex = /"([a-zA-Z0-9]{32})"/s;
 					const settings = page.match(regex);
 					if (settings != null) {
 						xapikey = settings[1];
 						this.getConfig();
+					} else {
+						that.log.error("Couldnt extract API Key");	
 					}
 				} else {
 					that.log.error("Couldnt get API Key");
