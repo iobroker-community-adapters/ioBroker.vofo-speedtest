@@ -450,6 +450,8 @@ class VofoSpeedtest extends utils.Adapter {
 					curl.setOpt(Curl.option.URL, testServer + "?" + Math.random());
 					curl.setOpt(Curl.option.NOPROGRESS, false);
 					curl.setOpt(Curl.option.SSL_VERIFYPEER, false);
+					curl.setOpt(Curl.option.CONNECTTIMEOUT, 5);
+					curl.setOpt(Curl.option.TIMEOUT, 120);
 					curl.enable(CurlFeature.NoStorage);
 					curl.setProgressCallback((dltotal, dlnow) => {
 						bytes_loaded[testServer][i] = dlnow;
@@ -477,6 +479,7 @@ class VofoSpeedtest extends utils.Adapter {
 						method: "GET",
 						rejectUnauthorized: false,
 						resolveWithFullResponse: true,
+						timeout: 120000,
 					};
 
 					const req = https.request(options, res => {
@@ -583,6 +586,8 @@ class VofoSpeedtest extends utils.Adapter {
 		curl.setOpt(Curl.option.URL, init.data.speedtest.servers.uploadServer.dualstack);
 		curl.setOpt(Curl.option.NOPROGRESS, false);
 		curl.setOpt(Curl.option.SSL_VERIFYPEER, false);
+		curl.setOpt(Curl.option.CONNECTTIMEOUT, 5);
+		curl.setOpt(Curl.option.TIMEOUT, 120);
 		curl.enable(CurlFeature.NoStorage);
 		curl.setOpt(Curl.option.HTTPPOST, data);
 		curl.setProgressCallback((dltotal, dlnow, ultotal, ulnow) => {
