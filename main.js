@@ -217,6 +217,7 @@ class VofoSpeedtest extends utils.Adapter {
 					}
 				} else {
 					that.log.error("Couldnt get .js file for API Key");
+					that.stop();
 				}
 			});
 		});
@@ -257,10 +258,12 @@ class VofoSpeedtest extends utils.Adapter {
 						xapikey = settings[1];
 						this.getConfig();
 					} else {
-						that.log.error("Couldnt extract API Key");	
+						that.log.error("Couldnt extract API Key");
+						that.stop();
 					}
 				} else {
 					that.log.error("Couldnt get API Key");
+					that.stop();
 				}
 			});
 		});
@@ -304,6 +307,7 @@ class VofoSpeedtest extends utils.Adapter {
 					this.getRemotePort();
 				} else {
 					that.log.error("Couldnt get Speedtest Config");
+					that.stop();
 				}
 			});
 		});
@@ -345,6 +349,7 @@ class VofoSpeedtest extends utils.Adapter {
 					}
 				} else {
 					that.log.error("Couldnt get Remote Port");
+					that.stop();
 				}
 			});
 		});
