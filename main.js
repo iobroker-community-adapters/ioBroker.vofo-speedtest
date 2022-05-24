@@ -407,7 +407,7 @@ class VofoSpeedtest extends utils.Adapter {
 					this.log.debug("SBC-Init (Success):" + JSON.stringify(args));
 					this.startDownload();
 				} else {
-					this.log.error("init_sbc: Unknown Error");
+					that.log.error("init_sbc: Unknown Error");
 					that.stop();
 				}
 			});
