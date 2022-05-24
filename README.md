@@ -5,8 +5,7 @@
 ![Number of Installations (stable)](http://iobroker.live/badges/vofo-speedtest-stable.svg)
 [![NPM version](http://img.shields.io/npm/v/iobroker.vofo-speedtest.svg)](https://www.npmjs.com/package/iobroker.vofo-speedtest)
 
-![Test and Release](https://github.com/Apollon77/iobroker.vofo-speedtest/workflows/Test%20and%20Release/badge.svg)
-[![Translation status](https://weblate.iobroker.net/widgets/adapters/-/vofo-speedtest/svg-badge.svg)](https://weblate.iobroker.net/engage/adapters/?utm_source=widget)
+![Test and Release](https://github.com/peterbaumert/iobroker.vofo-speedtest/workflows/Test%20and%20Release/badge.svg)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.vofo-speedtest.svg)](https://www.npmjs.com/package/iobroker.vofo-speedtest)
 
 [![NPM](https://nodei.co/npm/iobroker.vofo-speedtest.png?downloads=true)](https://nodei.co/npm/iobroker.vofo-speedtest/)
