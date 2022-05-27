@@ -29,7 +29,7 @@ When the adapter crashes or an other Code error happens, this error message that
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 0.0.11 (2022-05-27)
 * updating dependencies
 * adding some timeouts trying to fix "already running with pid"
 * fix extracting API key from js-code (thanks Zwer2k) [#112][pr112]
