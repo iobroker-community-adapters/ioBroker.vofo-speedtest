@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "vofo-speedtest",
-    "version": "0.0.10",
+    "version": "0.0.12",
     "news": {
+      "0.0.12": {
+        "en": "rerelease for 0.0.11 because of missing version in io-package.json",
+        "de": "Neuveröffentlichung für 0.0.11 wegen fehlender Version in io-package.json",
+        "ru": "перевыпуск для 0.0.11 из-за отсутствия версии в io-package.json",
+        "pt": "relançamento para 0.0.11 por falta de versão em io-package.json",
+        "nl": "heruitgave voor 0.0.11 vanwege ontbrekende versie in io-package.json",
+        "fr": "réédition pour 0.0.11 en raison d'une version manquante dans io-package.json",
+        "it": "riedizione per 0.0.11 a causa della versione mancante in io-package.json",
+        "es": "relanzamiento para 0.0.11 debido a que falta una versión en io-package.json",
+        "pl": "ponowne wydanie dla 0.0.11 z powodu braku wersji w io-package.json",
+        "zh-cn": "由于 io-package.json 中缺少版本，重新发布 0.0.11"
+      },
       "0.0.10": {
         "en": "Fix version numbers",
         "de": "Versionsnummern korrigieren",
@@ -74,18 +86,6 @@
         "es": "* Se cambió el tipo de inicio del adaptador a programado (podría ser necesaria la reinstalación)\r\n* Corrección de errores e implementación de comentarios",
         "pl": "* Zmieniono typ uruchomienia adaptera na zaplanowany (konieczna może być ponowna instalacja)\r\n* Poprawki błędów i wdrożenie opinii",
         "zh-cn": "*将适配器启动类型更改为计划的（可能需要重新安装）\r\n*错误修复和反馈实施"
-      },
-      "0.0.3": {
-        "en": "* Implemented feedback from Forum and github issue",
-        "de": "* Feedback vom Forum und Github-Problem implementiert",
-        "ru": "* Реализована обратная связь с форума и проблема с github",
-        "pt": "* Feedback implementado do Fórum e do github",
-        "nl": "* Geïmplementeerde feedback van forum- en github-probleem",
-        "fr": "* Implémentation des commentaires du forum et du problème de github",
-        "it": "* Implementato feedback dal problema Forum e github",
-        "es": "* Implementado los comentarios del foro y el problema de github",
-        "pl": "* Wdrożono informacje zwrotne z forum i github",
-        "zh-cn": "*实现了来自论坛和github问题的反馈"
       }
     },
     "title": "Vofo Speedtest",

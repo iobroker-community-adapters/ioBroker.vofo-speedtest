@@ -29,6 +29,9 @@ When the adapter crashes or an other Code error happens, this error message that
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
+### 0.0.12 (2022-05-28)
+* rerelease for 0.0.11 because of missing version in io-package.json
+
 ### 0.0.11 (2022-05-27)
 * updating dependencies
 * adding some timeouts trying to fix "already running with pid"
