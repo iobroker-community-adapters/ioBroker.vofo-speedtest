@@ -184,6 +184,12 @@ class VofoSpeedtest extends utils.Adapter {
 			callback();
 		}
 	}
+	
+	stopNow() {
+		if (this.stop) {
+			this.stop();
+		}
+	}
 
 	updateData() {
 		this.getApiKeyFile();
@@ -217,17 +223,19 @@ class VofoSpeedtest extends utils.Adapter {
 					}
 				} else {
 					that.log.error("Couldnt get .js file for API Key");
-					that.stop();
+					that.stopNow();
 				}
 			});
 		});
 
 		req.on("error", e => {
 			this.log.error("getApiKeyFile error: " + JSON.stringify(e));
+			this.stopNow();
 		});
 
 		req.on("abort", e => {
 			this.log.warn("getApiKeyFile abort: " + JSON.stringify(e));
+			this.stopNow();
 		});
 		req.end();
 
@@ -259,21 +267,23 @@ class VofoSpeedtest extends utils.Adapter {
 						this.getConfig();
 					} else {
 						that.log.error("Couldnt extract API Key");
-						that.stop();
+						that.stopNow();
 					}
 				} else {
 					that.log.error("Couldnt get API Key");
-					that.stop();
+					that.stopNow();
 				}
 			});
 		});
 
 		req.on("error", e => {
 			this.log.error("getApiKey error: " + JSON.stringify(e));
+			this.stopNow();
 		});
 
 		req.on("abort", e => {
 			this.log.warn("getApiKey abort: " + JSON.stringify(e));
+			this.stopNow();
 		});
 		req.end();
 
@@ -307,17 +317,19 @@ class VofoSpeedtest extends utils.Adapter {
 					this.getRemotePort();
 				} else {
 					that.log.error("Couldnt get Speedtest Config");
-					that.stop();
+					that.stopNow();
 				}
 			});
 		});
 
 		req.on("error", e => {
 			this.log.error("getConfig error: " + JSON.stringify(e));
+			this.stopNow();
 		});
 
 		req.on("abort", e => {
 			this.log.warn("getConfig abort: " + JSON.stringify(e));
+			this.stopNow();
 		});
 		req.end();
 	}
@@ -349,17 +361,19 @@ class VofoSpeedtest extends utils.Adapter {
 					}
 				} else {
 					that.log.error("Couldnt get Remote Port");
-					that.stop();
+					that.stopNow();
 				}
 			});
 		});
 
 		req.on("error", e => {
 			this.log.error("getRemotePort error: " + JSON.stringify(e));
+			this.stopNow();
 		});
 
 		req.on("abort", e => {
 			this.log.warn("getRemotePort abort: " + JSON.stringify(e));
+			this.stopNow();
 		});
 		req.end();
 	}
@@ -408,13 +422,14 @@ class VofoSpeedtest extends utils.Adapter {
 					this.startDownload();
 				} else {
 					that.log.error("init_sbc: Unknown Error");
-					that.stop();
+					that.stopNow();
 				}
 			});
 		});
 
 		req.on("error", e => {
 			this.log.error("init_sbc: " + JSON.stringify(e));
+			this.stopNow();
 		});
 		const toSend = JSON.stringify({
 			"uuid": uuid.v1(),
@@ -501,6 +516,7 @@ class VofoSpeedtest extends utils.Adapter {
 						// @ts-ignore
 						if (e.code != "ECONNRESET") {
 							this.log.error("startDownload error: " + JSON.stringify(e));
+							this.stopNow();
 						}
 					});
 
@@ -744,6 +760,7 @@ class VofoSpeedtest extends utils.Adapter {
 
 		req.on("error", e => {
 			this.log.error("result: " + JSON.stringify(e));
+			this.stopNow();
 		});
 		req.write(data);
 		req.end();
@@ -789,9 +806,7 @@ class VofoSpeedtest extends utils.Adapter {
 		this.create_state("Results.ping.packetLoss", "packetLoss", parseInt(result.ping.packetLoss));
 
 		this.log.info("Vofo-Speedtest finished with " + result.download / 1000 + "mbit download speed and " + result.upload / 1000 + "mbit upload speed.");
-		if (this.stop) {
-			this.stop();
-		}
+		this.stopNow();
 	}
 
 	stopDownloadTest() {
