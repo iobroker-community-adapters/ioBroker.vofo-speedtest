@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "vofo-speedtest",
-    "version": "0.0.12",
+    "version": "0.0.13",
     "news": {
+      "0.0.13": {
+        "en": "some more \"already running\" fixes",
+        "de": "einige weitere \"bereits ausgeführte\" Korrekturen",
+        "ru": "еще несколько \"уже запущенных\" исправлений",
+        "pt": "mais algumas correções \"já em execução\"",
+        "nl": "nog wat \"reeds lopende\" fixes",
+        "fr": "quelques autres correctifs \"déjà en cours d'exécution\"",
+        "it": "altre correzioni \"già in esecuzione\".",
+        "es": "algunas correcciones más \"ya en ejecución\"",
+        "pl": "kilka poprawek \"już uruchomionych\"",
+        "zh-cn": "一些“已经在运行”的修复"
+      },
       "0.0.12": {
         "en": "rerelease for 0.0.11 because of missing version in io-package.json",
         "de": "Neuveröffentlichung für 0.0.11 wegen fehlender Version in io-package.json",
@@ -74,18 +86,6 @@
         "es": "* Resultados de ping agregados\r\n* Se agregaron valores calculados por datos sin procesar reales",
         "pl": "* Dodano wyniki ping\r\n* Dodano obliczone wartości według rzeczywistych surowych danych",
         "zh-cn": "*添加了ping结果\r\n*通过实际原始数据添加计算值"
-      },
-      "0.0.4": {
-        "en": "* Changed Adapter start type to scheduled (reinstallation might be needed)\r\n* Bug fixes and feedback implementation",
-        "de": "* Der Starttyp des Adapters wurde in \"Geplant\" geändert (eine Neuinstallation ist möglicherweise erforderlich.)\r\n* Fehlerbehebungen und Feedback-Implementierung",
-        "ru": "* Изменен тип запуска адаптера на запланированный (может потребоваться переустановка)\r\n* Исправление ошибок и реализация отзывов",
-        "pt": "* Tipo de início do adaptador alterado para agendado (pode ser necessário reinstalar)\r\n* Correções de erros e implementação de feedback",
-        "nl": "* Het starttype van de adapter is gewijzigd in gepland (herinstallatie kan nodig zijn)\r\n* Bugfixes en feedback implementatie",
-        "fr": "* Changement du type de démarrage de l'adaptateur en planifié (une réinstallation peut être nécessaire)\r\n* Correction de bugs et implémentation de commentaires",
-        "it": "* Modificato il tipo di avvio dell'adattatore in base alla pianificazione (potrebbe essere necessaria la reinstallazione)\r\n* Correzioni di bug e implementazione del feedback",
-        "es": "* Se cambió el tipo de inicio del adaptador a programado (podría ser necesaria la reinstalación)\r\n* Corrección de errores e implementación de comentarios",
-        "pl": "* Zmieniono typ uruchomienia adaptera na zaplanowany (konieczna może być ponowna instalacja)\r\n* Poprawki błędów i wdrożenie opinii",
-        "zh-cn": "*将适配器启动类型更改为计划的（可能需要重新安装）\r\n*错误修复和反馈实施"
       }
     },
     "title": "Vofo Speedtest",

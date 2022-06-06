@@ -29,6 +29,9 @@ When the adapter crashes or an other Code error happens, this error message that
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
+### 0.0.13 (2022-06-06)
+* some more "already running" fixes
+
 ### 0.0.12 (2022-05-28)
 * rerelease for 0.0.11 because of missing version in io-package.json
 
