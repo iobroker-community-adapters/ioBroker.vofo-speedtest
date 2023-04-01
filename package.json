@@ -16,7 +16,7 @@
     "url": "https://github.com/peterbaumert/ioBroker.vofo-speedtest"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.6.7",
+    "@iobroker/adapter-core": "^2.6.8",
     "node-libcurl": "^3.0.0",
     "ping": "^0.4.4",
     "uuid": "^9.0.0"
