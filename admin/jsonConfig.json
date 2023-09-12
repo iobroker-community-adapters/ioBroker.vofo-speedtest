@@ -13,7 +13,7 @@
     "useCurl": {
       "newLine": true,
       "type": "checkbox",
-      "help": "Use curl for download too (for some better performance)",
+      "help": "for download too (for some better performance)",
       "label": "Use curl",
       "sm": 12,
       "md": 6,
