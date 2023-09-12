@@ -1,0 +1,23 @@
+{
+  "i18n": true,
+  "type": "panel",
+  "items": {
+    "bindAddress": {
+      "type": "ip",
+      "label": "Local address",
+      "default": "0.0.0.0",
+      "sm": 12,
+      "md": 6,
+      "lg": 4
+    },
+    "useCurl": {
+      "newLine": true,
+      "type": "checkbox",
+      "help": "Use curl for download too (for some better performance)",
+      "label": "Use curl",
+      "sm": 12,
+      "md": 6,
+      "lg": 4
+    }
+  }
+}
