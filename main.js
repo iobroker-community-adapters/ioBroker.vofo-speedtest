@@ -1,17 +1,22 @@
-/*
- * Created with @iobroker/create-adapter v1.23.0
- */
-
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require("@iobroker/adapter-core");
 
 // Load your modules here, e.g.:
-const { Curl, CurlFeature } = require("node-libcurl");
+let Curl;
+let CurlFeature;
 const https = require("https");
 const ping = require("ping");
 const uuid = require("uuid");
-const state_attr = require("./lib/state_attr.js");
+const stateAttr = require("./lib/stateAttr.js");
+
+try {
+	const NodeCurl = require("node-libcurl");
+	Curl = NodeCurl.Curl;
+	CurlFeature = NodeCurl.CurlFeature;
+} catch (e) {
+	// curl is not available
+}
 
 let that = null;
 
@@ -144,9 +149,9 @@ class VofoSpeedtest extends utils.Adapter {
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	async onReady() {
-		//this.setState("info.connection", false, true);
+		// this.setState("info.connection", false, true);
 		that = this;
-		useCurl = this.config.useCurl;
+		useCurl = Curl && this.config.useCurl;
 		this.updateData();
 	}
 
@@ -517,8 +522,8 @@ class VofoSpeedtest extends utils.Adapter {
 						this.log.debug(`startDownload abort: ${JSON.stringify(e)}`));
 
 					downloadStream = {
-						options: options,
-						req: req
+						options,
+						req,
 					};
 				}
 				download_streams.push(downloadStream);
@@ -548,21 +553,25 @@ class VofoSpeedtest extends utils.Adapter {
 		if (running) {
 			return;
 		}
-		running = "upload";
-		data[0].contents = "0".repeat(1E7);
-		bytes_loaded_last_section = 0;
-		bytes_loaded[0] = 0;
-		this.interval(this.transferEnd, conf.data.upload.interval * 1000, this.intervalRoundTrips(conf.data.upload.duration, conf.data.upload.interval * 1000));
-		if (typeof stopHandler === "number") {
-			this.log.debug("resetting Timeout upload");
-			clearTimeout(stopHandler);
-			stopHandler = null;
-		}
-		stopHandler = setTimeout(this.stopUploadTest, conf.data.upload.duration * 1000);
+		if (Curl) {
+			running = "upload";
+			data[0].contents = "0".repeat(1E7);
+			bytes_loaded_last_section = 0;
+			bytes_loaded[0] = 0;
+			this.interval(this.transferEnd, conf.data.upload.interval * 1000, this.intervalRoundTrips(conf.data.upload.duration, conf.data.upload.interval * 1000));
+			if (typeof stopHandler === "number") {
+				this.log.debug("resetting Timeout upload");
+				clearTimeout(stopHandler);
+				stopHandler = null;
+			}
+			stopHandler = setTimeout(this.stopUploadTest, conf.data.upload.duration * 1000);
 
-		timeStart = new Date();
-		timeSection = timeStart;
-		this.pushData(0);
+			timeStart = new Date();
+			timeSection = timeStart;
+			this.pushData(0);
+		} else {
+			this.stopUploadTest();
+		}
 	}
 
 	async startPing() {
@@ -600,33 +609,35 @@ class VofoSpeedtest extends utils.Adapter {
 	}
 
 	pushData(id) {
-		const curl = new Curl();
-		curl.setOpt(Curl.option.URL, init.data.speedtest.servers.uploadServer.dualstack);
-		curl.setOpt(Curl.option.NOPROGRESS, false);
-		curl.setOpt(Curl.option.SSL_VERIFYPEER, false);
-		curl.setOpt(Curl.option.CONNECTTIMEOUT, 5);
-		curl.setOpt(Curl.option.TIMEOUT, 120);
-		curl.enable(CurlFeature.NoStorage);
-		curl.setOpt(Curl.option.HTTPPOST, data);
-		curl.setProgressCallback((dltotal, dlnow, ultotal, ulnow) => {
-			bytes_loaded[id] = ulnow;
-			return 0;
-		});
+		if (useCurl && Curl) {
+			const curl = new Curl();
+			curl.setOpt(Curl.option.URL, init.data.speedtest.servers.uploadServer.dualstack);
+			curl.setOpt(Curl.option.NOPROGRESS, false);
+			curl.setOpt(Curl.option.SSL_VERIFYPEER, false);
+			curl.setOpt(Curl.option.CONNECTTIMEOUT, 5);
+			curl.setOpt(Curl.option.TIMEOUT, 120);
+			curl.enable(CurlFeature.NoStorage);
+			curl.setOpt(Curl.option.HTTPPOST, data);
+			curl.setProgressCallback((dltotal, dlnow, ultotal, ulnow) => {
+				bytes_loaded[id] = ulnow;
+				return 0;
+			});
 
-		curl.on("end", () => {
-			this.log.debug("Upload ended");
-			curl.close();
-			if (running === "upload") {
-				this.pushData(id + 1);
-			}
-		});
+			curl.on("end", () => {
+				this.log.debug("Upload ended");
+				curl.close();
+				if (running === "upload") {
+					this.pushData(id + 1);
+				}
+			});
 
-		curl.on("error", (error) => {
-			this.log.debug(`Failed to upload file: ${error}`);
-			curl.close();
-		});
+			curl.on("error", error => {
+				this.log.debug(`Failed to upload file: ${error}`);
+				curl.close();
+			});
 
-		curl.perform();
+			curl.perform();
+		}
 	}
 
 	getBytesUntilNow() {
@@ -696,7 +707,7 @@ class VofoSpeedtest extends utils.Adapter {
 		}
 	}
 
-	result_from_arr(arr, type, ref, time, bytes) {
+	resultFromArray(arr, type, ref, time, bytes) {
 		const data = JSON.stringify({
 			speedtestId: init.data.speedtest.id,
 			intermediateValues: arr,
@@ -738,12 +749,12 @@ class VofoSpeedtest extends utils.Adapter {
 									that.log.error("retry error");
 								}
 							} else {
-								timers.result_from_arr = setTimeout(() => this.run("upload"), 500);
+								timers.resultFromArray = setTimeout(() => this.run("upload"), 500);
 							}
 							break;
 						case "upload":
 							result.upload = args.data.value;
-							timers.result_from_arr = setTimeout(() => this.run("ping"), 500);
+							timers.resultFromArray = setTimeout(() => this.run("ping"), 500);
 							break;
 					}
 					this.log.debug(`result: ${JSON.stringify(args)}`);
@@ -817,7 +828,7 @@ class VofoSpeedtest extends utils.Adapter {
 		}
 		download_streams = [];
 		running = null;
-		that.result_from_arr(result.download_raw, "download", provider_download, result.overall_time.download, result.overall_bytes.download);
+		that.resultFromArray(result.download_raw, "download", provider_download, result.overall_time.download, result.overall_bytes.download);
 	}
 
 	stopUploadTest() {
@@ -829,7 +840,7 @@ class VofoSpeedtest extends utils.Adapter {
 		running = null;
 		data[0].contents = "";
 		upload_streams = [];
-		that.result_from_arr(result.upload_raw, "upload", provider_upload, result.overall_time.upload, result.overall_bytes.upload);
+		that.resultFromArray(result.upload_raw, "upload", provider_upload, result.overall_time.upload, result.overall_bytes.upload);
 	}
 
 	interval(func, wait, times) {
@@ -860,14 +871,14 @@ class VofoSpeedtest extends utils.Adapter {
 
 		try {
 			// Try to get details from state lib, if not use defaults. throw warning if states are not known in an attribute list
-			if (state_attr[name] === undefined) {
+			if (stateAttr[name] === undefined) {
 				this.log.warn(`State attribute definition missing for + ${name}`);
 			}
-			const writable = state_attr[name] !== undefined ? state_attr[name].write || false : false;
-			const state_name = state_attr[name] !== undefined ? state_attr[name].name || name : name;
-			const role = state_attr[name] !== undefined ? state_attr[name].role || "state" : "state";
-			const type = state_attr[name] !== undefined ? state_attr[name].type || "mixed" : "mixed";
-			const unit = state_attr[name] !== undefined ? state_attr[name].unit || "" : "";
+			const writable = stateAttr[name] !== undefined ? stateAttr[name].write || false : false;
+			const state_name = stateAttr[name] !== undefined ? stateAttr[name].name || name : name;
+			const role = stateAttr[name] !== undefined ? stateAttr[name].role || "state" : "state";
+			const type = stateAttr[name] !== undefined ? stateAttr[name].type || "mixed" : "mixed";
+			const unit = stateAttr[name] !== undefined ? stateAttr[name].unit || "" : "";
 			this.log.debug(`Write value: ${writable}`);
 
 			if (type === "device") {

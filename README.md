@@ -31,6 +31,9 @@ This allows Sentry to group errors and show how many unique users are affected b
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (bluefox) Updated packages and refactored code
+
 ### 1.0.0 (2023-09-13)
 * (bluefox) Updated packages and refactored code
 
