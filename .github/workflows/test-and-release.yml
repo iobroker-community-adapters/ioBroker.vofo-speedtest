@@ -21,18 +21,15 @@ jobs:
     if: contains(github.event.head_commit.message, '[skip ci]') == false
 
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18.x
 
       - name: Install dependencies
         run: npm ci
@@ -51,7 +48,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [18.x, 20.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
@@ -72,7 +69,7 @@ jobs:
         if: startsWith(runner.OS, 'windows')
         run: set DEBUG=testing:* & npm run test:integration
 
-  # Deploys the final package to NPM and Github Actions
+  # Deploys the final package to NPM and GitHub Actions
   deploy:
     # Trigger this step only when a commit on master is tagged with a version number
     if: |
@@ -123,7 +120,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release v${{ steps.extract_release.outputs.VERSION }}
           draft: false
-          # Prerelease versions create prereleases on Github
+          # Prerelease versions create pre-releases on GitHub
           prerelease: ${{ contains(steps.extract_release.outputs.VERSION, '-') }}
           body: ${{ steps.extract_release.outputs.BODY }}
 
@@ -137,7 +134,7 @@ jobs:
           sentry-cli releases new $SENTRY_VERSION
           sentry-cli releases finalize $SENTRY_VERSION
 
-  # Dummy job for skipped builds - without this, github reports the build as failed
+  # Dummy job for skipped builds - without this, GitHub reports the build as failed
   skip-ci:
     if: contains(github.event.head_commit.message, '[skip ci]')
     runs-on: ubuntu-latest
