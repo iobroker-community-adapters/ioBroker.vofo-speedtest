@@ -88,7 +88,6 @@
         "zh-cn": "*添加了ping结果\r\n*通过实际原始数据添加计算值"
       }
     },
-    "title": "Vofo Speedtest",
     "titleLang": {
       "en": "Vofo Speedtest",
       "de": "Vofo Speedtest",
@@ -114,19 +113,25 @@
       "zh-cn": "Vodafone.de的速度测试"
     },
     "authors": [
-      "Peter Baumert <ioBroker.vofo-speedtest@outlook.com>"
+      "Peter Baumert <ioBroker.unifi-protect@outlook.com>",
+      "mcm1957 <mcm57@gmx.at>"
     ],
     "keywords": [
-      "speedtest speed bandwidth"
+      "speedtest",
+      "speed",
+      "bandwidth"
     ],
-    "license": "MIT",
+    "licenseInformation": {
+      "license": "MIT",
+      "type": "free"
+    },
     "platform": "Javascript/Node.js",
-    "main": "main.js",
     "icon": "vofo-speedtest.png",
     "enabled": true,
     "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.vofo-speedtest/master/admin/vofo-speedtest.png",
     "readme": "https://github.com/iobroker-community-adapters/ioBroker.vofo-speedtest/blob/master/README.md",
     "loglevel": "info",
+    "tier": 2,
     "mode": "schedule",
     "schedule": "11,41 * * * *",
     "type": "network",
@@ -139,18 +144,13 @@
     },
     "dependencies": [
       {
-        "js-controller": ">=4.0.0"
+        "js-controller": ">=5.0.0"
       }
     ],
     "osDependencies": {
       "linux": [
         "curl"
       ]
-    },
-    "plugins": {
-      "sentry": {
-        "dsn": "https://64bf66cd21d4485eb4ff8867bb0124d5@o508406.ingest.sentry.io/5602321"
-      }
     }
   },
   "native": {
