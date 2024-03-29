@@ -155,6 +155,11 @@
         "js-controller": ">=5.0.0"
       }
     ],
+    "globalDependencies": [
+      {
+        "admin": ">=6.0.0"
+      }
+    ],
     "osDependencies": {
       "linux": [
         "curl"
