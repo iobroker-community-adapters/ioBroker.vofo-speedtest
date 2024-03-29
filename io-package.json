@@ -1,11 +1,11 @@
 {
   "common": {
     "name": "vofo-speedtest",
-    "version": "2.0.0-alpha.1",
+    "version": "2.0.0",
     "news": {
-      "2.0.0-alpha.1": {
-        "en": "BREAKING: Adapter requires node.js 18, js-controller >= 5 and admin >= 6 now\nAdapter has been moved to iobroker-community-adapters organisation\nMetrialize admin UI has been removed as jsonConfig is available\nDependencies have been updated",
-        "de": "BREAKING: Adapter benötigt node.js 18, js-controller >= 5 und admin >= 6 jetzt\nAdapter wurde auf iobroker-community-Adapter Organisation verschoben\nMetrialize admin UI wurde entfernt, da jsonConfig verfügbar ist\nAbhängigkeiten wurden aktualisiert",
+      "2.0.0": {
+        "en": "BREAKING: Adapter requires node.js 18, js-controller >= 5 and admin >= 6 now\nAdapter has been moved to iobroker-community-adapters organisation\nMaterialize admin UI has been removed as jsonConfig is available\nDependencies have been updated",
+        "de": "BREAKING: Adapter benötigt node.js 18, js-controller >= 5 und admin >= 6 jetzt\nAdapter wurde auf iobroker-community-Adapter Organisation verschoben\nMaterialize admin UI wurde entfernt, da jsonConfig verfügbar ist\nAbhängigkeiten wurden aktualisiert",
         "ru": "BREAKING: Adapter requires node.js 18, js-controller >= 5 и admin >= 6 сейчас\nАдаптер был перемещен в организацию iobroker-community-adapters\nMetrialize admin UI был удален как jsonConfig доступен\nЗависимость обновлена",
         "pt": "BREAKING: Adapter requer node.js 18, js-controller >= 5 e admin >= 6 agora\nAdapter foi movido para iobroker-community-adapters organização\nMetrialize admin UI foi removido como jsonConfig está disponível\nAs dependências foram atualizadas",
         "nl": "Breaking: adapter vereist node.js 18, js-controller 5 en admin 6 nu\nAdapter is verplaatst naar iobroker-community-adapters organisatie\nMetrialize admin UI is verwijderd omdat jsonConfig beschikbaar is\nAfhankelijkheden zijn bijgewerkt",
