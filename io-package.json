@@ -1,20 +1,20 @@
 {
   "common": {
     "name": "vofo-speedtest",
-    "version": "2.0.0-alpha.0",
+    "version": "2.0.0-alpha.1",
     "news": {
-      "2.0.0-alpha.0": {
-        "en": "BREAKING: Adapter requires node.js 18 and js-controller >= 5 now\nAdapter has been moved to iobroker-community-adapters organisation\nDependencies have been updated",
-        "de": "BREAKING: Adapter benötigt node.js 18 und js-controller >= 5 jetzt\nAdapter wurde auf iobroker-community-adapters Organisation verschoben\nAbhängigkeiten wurden aktualisiert",
-        "ru": "BREAKING: Adapter requires node.js 18 and js-controller >= 5 сейчас\nАдаптер был перемещен в организацию iobroker-community-adapters\nЗависимость обновлена",
-        "pt": "BREAKING: Adapter requer node.js 18 e js-controller >= 5 agora\nAdapter foi movido para iobroker-community-adapters organização\nAs dependências foram atualizadas",
-        "nl": "Breaking: adapter vereist node.js 18 en js-controller Nu 5\nAdapter is verplaatst naar iobroker-community-adapters organisatie\nAfhankelijkheden zijn bijgewerkt",
-        "fr": "L'adaptateur nécessite node.js 18 et js-controller >= 5 maintenant\nAdapter a été transféré à l'organisation iobroker-community-adapters\nLes dépendances ont été actualisées",
-        "it": "BREAKING: Adattatore richiede node.js 18 e js-controller >= 5 ora\nL'adattatore è stato spostato nell'organizzazione degli adattatori della comunità-iobroker\nLe dipendenze sono state aggiornate",
-        "es": "BREAKING: El adaptador requiere node.js 18 y js-controller 5 ahora\nAdaptador ha sido trasladado a la organización de ibroker-community-adapters\nSe han actualizado las dependencias",
-        "pl": "BREAKING: Adapter wymaga node.js 18 i sterownika js- > = 5 teraz\nAdapter został przeniesiony do organizacji adapterów społeczności iobrokerowej\nZaktualizowano zależności",
-        "uk": "BREAKING: Адаптер вимагає вузла.js 18 і js-controller >= 5 тепер\nПереміщено перехід на iobroker-community-adapters\nЗалежність було оновлено",
-        "zh-cn": "适配器需要节点.js 18和js控制器 QQ 现在5号\n适应者被转移到了职业经纪人-社区适应者组织\n依赖关系已更新"
+      "2.0.0-alpha.1": {
+        "en": "BREAKING: Adapter requires node.js 18, js-controller >= 5 and admin >= 6 now\nAdapter has been moved to iobroker-community-adapters organisation\nMetrialize admin UI has been removed as jsonConfig is available\nDependencies have been updated",
+        "de": "BREAKING: Adapter benötigt node.js 18, js-controller >= 5 und admin >= 6 jetzt\nAdapter wurde auf iobroker-community-Adapter Organisation verschoben\nMetrialize admin UI wurde entfernt, da jsonConfig verfügbar ist\nAbhängigkeiten wurden aktualisiert",
+        "ru": "BREAKING: Adapter requires node.js 18, js-controller >= 5 и admin >= 6 сейчас\nАдаптер был перемещен в организацию iobroker-community-adapters\nMetrialize admin UI был удален как jsonConfig доступен\nЗависимость обновлена",
+        "pt": "BREAKING: Adapter requer node.js 18, js-controller >= 5 e admin >= 6 agora\nAdapter foi movido para iobroker-community-adapters organização\nMetrialize admin UI foi removido como jsonConfig está disponível\nAs dependências foram atualizadas",
+        "nl": "Breaking: adapter vereist node.js 18, js-controller 5 en admin 6 nu\nAdapter is verplaatst naar iobroker-community-adapters organisatie\nMetrialize admin UI is verwijderd omdat jsonConfig beschikbaar is\nAfhankelijkheden zijn bijgewerkt",
+        "fr": "L'adaptateur nécessite node.js 18, js-controller >= 5 et administrateur >= 6 maintenant\nAdapter a été transféré à l'organisation iobroker-community-adapters\nMetrialize admin UI a été supprimé car jsonConfig est disponible\nLes dépendances ont été actualisées",
+        "it": "BREAKING: Adattatore richiede node.js 18, js-controller >= 5 e admin >= 6 ora\nL'adattatore è stato spostato nell'organizzazione degli adattatori della comunità-iobroker\nMetrialize admin UI è stato rimosso come jsonConfig è disponibile\nLe dipendenze sono state aggiornate",
+        "es": "BREAKING: El adaptador requiere node.js 18, js-controller 5 y admin= 6 ahora\nAdaptador ha sido trasladado a la organización de ibroker-community-adapters\nMetrialize admin UI ha sido eliminado como jsonConfig está disponible\nSe han actualizado las dependencias",
+        "pl": "BREAKING: Adapter wymaga node.js 18, kontroler js- > = 5 i admin > = 6 teraz\nAdapter został przeniesiony do organizacji adapterów społeczności iobrokerowej\nMetrialize admin UI został usunięty jako jsonConfig jest dostępny\nZaktualizowano zależności",
+        "uk": "BREAKING: Адаптер вимагає node.js 18, js-controller >= 5 і admin >= 6 тепер\nПереміщено перехід на iobroker-community-adapters\nВидаляє адміністратор UI як jsonConfig\nЗалежність було оновлено",
+        "zh-cn": "适配器需要节点.js 18,js控制器 QQ 第5条 行政 现在6个\n适应者被转移到了职业经纪人-社区适应者组织\n由于 jsonConfig 已可用, 已删除了管理权限\n依赖关系已更新"
       },
       "0.0.13": {
         "en": "some more \"already running\" fixes",
@@ -80,19 +80,6 @@
         "pl": "Naprawiono niektóre luki w zależnościach od programistów\nNaprawiono problemy z kontrolerem js 3 *\nNaprawiono kompatybilność z węzłem 16",
         "zh-cn": "修复了开发人员依存关系中的一些漏洞\n修复了js-controller 3 *问题\n固定节点16兼容性",
         "uk": "Виправлено деякі вразливості в залежностях розробників\nВиправлено проблеми js-контролера 3*\nВиправлена ​​сумісність вузла 16"
-      },
-      "0.0.6": {
-        "en": "Added Sentry.io Integration",
-        "de": "Sentry.io Integration hinzugefügt",
-        "ru": "Добавлена интеграция с Sentry.io",
-        "pt": "Adicionado Integração Sentry.io",
-        "nl": "Sentry.io-integratie toegevoegd",
-        "fr": "Ajout de l'intégration Sentry.io",
-        "it": "Aggiunta integrazione Sentry.io",
-        "es": "Integración Sentry.io agregada",
-        "pl": "Dodano integrację Sentry.io",
-        "zh-cn": "添加了Sentry.io集成",
-        "uk": "Додано інтеграцію Sentry.io"
       }
     },
     "titleLang": {
