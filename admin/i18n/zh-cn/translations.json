@@ -1,5 +1,8 @@
 {
-  "Local address": "本地地址",
-  "Use curl": "使用CURL命令",
-  "for download too (for some better performance)": "也可供下载（以获得更好的性能）"
+    "Local address": "本地地址",
+    "Use curl": "使用CURL命令",
+    "for download too (for some better performance)": "也可供下载（以获得更好的性能）",
+    "option1": "选项1",
+    "option2": "选项2",
+    "vofo-speedtest adapter settings": "vofo-speedtest的适配器设置"
 }

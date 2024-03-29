@@ -13,7 +13,8 @@
         "it": "altre correzioni \"già in esecuzione\".",
         "es": "algunas correcciones más \"ya en ejecución\"",
         "pl": "kilka poprawek \"już uruchomionych\"",
-        "zh-cn": "一些“已经在运行”的修复"
+        "zh-cn": "一些“已经在运行”的修复",
+        "uk": "ще деякі \"вже запущені\" виправлення"
       },
       "0.0.12": {
         "en": "rerelease for 0.0.11 because of missing version in io-package.json",
@@ -25,7 +26,8 @@
         "it": "riedizione per 0.0.11 a causa della versione mancante in io-package.json",
         "es": "relanzamiento para 0.0.11 debido a que falta una versión en io-package.json",
         "pl": "ponowne wydanie dla 0.0.11 z powodu braku wersji w io-package.json",
-        "zh-cn": "由于 io-package.json 中缺少版本，重新发布 0.0.11"
+        "zh-cn": "由于 io-package.json 中缺少版本，重新发布 0.0.11",
+        "uk": "перевипуск для 0.0.11 через відсутність версії в io-package.json"
       },
       "0.0.10": {
         "en": "Fix version numbers",
@@ -37,7 +39,8 @@
         "it": "Correggi i numeri di versione",
         "es": "Corregir números de versión",
         "pl": "Napraw numery wersji",
-        "zh-cn": "修复版本号"
+        "zh-cn": "修复版本号",
+        "uk": "Виправити номери версій"
       },
       "0.0.8": {
         "en": "Renamed Adapter due to legal reasons\nFixed some dependencies",
@@ -49,7 +52,8 @@
         "it": "Adattatore rinominato per motivi legali\nRisolte alcune dipendenze",
         "es": "Adaptador renombrado por razones legales\nSe corrigieron algunas dependencias",
         "pl": "Zmieniono nazwę adaptera ze względów prawnych\nNaprawiono niektóre zależności",
-        "zh-cn": "由于法律原因重命名适配器\n修复了一些依赖"
+        "zh-cn": "由于法律原因重命名适配器\n修复了一些依赖",
+        "uk": "Змінено назву Adapter через юридичні причини\nВиправлено деякі залежності"
       },
       "0.0.7": {
         "en": "Fixed some vulnerabilities in dev-dependencies\nFixed js-controller 3* issues\nFixed node 16 compatability",
@@ -61,7 +65,8 @@
         "it": "Risolte alcune vulnerabilità nelle dipendenze dev\nRisolti i problemi con js-controller 3 *\nRisolto il problema con la compatibilità del nodo 16",
         "es": "Se corrigieron algunas vulnerabilidades en las dependencias de desarrollo.\nSe corrigieron problemas de js-controller 3 *\nCompatibilidad del nodo fijo 16",
         "pl": "Naprawiono niektóre luki w zależnościach od programistów\nNaprawiono problemy z kontrolerem js 3 *\nNaprawiono kompatybilność z węzłem 16",
-        "zh-cn": "修复了开发人员依存关系中的一些漏洞\n修复了js-controller 3 *问题\n固定节点16兼容性"
+        "zh-cn": "修复了开发人员依存关系中的一些漏洞\n修复了js-controller 3 *问题\n固定节点16兼容性",
+        "uk": "Виправлено деякі вразливості в залежностях розробників\nВиправлено проблеми js-контролера 3*\nВиправлена ​​сумісність вузла 16"
       },
       "0.0.6": {
         "en": "Added Sentry.io Integration",
@@ -73,7 +78,8 @@
         "it": "Aggiunta integrazione Sentry.io",
         "es": "Integración Sentry.io agregada",
         "pl": "Dodano integrację Sentry.io",
-        "zh-cn": "添加了Sentry.io集成"
+        "zh-cn": "添加了Sentry.io集成",
+        "uk": "Додано інтеграцію Sentry.io"
       },
       "0.0.5": {
         "en": "* Added ping results\r\n* Added calculated values by actual raw data",
@@ -85,7 +91,8 @@
         "it": "* Aggiunti i risultati del ping\r\n* Aggiunti valori calcolati dai dati grezzi effettivi",
         "es": "* Resultados de ping agregados\r\n* Se agregaron valores calculados por datos sin procesar reales",
         "pl": "* Dodano wyniki ping\r\n* Dodano obliczone wartości według rzeczywistych surowych danych",
-        "zh-cn": "*添加了ping结果\r\n*通过实际原始数据添加计算值"
+        "zh-cn": "*添加了ping结果\r\n*通过实际原始数据添加计算值",
+        "uk": "* Додано результати ping\r\n* Додано обчислені значення за фактичними вихідними даними"
       }
     },
     "titleLang": {
@@ -98,7 +105,8 @@
       "it": "Vofo Speedtest",
       "es": "Vofo Speedtest",
       "pl": "Vofo Speedtest",
-      "zh-cn": "沃达丰速度测试"
+      "zh-cn": "沃达丰速度测试",
+      "uk": "Vofo Speedtest"
     },
     "desc": {
       "en": "Speedtest of Vodafone.de",
@@ -110,7 +118,8 @@
       "it": "Speedtest di Vodafone.de",
       "es": "Speedtest de Vodafone.de",
       "pl": "Speedtest of Vodafone.de",
-      "zh-cn": "Vodafone.de的速度测试"
+      "zh-cn": "Vodafone.de的速度测试",
+      "uk": "Тест швидкості Vodafone.de"
     },
     "authors": [
       "Peter Baumert <ioBroker.unifi-protect@outlook.com>",

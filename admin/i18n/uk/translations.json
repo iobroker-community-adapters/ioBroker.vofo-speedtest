@@ -1,5 +1,8 @@
 {
-  "Local address": "Місцева адреса",
-  "Use curl": "Використовуйте CURL",
-  "for download too (for some better performance)": "також для завантаження (для кращої продуктивності)"
+    "Local address": "Місцева адреса",
+    "Use curl": "Використовуйте CURL",
+    "for download too (for some better performance)": "також для завантаження (для кращої продуктивності)",
+    "option1": "",
+    "option2": "",
+    "vofo-speedtest adapter settings": ""
 }

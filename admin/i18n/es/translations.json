@@ -1,5 +1,8 @@
 {
-  "Local address": "Dirección local",
-  "Use curl": "Usar el CURL",
-  "for download too (for some better performance)": "para descargar también (para un mejor rendimiento)"
+    "Local address": "Dirección local",
+    "Use curl": "Usar el CURL",
+    "for download too (for some better performance)": "para descargar también (para un mejor rendimiento)",
+    "option1": "Opción 1",
+    "option2": "opcion 2",
+    "vofo-speedtest adapter settings": "Ajustes del adaptador para vofo-speedtest"
 }
