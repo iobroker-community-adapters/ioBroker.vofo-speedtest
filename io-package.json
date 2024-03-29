@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "vofo-speedtest",
-    "version": "1.0.1",
+    "version": "2.0.0-alpha.0",
     "news": {
+      "2.0.0-alpha.0": {
+        "en": "BREAKING: Adapter requires node.js 18 and js-controller >= 5 now\nAdapter has been moved to iobroker-community-adapters organisation\nDependencies have been updated",
+        "de": "BREAKING: Adapter benötigt node.js 18 und js-controller >= 5 jetzt\nAdapter wurde auf iobroker-community-adapters Organisation verschoben\nAbhängigkeiten wurden aktualisiert",
+        "ru": "BREAKING: Adapter requires node.js 18 and js-controller >= 5 сейчас\nАдаптер был перемещен в организацию iobroker-community-adapters\nЗависимость обновлена",
+        "pt": "BREAKING: Adapter requer node.js 18 e js-controller >= 5 agora\nAdapter foi movido para iobroker-community-adapters organização\nAs dependências foram atualizadas",
+        "nl": "Breaking: adapter vereist node.js 18 en js-controller Nu 5\nAdapter is verplaatst naar iobroker-community-adapters organisatie\nAfhankelijkheden zijn bijgewerkt",
+        "fr": "L'adaptateur nécessite node.js 18 et js-controller >= 5 maintenant\nAdapter a été transféré à l'organisation iobroker-community-adapters\nLes dépendances ont été actualisées",
+        "it": "BREAKING: Adattatore richiede node.js 18 e js-controller >= 5 ora\nL'adattatore è stato spostato nell'organizzazione degli adattatori della comunità-iobroker\nLe dipendenze sono state aggiornate",
+        "es": "BREAKING: El adaptador requiere node.js 18 y js-controller 5 ahora\nAdaptador ha sido trasladado a la organización de ibroker-community-adapters\nSe han actualizado las dependencias",
+        "pl": "BREAKING: Adapter wymaga node.js 18 i sterownika js- > = 5 teraz\nAdapter został przeniesiony do organizacji adapterów społeczności iobrokerowej\nZaktualizowano zależności",
+        "uk": "BREAKING: Адаптер вимагає вузла.js 18 і js-controller >= 5 тепер\nПереміщено перехід на iobroker-community-adapters\nЗалежність було оновлено",
+        "zh-cn": "适配器需要节点.js 18和js控制器 QQ 现在5号\n适应者被转移到了职业经纪人-社区适应者组织\n依赖关系已更新"
+      },
       "0.0.13": {
         "en": "some more \"already running\" fixes",
         "de": "einige weitere \"bereits ausgeführte\" Korrekturen",
@@ -80,19 +93,6 @@
         "pl": "Dodano integrację Sentry.io",
         "zh-cn": "添加了Sentry.io集成",
         "uk": "Додано інтеграцію Sentry.io"
-      },
-      "0.0.5": {
-        "en": "* Added ping results\r\n* Added calculated values by actual raw data",
-        "de": "* Ping-Ergebnisse hinzugefügt\r\n* Berechnete Werte durch tatsächliche Rohdaten hinzugefügt",
-        "ru": "* Добавлены результаты пинга\r\n* Добавлены рассчитанные значения по фактическим необработанным данным",
-        "pt": "* Adicionado resultados de ping\r\n* Valores calculados adicionados por dados brutos reais",
-        "nl": "* Ping-resultaten toegevoegd\r\n* Berekende waarden toegevoegd door werkelijke onbewerkte gegevens",
-        "fr": "* Résultats de ping ajoutés\r\n* Ajout des valeurs calculées par les données brutes réelles",
-        "it": "* Aggiunti i risultati del ping\r\n* Aggiunti valori calcolati dai dati grezzi effettivi",
-        "es": "* Resultados de ping agregados\r\n* Se agregaron valores calculados por datos sin procesar reales",
-        "pl": "* Dodano wyniki ping\r\n* Dodano obliczone wartości według rzeczywistych surowych danych",
-        "zh-cn": "*添加了ping结果\r\n*通过实际原始数据添加计算值",
-        "uk": "* Додано результати ping\r\n* Додано обчислені значення за фактичними вихідними даними"
       }
     },
     "titleLang": {
