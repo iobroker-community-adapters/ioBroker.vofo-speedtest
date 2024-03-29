@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "vofo-speedtest",
-    "version": "0.0.13",
+    "version": "1.0.1",
     "news": {
       "0.0.13": {
         "en": "some more \"already running\" fixes",
