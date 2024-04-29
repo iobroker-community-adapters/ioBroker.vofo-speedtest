@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "vofo-speedtest",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "news": {
+      "2.0.1": {
+        "en": "Dependencies have been updated",
+        "de": "Abhängigkeiten wurden aktualisiert",
+        "ru": "Зависимость обновлена",
+        "pt": "As dependências foram atualizadas",
+        "nl": "Afhankelijkheden zijn bijgewerkt",
+        "fr": "Les dépendances ont été actualisées",
+        "it": "Le dipendenze sono state aggiornate",
+        "es": "Se han actualizado las dependencias",
+        "pl": "Zaktualizowano zależności",
+        "uk": "Залежність було оновлено",
+        "zh-cn": "依赖关系已更新"
+      },
       "2.0.0": {
         "en": "BREAKING: Adapter requires node.js 18, js-controller >= 5 and admin >= 6 now\nAdapter has been moved to iobroker-community-adapters organisation\nMaterialize admin UI has been removed as jsonConfig is available\nDependencies have been updated",
         "de": "BREAKING: Adapter benötigt node.js 18, js-controller >= 5 und admin >= 6 jetzt\nAdapter wurde auf iobroker-community-Adapter Organisation verschoben\nMaterialize admin UI wurde entfernt, da jsonConfig verfügbar ist\nAbhängigkeiten wurden aktualisiert",

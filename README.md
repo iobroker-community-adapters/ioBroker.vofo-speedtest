@@ -34,8 +34,8 @@ This adapter would not have been possible without the great work of Peter Baumer
 <!--
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
--->	
-### **WORK IN PROGRESS**
+-->
+### 2.0.1 (2024-04-29)
 * (mcm1957) Dependencies have been updated
 
 ### 2.0.0 (2024-03-29)
