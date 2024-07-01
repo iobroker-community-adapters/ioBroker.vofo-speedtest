@@ -25,7 +25,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^3.1.4",
+    "@iobroker/adapter-core": "^3.1.6",
     "node-libcurl": "^4.0.0",
     "ping": "^0.4.4",
     "uuid": "^9.0.1"
