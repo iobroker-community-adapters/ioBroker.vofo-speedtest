@@ -28,7 +28,7 @@
     "@iobroker/adapter-core": "^3.1.6",
     "node-libcurl": "^4.0.0",
     "ping": "^0.4.4",
-    "uuid": "^9.0.1"
+    "uuid": "^11.0.2"
   },
   "devDependencies": {
     "@alcalzone/release-script": "^3.8.0",
