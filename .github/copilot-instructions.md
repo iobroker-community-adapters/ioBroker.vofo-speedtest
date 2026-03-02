@@ -1,6 +1,6 @@
 # ioBroker Adapter Development with GitHub Copilot
 
-**Version:** 0.5.6
+**Version:** 0.5.7
 **Template Source:** https://github.com/DrozmotiX/ioBroker-Copilot-Instructions
 
 This file contains instructions and best practices for GitHub Copilot when working on ioBroker adapter development.
@@ -578,6 +578,18 @@ process.exit(hasErrors ? 1 : 0);
 5. Remove orphaned keys manually from all translation files
 6. Add missing translations in native languages
 7. Run: `npm run lint && npm run test`
+
+#### Add Validation to package.json
+
+```json
+{
+  "scripts": {
+    "translate": "translate-adapter",
+    "validate:translations": "node scripts/validate-translations.js",
+    "pretest": "npm run lint && npm run validate:translations"
+  }
+}
+```
 
 #### Translation Checklist
 
