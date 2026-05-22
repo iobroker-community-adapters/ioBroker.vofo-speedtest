@@ -5,7 +5,7 @@ const utils = require('@iobroker/adapter-core');
 // Load your modules here, e.g.:
 let Curl;
 let CurlFeature;
-const https = require('https');
+const https = require('node:https');
 const ping = require('ping');
 const uuid = require('uuid');
 const stateAttr = require('./lib/stateAttr.js');
