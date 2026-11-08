@@ -1,0 +1,9 @@
+{
+    "vofodm_instance": "Instance",
+    "vofodm_max_speed": "Fin de l'échelle en Mb/s",
+    "vofodm_max_speed_help": "0 : le débit souscrit s'il est connu, sinon automatique",
+    "vofodm_show_start": "Afficher le bouton de démarrage",
+    "vofodm_name": "Nom",
+    "vofodm_icon": "Icône",
+    "vofodm_title": "Test de débit"
+}

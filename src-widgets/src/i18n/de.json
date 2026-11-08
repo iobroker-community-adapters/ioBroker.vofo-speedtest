@@ -1,0 +1,14 @@
+{
+    "set_label": "Speedtest",
+    "widget_label": "Speedtest",
+    "instance": "Instanz",
+    "layout": "Layout",
+    "layout_full": "Tachos",
+    "layout_strip": "Eine Zeile",
+    "layout_mini": "Kompakt",
+    "max_speed": "Skalenende in Mb/s",
+    "max_speed_help": "0: gebuchte Bandbreite, falls bekannt, sonst automatisch",
+    "show_start": "Start-Button anzeigen",
+    "name": "Name",
+    "without_card": "Ohne Karte"
+}

@@ -1,0 +1,14 @@
+{
+    "set_label": "Speed test",
+    "widget_label": "Speed test",
+    "instance": "Instance",
+    "layout": "Layout",
+    "layout_full": "Gauges",
+    "layout_strip": "One line",
+    "layout_mini": "Compact",
+    "max_speed": "End of the scale in Mb/s",
+    "max_speed_help": "0: the booked speed if it is known, otherwise automatic",
+    "show_start": "Show the start button",
+    "name": "Name",
+    "without_card": "Without card"
+}

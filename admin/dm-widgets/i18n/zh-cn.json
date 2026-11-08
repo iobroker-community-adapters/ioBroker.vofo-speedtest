@@ -1,0 +1,9 @@
+{
+    "vofodm_instance": "实例",
+    "vofodm_max_speed": "刻度上限 (Mb/s)",
+    "vofodm_max_speed_help": "0：已知时使用签约速率，否则自动",
+    "vofodm_show_start": "显示开始按钮",
+    "vofodm_name": "名称",
+    "vofodm_icon": "图标",
+    "vofodm_title": "网速测试"
+}

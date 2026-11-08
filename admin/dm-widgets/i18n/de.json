@@ -1,0 +1,9 @@
+{
+    "vofodm_instance": "Instanz",
+    "vofodm_max_speed": "Skalenende in Mb/s",
+    "vofodm_max_speed_help": "0: gebuchte Bandbreite, falls bekannt, sonst automatisch",
+    "vofodm_show_start": "Start-Button anzeigen",
+    "vofodm_name": "Name",
+    "vofodm_icon": "Symbol",
+    "vofodm_title": "Speedtest"
+}

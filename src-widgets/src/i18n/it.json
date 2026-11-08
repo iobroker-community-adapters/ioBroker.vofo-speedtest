@@ -1,0 +1,14 @@
+{
+    "set_label": "Test di velocità",
+    "widget_label": "Test di velocità",
+    "instance": "Istanza",
+    "layout": "Layout",
+    "layout_full": "Indicatori",
+    "layout_strip": "Una riga",
+    "layout_mini": "Compatto",
+    "max_speed": "Fine scala in Mb/s",
+    "max_speed_help": "0: la velocità del piano se nota, altrimenti automatico",
+    "show_start": "Mostra il pulsante di avvio",
+    "name": "Nome",
+    "without_card": "Senza scheda"
+}

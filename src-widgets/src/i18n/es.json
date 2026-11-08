@@ -1,0 +1,14 @@
+{
+    "set_label": "Prueba de velocidad",
+    "widget_label": "Prueba de velocidad",
+    "instance": "Instancia",
+    "layout": "Diseño",
+    "layout_full": "Indicadores",
+    "layout_strip": "Una línea",
+    "layout_mini": "Compacto",
+    "max_speed": "Fin de la escala en Mb/s",
+    "max_speed_help": "0: la velocidad contratada si se conoce, si no automático",
+    "show_start": "Mostrar el botón de inicio",
+    "name": "Nombre",
+    "without_card": "Sin tarjeta"
+}

@@ -1,3 +1,7 @@
 {
-    "Local address": "本地地址"
+    "Local address": "本地地址",
+    "Schedule of the automatic test": "自动测试计划",
+    "Leave empty to start the test only on demand with the state test.start": "留空则仅通过状态 test.start 按需启动测试",
+    "Settings": "设置",
+    "Speed test": "网速测试"
 }

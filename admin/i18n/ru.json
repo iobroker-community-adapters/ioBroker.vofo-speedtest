@@ -1,3 +1,7 @@
 {
-    "Local address": "Местный адрес"
+    "Local address": "Местный адрес",
+    "Schedule of the automatic test": "Расписание автоматического теста",
+    "Leave empty to start the test only on demand with the state test.start": "Оставьте пустым, чтобы запускать тест только по запросу через состояние test.start",
+    "Settings": "Настройки",
+    "Speed test": "Тест скорости"
 }

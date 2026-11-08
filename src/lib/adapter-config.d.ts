@@ -5,6 +5,8 @@ declare global {
         interface AdapterConfig {
             /** Local address to bind the test connections to, "0.0.0.0" = any */
             bindAddress: string;
+            /** Cron expression of the automatic test, empty = only on demand */
+            schedule: string;
         }
     }
 }

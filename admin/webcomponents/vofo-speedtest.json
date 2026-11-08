@@ -1,0 +1,193 @@
+{
+    "$schema": "https://raw.githubusercontent.com/ioBroker/web-components/main/schemas/manifest.json",
+    "manifestVersion": 1,
+    "tag": "iob-vofo-speedtest",
+    "name": {
+        "en": "Vofo speed test",
+        "de": "Vofo-Speedtest",
+        "ru": "Тест скорости Vofo",
+        "pt": "Teste de velocidade Vofo",
+        "nl": "Vofo-snelheidstest",
+        "fr": "Test de débit Vofo",
+        "it": "Test di velocità Vofo",
+        "es": "Prueba de velocidad Vofo",
+        "pl": "Test prędkości Vofo",
+        "uk": "Тест швидкості Vofo",
+        "zh-cn": "Vofo 网速测试"
+    },
+    "description": {
+        "en": "Download, upload and ping of the last speed test, with a button to start a new one",
+        "de": "Download, Upload und Ping des letzten Speedtests, mit einem Button zum Starten eines neuen Tests",
+        "ru": "Загрузка, отдача и пинг последнего теста скорости, с кнопкой запуска нового теста",
+        "pt": "Download, upload e ping do último teste de velocidade, com um botão para iniciar um novo",
+        "nl": "Download, upload en ping van de laatste snelheidstest, met een knop om een nieuwe te starten",
+        "fr": "Débit descendant, débit montant et ping du dernier test, avec un bouton pour en lancer un nouveau",
+        "it": "Download, upload e ping dell’ultimo test di velocità, con un pulsante per avviarne uno nuovo",
+        "es": "Descarga, subida y ping de la última prueba de velocidad, con un botón para iniciar una nueva",
+        "pl": "Pobieranie, wysyłanie i ping ostatniego testu prędkości, z przyciskiem uruchamiania nowego testu",
+        "uk": "Завантаження, вивантаження та пінг останнього тесту швидкості, з кнопкою запуску нового тесту",
+        "zh-cn": "上次网速测试的下载、上传和延迟，并带有开始新测试的按钮"
+    },
+    "icon": "../dm-widgets/speedtest.png",
+    "module": "vofo-speedtest.js",
+    "size": {
+        "width": 440,
+        "height": 300
+    },
+    "settings": {
+        "type": "panel",
+        "items": {
+            "instance": {
+                "type": "instance",
+                "adapter": "vofo-speedtest",
+                "default": "vofo-speedtest.0",
+                "label": {
+                    "en": "Instance",
+                    "de": "Instanz",
+                    "ru": "Экземпляр",
+                    "pt": "Instância",
+                    "nl": "Instantie",
+                    "fr": "Instance",
+                    "it": "Istanza",
+                    "es": "Instancia",
+                    "pl": "Instancja",
+                    "uk": "Екземпляр",
+                    "zh-cn": "实例"
+                }
+            },
+            "layout": {
+                "type": "select",
+                "default": "full",
+                "label": {
+                    "en": "Layout",
+                    "de": "Layout",
+                    "ru": "Вид",
+                    "pt": "Disposição",
+                    "nl": "Weergave",
+                    "fr": "Disposition",
+                    "it": "Layout",
+                    "es": "Diseño",
+                    "pl": "Układ",
+                    "uk": "Вигляд",
+                    "zh-cn": "布局"
+                },
+                "options": [
+                    {
+                        "value": "full",
+                        "label": {
+                            "en": "Gauges",
+                            "de": "Tachos",
+                            "ru": "Шкалы",
+                            "pt": "Medidores",
+                            "nl": "Meters",
+                            "fr": "Jauges",
+                            "it": "Indicatori",
+                            "es": "Indicadores",
+                            "pl": "Wskaźniki",
+                            "uk": "Шкали",
+                            "zh-cn": "仪表"
+                        }
+                    },
+                    {
+                        "value": "strip",
+                        "label": {
+                            "en": "One line",
+                            "de": "Eine Zeile",
+                            "ru": "Одна строка",
+                            "pt": "Uma linha",
+                            "nl": "Eén regel",
+                            "fr": "Une ligne",
+                            "it": "Una riga",
+                            "es": "Una línea",
+                            "pl": "Jedna linia",
+                            "uk": "Один рядок",
+                            "zh-cn": "单行"
+                        }
+                    },
+                    {
+                        "value": "mini",
+                        "label": {
+                            "en": "Compact",
+                            "de": "Kompakt",
+                            "ru": "Компактный",
+                            "pt": "Compacto",
+                            "nl": "Compact",
+                            "fr": "Compact",
+                            "it": "Compatto",
+                            "es": "Compacto",
+                            "pl": "Kompaktowy",
+                            "uk": "Компактний",
+                            "zh-cn": "紧凑"
+                        }
+                    }
+                ]
+            },
+            "title": {
+                "type": "text",
+                "label": {
+                    "en": "Name",
+                    "de": "Name",
+                    "ru": "Название",
+                    "pt": "Nome",
+                    "nl": "Naam",
+                    "fr": "Nom",
+                    "it": "Nome",
+                    "es": "Nombre",
+                    "pl": "Nazwa",
+                    "uk": "Назва",
+                    "zh-cn": "名称"
+                },
+                "hidden": "data.layout === \"strip\" || data.layout === \"mini\""
+            },
+            "maxSpeed": {
+                "type": "number",
+                "min": 0,
+                "default": 0,
+                "label": {
+                    "en": "End of the scale in Mb/s",
+                    "de": "Skalenende in Mb/s",
+                    "ru": "Конец шкалы в Мбит/с",
+                    "pt": "Fim da escala em Mb/s",
+                    "nl": "Einde van de schaal in Mb/s",
+                    "fr": "Fin de l'échelle en Mb/s",
+                    "it": "Fine scala in Mb/s",
+                    "es": "Fin de la escala en Mb/s",
+                    "pl": "Koniec skali w Mb/s",
+                    "uk": "Кінець шкали в Мбіт/с",
+                    "zh-cn": "刻度上限 (Mb/s)"
+                },
+                "help": {
+                    "en": "0: the booked speed if it is known, otherwise automatic",
+                    "de": "0: gebuchte Bandbreite, falls bekannt, sonst automatisch",
+                    "ru": "0: тарифная скорость, если известна, иначе автоматически",
+                    "pt": "0: a velocidade contratada, se conhecida, caso contrário automático",
+                    "nl": "0: de geboekte snelheid indien bekend, anders automatisch",
+                    "fr": "0 : le débit souscrit s'il est connu, sinon automatique",
+                    "it": "0: la velocità del piano se nota, altrimenti automatico",
+                    "es": "0: la velocidad contratada si se conoce, si no automático",
+                    "pl": "0: prędkość z taryfy, jeśli jest znana, w przeciwnym razie automatycznie",
+                    "uk": "0: тарифна швидкість, якщо відома, інакше автоматично",
+                    "zh-cn": "0：已知时使用签约速率，否则自动"
+                },
+                "hidden": "data.layout === \"strip\" || data.layout === \"mini\""
+            },
+            "showStart": {
+                "type": "checkbox",
+                "default": true,
+                "label": {
+                    "en": "Show the start button",
+                    "de": "Start-Button anzeigen",
+                    "ru": "Показать кнопку запуска",
+                    "pt": "Mostrar o botão de início",
+                    "nl": "Startknop tonen",
+                    "fr": "Afficher le bouton de démarrage",
+                    "it": "Mostra il pulsante di avvio",
+                    "es": "Mostrar el botón de inicio",
+                    "pl": "Pokaż przycisk startu",
+                    "uk": "Показати кнопку запуску",
+                    "zh-cn": "显示开始按钮"
+                }
+            }
+        }
+    }
+}

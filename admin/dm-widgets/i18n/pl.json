@@ -1,0 +1,9 @@
+{
+    "vofodm_instance": "Instancja",
+    "vofodm_max_speed": "Koniec skali w Mb/s",
+    "vofodm_max_speed_help": "0: prędkość z taryfy, jeśli jest znana, w przeciwnym razie automatycznie",
+    "vofodm_show_start": "Pokaż przycisk startu",
+    "vofodm_name": "Nazwa",
+    "vofodm_icon": "Ikona",
+    "vofodm_title": "Test prędkości"
+}

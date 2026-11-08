@@ -1,0 +1,32 @@
+{
+    "name": "iobroker.vofo-speedtest-widgets",
+    "private": true,
+    "version": "2.0.1",
+    "type": "module",
+    "dependencies": {
+        "@iobroker/types-vis-2": "~2.20.5",
+        "@module-federation/vite": "^1.23.5",
+        "@vitejs/plugin-react": "^6.1.2"
+    },
+    "devDependencies": {
+        "@types/react": "^19.3.0",
+        "@types/react-dom": "^19.3.0",
+        "react": "^19.3.1",
+        "react-dom": "^19.3.1",
+        "vite": "^8.3.5"
+    },
+    "scripts": {
+        "start": "vite --port 4173",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "npm": "npm i -f",
+        "lint": "eslint -c eslint.config.mjs src"
+    },
+    "homepage": ".",
+    "browserslist": [
+        ">0.2%",
+        "not dead",
+        "not ie <= 11",
+        "not op_mini all"
+    ]
+}
