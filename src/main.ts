@@ -4,6 +4,7 @@ import type { ClientRequest } from 'node:http';
 import { request, type RequestOptions } from 'node:https';
 import { promise as pingPromise } from 'ping';
 
+import { extractApiKey, FALLBACK_API_KEY } from './lib/apiKey';
 import { STATE_ATTRIBUTES } from './lib/stateAttr';
 import type {
     RemotePortResult,
@@ -16,6 +17,16 @@ import type {
 } from './lib/types';
 
 const API_HOST = 'api.speedtest.vodafone.anw.net';
+/** The whole test (download, upload, ping) normally takes about 45 seconds */
+const WATCHDOG_TIMEOUT = 5 * 60_000;
+const WEB_OPTIONS: RequestOptions = {
+    hostname: 'speedtest.vodafone.de',
+    port: 443,
+    method: 'GET',
+    rejectUnauthorized: false,
+    timeout: 60_000,
+    headers: { 'User-Agent': 'Mozilla/5.0 (ioBroker.vofo-speedtest)' },
+};
 const REQUEST_TIMEOUT = 60_000;
 const TRANSFER_TIMEOUT = 120_000;
 /** Size of the multipart field "data", that is uploaded again and again during the upload test */
@@ -109,7 +120,6 @@ class VofoSpeedtest extends utils.Adapter {
     private stopHandler: ioBroker.Timeout | undefined = undefined;
     private conf: SpeedtestConfig = DEFAULT_CONFIG;
     private init: SpeedtestInit = DEFAULT_INIT;
-    private apiKeyFile = '';
     private xApiKey = '';
     private readonly result: TestResult = {
         download_raw: [],
@@ -145,7 +155,17 @@ class VofoSpeedtest extends utils.Adapter {
      * Is called when databases are connected and adapter received configuration.
      */
     private onReady(): void {
-        void this.getApiKeyFile();
+        // The adapter runs in "schedule" mode. If a test hangs, the next start fails with "already running".
+        this.setTimeout(() => {
+            this.log.error(`Speed test did not finish within ${WATCHDOG_TIMEOUT / 60_000} minutes, stopping`);
+            this.stopNow();
+        }, WATCHDOG_TIMEOUT);
+        this.getApiKey().catch(e => this.onError('getApiKey', e));
+    }
+
+    private onError(step: string, e: unknown): void {
+        this.log.error(`${step}: ${(e as Error)?.message ?? String(e)}`);
+        this.stopNow();
     }
 
     /**
@@ -188,71 +208,41 @@ class VofoSpeedtest extends utils.Adapter {
         });
     }
 
-    private async getApiKeyFile(): Promise<void> {
-        this.log.debug('getApiKeyFile start...');
-        let res: HttpsResponse;
-        try {
-            res = await this.httpsRequest({
-                hostname: 'speedtest.vodafone.de',
-                port: 443,
-                path: '/',
-                method: 'GET',
-                rejectUnauthorized: false,
-                timeout: REQUEST_TIMEOUT,
-            });
-        } catch (e) {
-            this.log.error(`getApiKeyFile error: ${JSON.stringify(e)}`);
-            this.stopNow();
-            return;
-        }
-        this.log.debug(`getApiKeyFile finished with code ${res.statusCode}`);
-        if (res.statusCode === 200) {
-            // <script src="/_next/static/chunks/_app-784-16521bb81c5071f679b8.js" defer="">
-            const settings = res.body.match(
-                /<script src="(\/_next\/static\/chunks\/pages\/_app-[0-9a-z]+\.js)" defer="">/s,
-            );
-            if (settings) {
-                this.apiKeyFile = settings[1];
-                await this.getApiKey();
-            }
-        } else {
-            this.log.error("Couldn't get .js file for API Key");
-            this.stopNow();
-        }
-    }
-
+    /**
+     * The API key is compiled into one of the Next.js chunks of speedtest.vodafone.de.
+     * The chunk names change with every deployment of the web page, so all chunks are searched.
+     * If the key cannot be found, the last known key is used.
+     */
     private async getApiKey(): Promise<void> {
         this.log.debug('getApiKey start...');
-        let res: HttpsResponse;
+        let key: string | null = null;
         try {
-            res = await this.httpsRequest({
-                hostname: 'speedtest.vodafone.de',
-                port: 443,
-                path: this.apiKeyFile,
-                method: 'GET',
-                rejectUnauthorized: false,
-                timeout: REQUEST_TIMEOUT,
-            });
-        } catch (e) {
-            this.log.error(`getApiKey error: ${JSON.stringify(e)}`);
-            this.stopNow();
-            return;
-        }
-        this.log.debug(`getApiKey finished with code ${res.statusCode}`);
-        if (res.statusCode === 200) {
-            // 32 char long API key like "eiquo8HuP0aeDoinono2nao4keip1the"
-            const settings = res.body.match(/"([a-zA-Z0-9]{32})"/s);
-            if (settings != null) {
-                this.xApiKey = settings[1];
-                await this.getConfig();
-            } else {
-                this.log.error("Couldn't extract API Key");
-                this.stopNow();
+            const res = await this.httpsRequest({ ...WEB_OPTIONS, path: '/' });
+            this.log.debug(`getApiKey: web page finished with code ${res.statusCode}`);
+            if (res.statusCode === 200) {
+                const scripts = [...res.body.matchAll(/<script[^>]+src="(\/_next\/static\/[^"]+\.js)"/g)].map(
+                    m => m[1],
+                );
+                for (const script of scripts) {
+                    const chunk = await this.httpsRequest({ ...WEB_OPTIONS, path: script });
+                    if (chunk.statusCode === 200) {
+                        key = extractApiKey(chunk.body);
+                        if (key) {
+                            this.log.debug(`getApiKey: found API key in ${script}`);
+                            break;
+                        }
+                    }
+                }
             }
-        } else {
-            this.log.error("Couldn't get API Key");
-            this.stopNow();
+        } catch (e) {
+            this.log.debug(`getApiKey error: ${(e as Error).message}`);
         }
+        if (!key) {
+            this.log.warn("Couldn't extract API Key from speedtest.vodafone.de, using the last known key");
+            key = FALLBACK_API_KEY;
+        }
+        this.xApiKey = key;
+        await this.getConfig();
     }
 
     private async getConfig(): Promise<void> {
@@ -308,6 +298,9 @@ class VofoSpeedtest extends utils.Adapter {
             if (d) {
                 this.remotePort = d.port;
                 await this.initSBC();
+            } else {
+                this.log.error("Couldn't get Remote Port: empty answer");
+                this.stopNow();
             }
         } else {
             this.log.error("Couldn't get Remote Port");
@@ -470,7 +463,10 @@ class VofoSpeedtest extends utils.Adapter {
         this.timeStart = new Date();
         this.running = 'ping';
         this.resetStopHandler('ping');
-        this.stopHandler = this.setTimeout(() => void this.stopPingTest(), this.conf.data.ping.duration * 1000);
+        this.stopHandler = this.setTimeout(
+            () => this.stopPingTest().catch(e => this.onError('ping', e)),
+            this.conf.data.ping.duration * 1000,
+        );
         const res = await pingPromise.probe(
             this.init.data.speedtest.servers.pingServer.dualstack.replace('https://', ''),
             {
@@ -487,6 +483,11 @@ class VofoSpeedtest extends utils.Adapter {
     }
 
     private async stopPingTest(): Promise<void> {
+        // called by the timeout and by the end of the ping, the result must be written only once
+        if (this.running !== 'ping') {
+            return;
+        }
+        this.resetStopHandler('ping');
         this.running = null;
         this.result.overall_time.ping = Date.now() - this.timeStart.getTime();
         await this.writeResult();
@@ -615,7 +616,7 @@ class VofoSpeedtest extends utils.Adapter {
                 this.startUpload();
                 break;
             case 'ping':
-                void this.startPing();
+                this.startPing().catch(e => this.onError('ping', e));
                 break;
         }
     }
@@ -665,7 +666,9 @@ class VofoSpeedtest extends utils.Adapter {
                             this.retryDownload = true;
                             this.startDownload();
                         } else {
-                            this.log.error('retry error');
+                            // continue with the upload and ping test anyway
+                            this.log.error('retry error: download test returned no value twice');
+                            this.setTimeout(() => this.run('upload'), 500);
                         }
                     } else {
                         this.setTimeout(() => this.run('upload'), 500);
@@ -679,6 +682,7 @@ class VofoSpeedtest extends utils.Adapter {
             this.log.debug(`result: ${JSON.stringify(args)}`);
         } else {
             this.log.error(`result: Unknown Error ${res.statusCode}`);
+            this.stopNow();
         }
     }
 
@@ -734,12 +738,12 @@ class VofoSpeedtest extends utils.Adapter {
         this.downloadRequests.forEach(req => req.destroy());
         this.downloadRequests = [];
         this.running = null;
-        void this.resultFromArray(
+        this.resultFromArray(
             this.result.download_raw,
             'download',
             this.result.overall_time.download,
             this.result.overall_bytes.download,
-        );
+        ).catch(e => this.onError('download result', e));
     }
 
     private stopUploadTest(): void {
@@ -748,12 +752,12 @@ class VofoSpeedtest extends utils.Adapter {
         this.running = null;
         this.uploadRequests.forEach(req => req.destroy());
         this.uploadRequests = [];
-        void this.resultFromArray(
+        this.resultFromArray(
             this.result.upload_raw,
             'upload',
             this.result.overall_time.upload,
             this.result.overall_bytes.upload,
-        );
+        ).catch(e => this.onError('upload result', e));
     }
 
     /** Calls `func` every `wait` ms, `times` times */
