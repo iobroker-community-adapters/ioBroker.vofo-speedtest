@@ -1,5 +1,6 @@
 import * as utils from '@iobroker/adapter-core';
 import { randomUUID } from 'node:crypto';
+import { isIPv6 } from 'node:net';
 import type { ClientRequest } from 'node:http';
 import { request, type RequestOptions } from 'node:https';
 import { promise as pingPromise } from 'ping';
@@ -163,6 +164,19 @@ class VofoSpeedtest extends utils.Adapter {
         this.getApiKey().catch(e => this.onError('getApiKey', e));
     }
 
+    /** The configured local address, or undefined for "any" */
+    private localAddress(): string | undefined {
+        const address = (this.config.bindAddress || '').trim();
+        return address && address !== '0.0.0.0' ? address : undefined;
+    }
+
+    /** Binds the connection to the configured local address */
+    private bind(options: RequestOptions): RequestOptions {
+        const localAddress = this.localAddress();
+        // the address family must match the local address, otherwise e.g. an IPv6 server address cannot be reached
+        return localAddress ? { ...options, localAddress, family: isIPv6(localAddress) ? 6 : 4 } : options;
+    }
+
     private onError(step: string, e: unknown): void {
         this.log.error(`${step}: ${(e as Error)?.message ?? String(e)}`);
         this.stopNow();
@@ -195,7 +209,7 @@ class VofoSpeedtest extends utils.Adapter {
     /** Sends an HTTPS request and collects the complete answer */
     private httpsRequest(options: RequestOptions, body?: string): Promise<HttpsResponse> {
         return new Promise((resolve, reject) => {
-            const req = request(options, res => {
+            const req = request(this.bind(options), res => {
                 let page = '';
                 res.on('data', (d: Buffer) => (page += d.toString()));
                 res.on('end', () => resolve({ statusCode: res.statusCode, body: page }));
@@ -401,14 +415,14 @@ class VofoSpeedtest extends utils.Adapter {
             for (let i = 0; i < numStreams; i++) {
                 bytes[i] = 0;
                 const req = request(
-                    {
+                    this.bind({
                         hostname: url.hostname,
                         port: 443,
                         path: `${url.pathname}?${Math.random()}`,
                         method: 'GET',
                         rejectUnauthorized: false,
                         timeout: TRANSFER_TIMEOUT,
-                    },
+                    }),
                     res => res.on('data', (d: Buffer) => (bytes[i] += d.length)),
                 );
 
@@ -473,6 +487,7 @@ class VofoSpeedtest extends utils.Adapter {
                 timeout: this.conf.data.ping.interval,
                 // send 5 echo requests (-c 5 on Linux/macOS, -n 5 on Windows)
                 min_reply: 5,
+                sourceAddr: this.localAddress(),
             },
         );
         this.result.ping.min = res.min;
@@ -505,7 +520,7 @@ class VofoSpeedtest extends utils.Adapter {
         this.uploadBytes[id] = 0;
 
         const req = request(
-            {
+            this.bind({
                 hostname: url.hostname,
                 port: 443,
                 path: `${url.pathname}${url.search}`,
@@ -516,7 +531,7 @@ class VofoSpeedtest extends utils.Adapter {
                     'Content-Type': `multipart/form-data; boundary=${boundary}`,
                     'Content-Length': head.length + UPLOAD_SIZE + tail.length,
                 },
-            },
+            }),
             res => {
                 res.resume();
                 res.on('end', () => {
