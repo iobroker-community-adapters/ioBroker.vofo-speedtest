@@ -103,7 +103,7 @@ Vodafone is a trademark of Vodafone GmbH. I am in no way endorsed by or affiliat
 MIT License
 
 Copyright (c) 2024-2026 iobroker-community-adapters <iobroker-community-adapters@gmx.de>  
-Copyright (c) 2020-2023 Peter Baumert
+Copyright (c) 2020-2023 Peter Baumert <ioBroker.unifi-protect@outlook.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
