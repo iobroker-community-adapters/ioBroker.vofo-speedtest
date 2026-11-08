@@ -63,6 +63,9 @@ This adapter would not have been possible without the great work of Peter Baumer
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+- (mcm1957) Issues detected by repositorychecker have been fixed
+
 ### 3.0.0 (2026-11-08)
 - (copilot) BREAKING: Adapter requires node.js >= 22.19.0 now
 - (copilot) BREAKING: Adapter requires admin >= 8.3.10 now
