@@ -63,7 +63,7 @@ This adapter would not have been possible without the great work of Peter Baumer
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 3.0.1 (2026-11-08)
 - (mcm1957) Issues detected by repositorychecker have been fixed
 
 ### 3.0.0 (2026-11-08)
@@ -92,9 +92,6 @@ This adapter would not have been possible without the great work of Peter Baumer
 * (mcm1957) Dependencies have been updated
 
 ### 1.0.1 (2023-09-13)
-* (bluefox) Updated packages and refactored code
-
-### 1.0.0 (2023-09-13)
 * (bluefox) Updated packages and refactored code
 
 [Older changelogs can be found there](CHANGELOG_OLD.md)

@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "vofo-speedtest",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "news": {
+      "3.0.1": {
+        "en": "Issues detected by repositorychecker have been fixed",
+        "de": "Repositorychecker hat Probleme behoben",
+        "ru": "Исправлены проблемы, обнаруженные средством проверки репозиториев",
+        "pt": "Os problemas do repositorychecker foram corrigidos",
+        "nl": "Problemen die door de repositorychecker zijn ontdekt, zijn opgelost",
+        "fr": "Les problèmes détectés par RepositoryChecker ont été résolus",
+        "it": "Risolti i problemi rilevati da RepositoryChecker",
+        "es": "Se han solucionado los problemas detectados por RepositoryChecker",
+        "pl": "Problemy wykryte przez repositorychecker zostały naprawione",
+        "uk": "Виправлені проблеми, виявлені контролером сховища",
+        "zh-cn": "存储库检查器检测到的问题已修复"
+      },
       "3.0.0": {
         "en": "BREAKING: Adapter requires node.js >= 22.19.0 now\nBREAKING: Adapter requires admin >= 8.3.10 now\nBREAKING: Adapter requires js-controller >= 6.0.11 now\nBREAKING: The adapter runs permanently now and starts the test by itself. A schedule changed in the instance settings is taken over\nBREAKING: The option \"Use curl\" has been removed. node-libcurl is not used anymore, download and upload run over node.js https\nAdded: start a test with the state `test.start` (#153), and the states `test.running`, `test.phase`, `test.speed` and `test.error`\nAdded: the instance settings show the result and the running test, with a button to start a test\nAdded: `test.error` tells if the ping server did not answer\nAdded: a vis-2 widget, a tile for ioBroker.devices and the web component `<iob-vofo-speedtest>`\nFixed: upload values were missing without curl (#253)\nFixed: the adapter did not stop if the API key could not be found on speedtest.vodafone.de, the next start failed with \"already running\" (#239, #208)\nFixed: the download test without curl used outdated server paths\nThe option \"Local address\" is evaluated now\nThe adapter was refactored to TypeScript",
         "de": "BREAKING: Der Adapter benötigt jetzt node.js >= 22.19.0\nBREAKING: Der Adapter benötigt jetzt admin >= 8.3.10\nBREAKING: Der Adapter benötigt jetzt js-controller >= 6.0.11\nBREAKING: Der Adapter läuft jetzt dauerhaft und startet den Test selbst. Ein in den Instanzeinstellungen geänderter Zeitplan wird übernommen\nBREAKING: Die Option „Use curl“ wurde entfernt. node-libcurl wird nicht mehr verwendet, Download und Upload laufen über node.js https\nHinzugefügt: Start eines Tests über den State `test.start` (#153) sowie die States `test.running`, `test.phase`, `test.speed` und `test.error`\nHinzugefügt: Die Instanzeinstellungen zeigen das Ergebnis und den laufenden Test, mit einem Button zum Starten eines Tests\nHinzugefügt: `test.error` meldet, wenn der Ping-Server nicht geantwortet hat\nHinzugefügt: ein vis-2-Widget, eine Kachel für ioBroker.devices und die Web Component `<iob-vofo-speedtest>`\nBehoben: Upload-Werte fehlten ohne curl (#253)\nBehoben: Der Adapter stoppte nicht, wenn der API-Schlüssel auf speedtest.vodafone.de nicht gefunden wurde, der nächste Start schlug mit „already running“ fehl (#239, #208)\nBehoben: Der Download-Test ohne curl nutzte veraltete Serverpfade\nDie Option „Lokale Adresse“ wird jetzt ausgewertet\nDer Adapter wurde auf TypeScript umgestellt",
@@ -80,19 +93,6 @@
         "pl": "Napraw numery wersji",
         "zh-cn": "修复版本号",
         "uk": "Виправити номери версій"
-      },
-      "0.0.8": {
-        "en": "Renamed Adapter due to legal reasons\nFixed some dependencies",
-        "de": "Adapter aus rechtlichen Gründen umbenannt\nEinige Abhängigkeiten behoben",
-        "ru": "Адаптер переименован по юридическим причинам\nИсправлены некоторые зависимости",
-        "pt": "Adaptador renomeado devido a razões legais\nAlgumas dependências corrigidas",
-        "nl": "Om juridische redenen omgedoopt tot Adapter\nEnkele afhankelijkheden opgelost",
-        "fr": "Adaptateur renommé pour des raisons juridiques\nCorrection de certaines dépendances",
-        "it": "Adattatore rinominato per motivi legali\nRisolte alcune dipendenze",
-        "es": "Adaptador renombrado por razones legales\nSe corrigieron algunas dependencias",
-        "pl": "Zmieniono nazwę adaptera ze względów prawnych\nNaprawiono niektóre zależności",
-        "zh-cn": "由于法律原因重命名适配器\n修复了一些依赖",
-        "uk": "Змінено назву Adapter через юридичні причини\nВиправлено деякі залежності"
       }
     },
     "titleLang": {
