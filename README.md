@@ -4,22 +4,23 @@
 [![GitHub license](https://img.shields.io/github/license/iobroker-community-adapters/ioBroker.vofo-speedtest)](https://github.com/iobroker-community-adapters/ioBroker.vofo-speedtest/blob/master/LICENSE)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.vofo-speedtest.svg)](https://www.npmjs.com/package/iobroker.vofo-speedtest)
 ![GitHub repo size](https://img.shields.io/github/repo-size/iobroker-community-adapters/ioBroker.vofo-speedtestd)
-[![Translation status](https://weblate.iobroker.net/widgets/adapters/-/vofo-speedtest/svg-badge.svg)](https://weblate.iobroker.net/engage/adapters/?utm_source=widget)</br>
+[![Translation status](https://weblate.iobroker.net/widgets/adapters/-/vofo-speedtest/svg-badge.svg)](https://weblate.iobroker.net/engage/adapters/?utm_source=widget)
+
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/iobroker-community-adapters/ioBroker.vofo-speedtest)
 ![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/iobroker-community-adapters/ioBroker.vofo-speedtest/latest)
 ![GitHub last commit](https://img.shields.io/github/last-commit/iobroker-community-adapters/ioBroker.vofo-speedtest)
 ![GitHub issues](https://img.shields.io/github/issues/iobroker-community-adapters/ioBroker.vofo-speedtest)
-</br>
-**Version:** </br>
+
+**Version:**
+
 [![NPM version](http://img.shields.io/npm/v/iobroker.vofo-speedtest.svg)](https://www.npmjs.com/package/iobroker.vofo-speedtest)
 ![Current version in stable repository](https://iobroker.live/badges/vofo-speedtest-stable.svg)
 ![Number of Installations](https://iobroker.live/badges/vofo-speedtest-installed.svg)
-</br>
-**Tests:** </br>
+
+**Tests:**
+
 [![Test and Release](https://github.com/iobroker-community-adapters/ioBroker.vofo-speedtest/actions/workflows/test-and-release.yml/badge.svg)](https://github.com/iobroker-community-adapters/ioBroker.vofo-speedtest/actions/workflows/test-and-release.yml)
 [![CodeQL](https://github.com/iobroker-community-adapters/ioBroker.vofo-speedtest/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/iobroker-community-adapters/ioBroker.vofo-speedtest/actions/workflows/github-code-scanning/codeql)
-
-
 
 ## vofo-speedtest adapter for ioBroker
 
@@ -37,10 +38,15 @@ This adapter would not have been possible without the great work of Peter Baumer
 -->
 
 ### **WORK IN PROGRESS**
-- (copilot) Adapter requires node.js >= 22.19.0 now
-- (copilot) Adapter requires admin >= 7.7.22 now
-- (copilot) Adapter requires js-controller >= 6.0.11 now
-- (copilot) Adapter requires admin >= 7.6.17 now
+- (copilot) BREAKING: Adapter requires node.js >= 22.19.0 now
+- (copilot) BREAKING: Adapter requires admin >= 7.7.22 now
+- (copilot) BREAKING: Adapter requires js-controller >= 6.0.11 now
+- (bluefox) BREAKING: The option "Use curl" has been removed. node-libcurl is not used anymore, download and upload run over node.js https
+- (bluefox) Fixed: upload values were missing without curl (#253)
+- (bluefox) Fixed: the adapter did not stop if the API key could not be found on speedtest.vodafone.de, the next start failed with "already running" (#239, #208)
+- (bluefox) Fixed: the download test without curl used outdated server paths
+- (bluefox) The option "Local address" is evaluated now
+- (bluefox) The adapter was refactored to TypeScript
 
 ### 2.0.1 (2024-04-29)
 * (mcm1957) Dependencies have been updated
