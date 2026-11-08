@@ -1,5 +1,13 @@
+export interface StateAttribute {
+    name: string;
+    type: ioBroker.CommonType | 'device';
+    role?: string;
+    unit?: string;
+    write?: boolean;
+}
+
 // Classification of all state attributes possible
-const state_attrb = {
+export const STATE_ATTRIBUTES: Record<string, StateAttribute> = {
     // Speed results
     running_download: {
         name: 'Currently download test in progress ?',
@@ -138,7 +146,7 @@ const state_attrb = {
     // Modem Details
     modem: {
         name: 'Modem',
-        type: 'device'
+        type: 'device',
     },
     vendor: {
         name: 'Modem vendor',
@@ -168,5 +176,3 @@ const state_attrb = {
         role: 'value.time',
     },
 };
-
-module.exports = state_attrb;
