@@ -6,14 +6,26 @@ export default [
         languageOptions: {
             parserOptions: {
                 projectService: {
-                    allowDefaultProject: ['*.mjs'],
+                    allowDefaultProject: ['*.mjs', '*.mts'],
                 },
                 tsconfigRootDir: import.meta.dirname,
             },
         },
     },
     {
-        ignores: ['admin/**/*', 'node_modules/**/*', 'test/**/*', 'build/**/*', 'tmp/**/*', '.**/*'],
+        ignores: [
+            'admin/**/*',
+            'widgets/**/*',
+            'node_modules/**/*',
+            'test/**/*',
+            'build/**/*',
+            // the front-ends have their own tsconfig and eslint config
+            'src-widgets/**/*',
+            'src-devices/**/*',
+            'src-webcomponents/**/*',
+            'tmp/**/*',
+            '.**/*',
+        ],
     },
     {
         rules: {

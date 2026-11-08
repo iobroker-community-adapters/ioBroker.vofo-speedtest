@@ -1,0 +1,9 @@
+{
+    "vofodm_instance": "Istanza",
+    "vofodm_max_speed": "Fine scala in Mb/s",
+    "vofodm_max_speed_help": "0: la velocità del piano se nota, altrimenti automatico",
+    "vofodm_show_start": "Mostra il pulsante di avvio",
+    "vofodm_name": "Nome",
+    "vofodm_icon": "Icona",
+    "vofodm_title": "Test di velocità"
+}

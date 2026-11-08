@@ -1,0 +1,14 @@
+{
+    "set_label": "Snelheidstest",
+    "widget_label": "Snelheidstest",
+    "instance": "Instantie",
+    "layout": "Weergave",
+    "layout_full": "Meters",
+    "layout_strip": "Eén regel",
+    "layout_mini": "Compact",
+    "max_speed": "Einde van de schaal in Mb/s",
+    "max_speed_help": "0: de geboekte snelheid indien bekend, anders automatisch",
+    "show_start": "Startknop tonen",
+    "name": "Naam",
+    "without_card": "Zonder kaart"
+}

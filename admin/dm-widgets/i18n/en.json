@@ -1,0 +1,9 @@
+{
+    "vofodm_instance": "Instance",
+    "vofodm_max_speed": "End of the scale in Mb/s",
+    "vofodm_max_speed_help": "0: the booked speed if it is known, otherwise automatic",
+    "vofodm_show_start": "Show the start button",
+    "vofodm_name": "Name",
+    "vofodm_icon": "Icon",
+    "vofodm_title": "Speed test"
+}

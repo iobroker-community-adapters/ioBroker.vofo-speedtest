@@ -1,0 +1,9 @@
+{
+    "vofodm_instance": "Instância",
+    "vofodm_max_speed": "Fim da escala em Mb/s",
+    "vofodm_max_speed_help": "0: a velocidade contratada, se conhecida, caso contrário automático",
+    "vofodm_show_start": "Mostrar o botão de início",
+    "vofodm_name": "Nome",
+    "vofodm_icon": "Ícone",
+    "vofodm_title": "Teste de velocidade"
+}

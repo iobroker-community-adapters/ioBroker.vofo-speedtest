@@ -1,0 +1,9 @@
+{
+    "vofodm_instance": "Instantie",
+    "vofodm_max_speed": "Einde van de schaal in Mb/s",
+    "vofodm_max_speed_help": "0: de geboekte snelheid indien bekend, anders automatisch",
+    "vofodm_show_start": "Startknop tonen",
+    "vofodm_name": "Naam",
+    "vofodm_icon": "Pictogram",
+    "vofodm_title": "Snelheidstest"
+}

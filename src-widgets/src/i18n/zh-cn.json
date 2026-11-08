@@ -1,0 +1,14 @@
+{
+    "set_label": "网速测试",
+    "widget_label": "网速测试",
+    "instance": "实例",
+    "layout": "布局",
+    "layout_full": "仪表",
+    "layout_strip": "单行",
+    "layout_mini": "紧凑",
+    "max_speed": "刻度上限 (Mb/s)",
+    "max_speed_help": "0：已知时使用签约速率，否则自动",
+    "show_start": "显示开始按钮",
+    "name": "名称",
+    "without_card": "无卡片"
+}

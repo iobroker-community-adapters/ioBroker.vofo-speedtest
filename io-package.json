@@ -142,8 +142,7 @@
     "readme": "https://github.com/iobroker-community-adapters/ioBroker.vofo-speedtest/blob/master/README.md",
     "loglevel": "info",
     "tier": 2,
-    "mode": "schedule",
-    "schedule": "11,41 * * * *",
+    "mode": "daemon",
     "type": "network",
     "compact": true,
     "nogit": true,
@@ -159,13 +158,136 @@
     ],
     "globalDependencies": [
       {
-        "admin": ">=7.7.22"
+        "admin": ">=8.3.10"
       }
+    ],
+    "visWidgets": {
+      "vis2VofoSpeedtestWidgets": {
+        "i18n": "component",
+        "name": "vis2VofoSpeedtestWidgets",
+        "url": "vofo-speedtest/customWidgets.js",
+        "bundlerType": "module",
+        "components": [
+          "VofoSpeedtest"
+        ]
+      }
+    },
+    "deviceWidgets": {
+      "components": [
+        {
+          "name": "VofoSpeedtestComponent",
+          "label": {
+            "en": "Vofo speed test",
+            "de": "Vofo-Speedtest",
+            "ru": "Тест скорости Vofo",
+            "pt": "Teste de velocidade Vofo",
+            "nl": "Vofo-snelheidstest",
+            "fr": "Test de débit Vofo",
+            "it": "Test di velocità Vofo",
+            "es": "Prueba de velocidad Vofo",
+            "pl": "Test prędkości Vofo",
+            "uk": "Тест швидкості Vofo",
+            "zh-cn": "Vofo 网速测试"
+          },
+          "description": {
+            "en": "Download, upload and ping of the last speed test, with a button to start a new one",
+            "de": "Download, Upload und Ping des letzten Speedtests, mit einem Button zum Starten eines neuen Tests",
+            "ru": "Загрузка, отдача и пинг последнего теста скорости, с кнопкой запуска нового теста",
+            "pt": "Download, upload e ping do último teste de velocidade, com um botão para iniciar um novo",
+            "nl": "Download, upload en ping van de laatste snelheidstest, met een knop om een nieuwe te starten",
+            "fr": "Débit descendant, débit montant et ping du dernier test, avec un bouton pour en lancer un nouveau",
+            "it": "Download, upload e ping dell’ultimo test di velocità, con un pulsante per avviarne uno nuovo",
+            "es": "Descarga, subida y ping de la última prueba de velocidad, con un botón para iniciar una nueva",
+            "pl": "Pobieranie, wysyłanie i ping ostatniego testu prędkości, z przyciskiem uruchamiania nowego testu",
+            "uk": "Завантаження, вивантаження та пінг останнього тесту швидкості, з кнопкою запуску нового тесту",
+            "zh-cn": "上次网速测试的下载、上传和延迟，并带有开始新测试的按钮"
+          },
+          "icon": "speedtest.png"
+        }
+      ]
+    },
+    "webComponents": [
+      "webcomponents/vofo-speedtest.json"
     ]
   },
   "native": {
-    "bindAddress": "0.0.0.0"
+    "bindAddress": "0.0.0.0",
+    "schedule": "11,41 * * * *"
   },
   "objects": [],
-  "instanceObjects": []
+  "instanceObjects": [
+    {
+      "_id": "test",
+      "type": "channel",
+      "common": {
+        "name": "Speed test control"
+      },
+      "native": {}
+    },
+    {
+      "_id": "test.start",
+      "type": "state",
+      "common": {
+        "name": "Start a speed test",
+        "read": false,
+        "write": true,
+        "type": "boolean",
+        "role": "button"
+      },
+      "native": {}
+    },
+    {
+      "_id": "test.running",
+      "type": "state",
+      "common": {
+        "name": "A speed test is in progress",
+        "read": true,
+        "write": false,
+        "type": "boolean",
+        "role": "indicator.working",
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "test.phase",
+      "type": "state",
+      "common": {
+        "name": "Phase of the test: init, download, upload, ping",
+        "read": true,
+        "write": false,
+        "type": "string",
+        "role": "text",
+        "def": ""
+      },
+      "native": {}
+    },
+    {
+      "_id": "test.speed",
+      "type": "state",
+      "common": {
+        "name": "Current speed of the test in progress",
+        "read": true,
+        "write": false,
+        "type": "number",
+        "role": "value",
+        "unit": "Mb/s",
+        "def": 0
+      },
+      "native": {}
+    },
+    {
+      "_id": "test.error",
+      "type": "state",
+      "common": {
+        "name": "Error of the last test",
+        "read": true,
+        "write": false,
+        "type": "string",
+        "role": "text",
+        "def": ""
+      },
+      "native": {}
+    }
+  ]
 }

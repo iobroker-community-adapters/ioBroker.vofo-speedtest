@@ -28,6 +28,33 @@ Speedtest of Vodafone.de
 
 Implements same as technique as https://speedtest.vodafone.de
 
+The test also runs on connections of other providers. Vodafone reports the booked speed only for its own customers, so without a Vodafone connection `downstreamBooked` and `upstreamBooked` stay empty, and the widgets show no percentage of the booked speed.
+
+## Starting a test
+
+The adapter runs permanently and starts the test itself:
+
+- by the schedule in the instance settings (default: at minute 11 and 41 of every hour); leave it empty to start tests only on demand,
+- when `true` is written to `vofo-speedtest.0.test.start`, e.g. by the button in the instance settings or of the widgets, or by a script.
+
+A start during a running test is ignored.
+
+| State               | Meaning                                                                   |
+|---------------------|---------------------------------------------------------------------------|
+| `test.start`        | Write `true` to start a test                                              |
+| `test.running`      | A test is in progress                                                     |
+| `test.phase`        | Phase of the test: `init`, `download`, `upload`, `ping`, empty when idle  |
+| `test.speed`        | Current speed during the download and the upload in Mb/s                  |
+| `test.error`        | Error of the last test, empty if it succeeded. Also says if the ping server did not answer: download and upload are valid then |
+
+## Widgets
+
+The adapter brings the same view for three front-ends: gauges for download and upload, the percentage of the booked speed (if the provider reports it), ping, packet loss, the time of the last test and a button that starts a test. During a test the gauges show the current speed.
+
+- **vis-2**: the widget set `vofo-speedtest`
+- **ioBroker.devices**: a tile in the sizes 1x1, 2x0.5 and 2x1
+- **Web component**: `<iob-vofo-speedtest>` for every host of `@iobroker/web-components`, e.g. Aura
+
 ## Credits
 This adapter would not have been possible without the great work of Peter Baumert <ioBroker.unifi-protect@outlook.com> who implemented the inital release of this adapter.
 
@@ -39,9 +66,14 @@ This adapter would not have been possible without the great work of Peter Baumer
 
 ### **WORK IN PROGRESS**
 - (copilot) BREAKING: Adapter requires node.js >= 22.19.0 now
-- (copilot) BREAKING: Adapter requires admin >= 7.7.22 now
+- (copilot) BREAKING: Adapter requires admin >= 8.3.10 now
 - (copilot) BREAKING: Adapter requires js-controller >= 6.0.11 now
+- (bluefox) BREAKING: The adapter runs permanently now and starts the test by itself. A schedule changed in the instance settings is taken over
 - (bluefox) BREAKING: The option "Use curl" has been removed. node-libcurl is not used anymore, download and upload run over node.js https
+- (bluefox) Added: start a test with the state `test.start` (#153), and the states `test.running`, `test.phase`, `test.speed` and `test.error`
+- (bluefox) Added: the instance settings show the result and the running test, with a button to start a test
+- (bluefox) Added: `test.error` tells if the ping server did not answer
+- (bluefox) Added: a vis-2 widget, a tile for ioBroker.devices and the web component `<iob-vofo-speedtest>`
 - (bluefox) Fixed: upload values were missing without curl (#253)
 - (bluefox) Fixed: the adapter did not stop if the API key could not be found on speedtest.vodafone.de, the next start failed with "already running" (#239, #208)
 - (bluefox) Fixed: the download test without curl used outdated server paths

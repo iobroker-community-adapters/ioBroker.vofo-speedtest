@@ -1,3 +1,7 @@
 {
-    "Local address": "Local address"
+    "Local address": "Local address",
+    "Schedule of the automatic test": "Schedule of the automatic test",
+    "Leave empty to start the test only on demand with the state test.start": "Leave empty to start the test only on demand with the state test.start",
+    "Settings": "Settings",
+    "Speed test": "Speed test"
 }

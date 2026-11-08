@@ -1,0 +1,9 @@
+{
+    "vofodm_instance": "Экземпляр",
+    "vofodm_max_speed": "Конец шкалы в Мбит/с",
+    "vofodm_max_speed_help": "0: тарифная скорость, если известна, иначе автоматически",
+    "vofodm_show_start": "Показать кнопку запуска",
+    "vofodm_name": "Название",
+    "vofodm_icon": "Значок",
+    "vofodm_title": "Тест скорости"
+}

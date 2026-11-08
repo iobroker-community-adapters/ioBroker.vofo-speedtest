@@ -1,0 +1,14 @@
+{
+    "set_label": "Test prędkości",
+    "widget_label": "Test prędkości",
+    "instance": "Instancja",
+    "layout": "Układ",
+    "layout_full": "Wskaźniki",
+    "layout_strip": "Jedna linia",
+    "layout_mini": "Kompaktowy",
+    "max_speed": "Koniec skali w Mb/s",
+    "max_speed_help": "0: prędkość z taryfy, jeśli jest znana, w przeciwnym razie automatycznie",
+    "show_start": "Pokaż przycisk startu",
+    "name": "Nazwa",
+    "without_card": "Bez karty"
+}

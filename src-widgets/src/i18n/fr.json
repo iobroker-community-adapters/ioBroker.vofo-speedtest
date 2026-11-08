@@ -1,0 +1,14 @@
+{
+    "set_label": "Test de débit",
+    "widget_label": "Test de débit",
+    "instance": "Instance",
+    "layout": "Disposition",
+    "layout_full": "Jauges",
+    "layout_strip": "Une ligne",
+    "layout_mini": "Compact",
+    "max_speed": "Fin de l'échelle en Mb/s",
+    "max_speed_help": "0 : le débit souscrit s'il est connu, sinon automatique",
+    "show_start": "Afficher le bouton de démarrage",
+    "name": "Nom",
+    "without_card": "Sans carte"
+}

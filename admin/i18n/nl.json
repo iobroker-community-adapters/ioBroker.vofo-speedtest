@@ -1,3 +1,7 @@
 {
-    "Local address": "Lokaal adres"
+    "Local address": "Lokaal adres",
+    "Schedule of the automatic test": "Schema van de automatische test",
+    "Leave empty to start the test only on demand with the state test.start": "Laat leeg om de test alleen op verzoek te starten met de status test.start",
+    "Settings": "Instellingen",
+    "Speed test": "Snelheidstest"
 }

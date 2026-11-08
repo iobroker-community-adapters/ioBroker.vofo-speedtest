@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { isIPv6 } from 'node:net';
 import type { ClientRequest } from 'node:http';
 import { request, type RequestOptions } from 'node:https';
+import { scheduleJob, type Job } from 'node-schedule';
 import { promise as pingPromise } from 'ping';
 
 import { extractApiKey, FALLBACK_API_KEY } from './lib/apiKey';
@@ -18,7 +19,9 @@ import type {
 } from './lib/types';
 
 const API_HOST = 'api.speedtest.vodafone.anw.net';
-/** The whole test (download, upload, ping) normally takes about 45 seconds */
+/** Written with `true` and ack=false by the widgets, by scripts or by hand: starts a test */
+const START_STATE = 'test.start';
+/** A test (download, upload, ping) normally takes about 45 seconds. A hanging test must not block the next ones. */
 const WATCHDOG_TIMEOUT = 5 * 60_000;
 const WEB_OPTIONS: RequestOptions = {
     hostname: 'speedtest.vodafone.de',
@@ -100,6 +103,31 @@ const DEFAULT_INIT: SpeedtestInit = {
     },
 };
 
+/** The ping values of a test without an answer of the ping server */
+const NO_PING = '987';
+
+function createResult(): TestResult {
+    return {
+        download_raw: [],
+        upload_raw: [],
+        overall_time: {
+            ping: 0,
+        },
+        overall_bytes: {
+            upload: 0,
+            download: 0,
+        },
+        download: 0,
+        upload: 0,
+        ping: {
+            min: NO_PING,
+            max: NO_PING,
+            avg: NO_PING,
+            packetLoss: NO_PING,
+        },
+    };
+}
+
 interface HttpsResponse {
     statusCode: number | undefined;
     body: string;
@@ -107,7 +135,7 @@ interface HttpsResponse {
 
 class VofoSpeedtest extends utils.Adapter {
     /** Bytes received per download server and stream */
-    private readonly downloadBytes: Record<string, number[]> = {};
+    private downloadBytes: Record<string, number[]> = {};
     /** Bytes sent per upload request */
     private uploadBytes: number[] = [];
     private downloadRequests: ClientRequest[] = [];
@@ -122,25 +150,12 @@ class VofoSpeedtest extends utils.Adapter {
     private conf: SpeedtestConfig = DEFAULT_CONFIG;
     private init: SpeedtestInit = DEFAULT_INIT;
     private xApiKey = '';
-    private readonly result: TestResult = {
-        download_raw: [],
-        upload_raw: [],
-        overall_time: {
-            ping: 0,
-        },
-        overall_bytes: {
-            upload: 0,
-            download: 0,
-        },
-        download: 0,
-        upload: 0,
-        ping: {
-            min: '987',
-            max: '987',
-            avg: '987',
-            packetLoss: '987',
-        },
-    };
+    private result: TestResult = createResult();
+    /** A test is in progress, from the API key to the written result */
+    private testActive = false;
+    private watchdog: ioBroker.Timeout | undefined = undefined;
+    private intervalTimer: ioBroker.Timeout | undefined = undefined;
+    private scheduledJob: Job | null = null;
 
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
         super({
@@ -148,20 +163,138 @@ class VofoSpeedtest extends utils.Adapter {
             name: 'vofo-speedtest',
         });
 
-        this.on('ready', () => this.onReady());
+        this.on('ready', () => this.onReady().catch(e => this.log.error(`Cannot start: ${(e as Error).message}`)));
+        this.on('stateChange', (id, state) => this.onStateChange(id, state));
         this.on('unload', callback => this.onUnload(callback));
     }
 
     /**
      * Is called when databases are connected and adapter received configuration.
      */
-    private onReady(): void {
-        // The adapter runs in "schedule" mode. If a test hangs, the next start fails with "already running".
-        this.setTimeout(() => {
-            this.log.error(`Speed test did not finish within ${WATCHDOG_TIMEOUT / 60_000} minutes, stopping`);
-            this.stopNow();
+    private async onReady(): Promise<void> {
+        if (await this.migrateSchedule()) {
+            // The instance object was changed: the controller restarts this instance
+            return;
+        }
+        // the previous process could have been killed in the middle of a test
+        this.setStatus('', false);
+        await this.subscribeStatesAsync(START_STATE);
+        this.startSchedule();
+    }
+
+    /**
+     * Up to version 2 the adapter ran in the mode "schedule" with the schedule in `common.schedule` of the instance.
+     * A schedule that a user changed there moves to the setting that replaces it.
+     *
+     * @returns true if the instance object was changed
+     */
+    private async migrateSchedule(): Promise<boolean> {
+        const id = `system.adapter.${this.namespace}`;
+        const obj = await this.getForeignObjectAsync(id);
+        if (!obj?.common || !('schedule' in obj.common)) {
+            return false;
+        }
+        const schedule = obj.common.schedule;
+        delete obj.common.schedule;
+        if (schedule) {
+            obj.native.schedule = schedule;
+            this.log.info(`The schedule "${schedule}" was moved to the instance settings`);
+        }
+        await this.setForeignObject(id, obj);
+        return true;
+    }
+
+    private startSchedule(): void {
+        const cron = (this.config.schedule || '').trim();
+        if (!cron) {
+            this.log.info('No schedule is configured, a test starts only on demand');
+            return;
+        }
+        // As the controller does for cloud adapters: not all installations at the same second
+        const expression = cron.split(/\s+/).length === 5 ? `${Math.floor(Math.random() * 60)} ${cron}` : cron;
+        this.scheduledJob = scheduleJob(expression, () => this.startTest());
+        if (this.scheduledJob) {
+            this.log.debug(`Scheduled the test with "${expression}"`);
+        } else {
+            this.log.error(`Invalid schedule: "${cron}"`);
+        }
+    }
+
+    private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
+        if (id === `${this.namespace}.${START_STATE}` && state && !state.ack && state.val) {
+            this.setState(START_STATE, { val: false, ack: true }).catch(e => this.onError('start', e));
+            this.startTest();
+        }
+    }
+
+    private startTest(): void {
+        if (this.testActive) {
+            this.log.info('A speed test is already running');
+            return;
+        }
+        this.testActive = true;
+        this.result = createResult();
+        this.downloadBytes = {};
+        this.uploadBytes = [];
+        this.bytesLoadedLastSection = 0;
+        this.retryDownload = false;
+        this.running = null;
+        this.setStatus('init', true, '');
+        this.watchdog = this.setTimeout(() => {
+            this.watchdog = undefined;
+            this.failTest(`Speed test did not finish within ${WATCHDOG_TIMEOUT / 60_000} minutes`);
         }, WATCHDOG_TIMEOUT);
         this.getApiKey().catch(e => this.onError('getApiKey', e));
+    }
+
+    /** Ends the test, with or without success. Whatever is still under way of it is cancelled. */
+    private finishTest(error?: string): void {
+        if (!this.testActive) {
+            return;
+        }
+        this.testActive = false;
+        this.running = null;
+        this.watchdog && this.clearTimeout(this.watchdog);
+        this.watchdog = undefined;
+        this.stopHandler && this.clearTimeout(this.stopHandler);
+        this.stopHandler = undefined;
+        this.intervalTimer && this.clearTimeout(this.intervalTimer);
+        this.intervalTimer = undefined;
+        this.closeTransfers();
+        this.setStatus('', false, error);
+    }
+
+    private failTest(message: string): void {
+        if (this.testActive) {
+            this.log.error(message);
+            this.finishTest(message);
+        }
+    }
+
+    private closeTransfers(): void {
+        this.downloadRequests.forEach(req => req.destroy());
+        this.uploadRequests.forEach(req => req.destroy());
+        this.downloadRequests = [];
+        this.uploadRequests = [];
+    }
+
+    /** The states the widgets show the progress with */
+    private setStatus(phase: string, running: boolean, error?: string): void {
+        const states: [string, ioBroker.StateValue][] = [
+            ['test.phase', phase],
+            ['test.running', running],
+        ];
+        if (error !== undefined) {
+            states.push(['test.error', error]);
+        }
+        if (!running) {
+            states.push(['test.speed', 0]);
+        }
+        for (const [id, val] of states) {
+            this.setState(id, { val, ack: true }).catch(e =>
+                this.log.warn(`Cannot set ${id}: ${(e as Error).message}`),
+            );
+        }
     }
 
     /** The configured local address, or undefined for "any" */
@@ -178,8 +311,7 @@ class VofoSpeedtest extends utils.Adapter {
     }
 
     private onError(step: string, e: unknown): void {
-        this.log.error(`${step}: ${(e as Error)?.message ?? String(e)}`);
-        this.stopNow();
+        this.failTest(`${step}: ${(e as Error)?.message ?? String(e)}`);
     }
 
     /**
@@ -188,21 +320,16 @@ class VofoSpeedtest extends utils.Adapter {
     private onUnload(callback: () => void): void {
         try {
             this.log.info('starting cleanup...');
-            // the timers are cleared by adapter-core, the open transfers have to be closed here
-            this.downloadRequests.forEach(req => req.destroy());
-            this.uploadRequests.forEach(req => req.destroy());
-            this.downloadRequests = [];
-            this.uploadRequests = [];
+            // the timers are cleared by adapter-core, the job and the open transfers have to be closed here
+            this.scheduledJob?.cancel();
+            this.scheduledJob = null;
+            this.testActive = false;
+            this.running = null;
+            this.closeTransfers();
             this.log.info('cleaned everything up...');
             callback();
         } catch {
             callback();
-        }
-    }
-
-    private stopNow(): void {
-        if (this.stop) {
-            void this.stop();
         }
     }
 
@@ -215,6 +342,8 @@ class VofoSpeedtest extends utils.Adapter {
                 res.on('end', () => resolve({ statusCode: res.statusCode, body: page }));
             });
             req.on('error', reject);
+            // the option "timeout" only announces the timeout, the request has to be closed here
+            req.on('timeout', () => req.destroy(new Error(`Timeout of ${options.hostname as string}`)));
             if (body !== undefined) {
                 req.write(body);
             }
@@ -275,8 +404,7 @@ class VofoSpeedtest extends utils.Adapter {
                 },
             });
         } catch (e) {
-            this.log.error(`getConfig error: ${JSON.stringify(e)}`);
-            this.stopNow();
+            this.failTest(`getConfig error: ${(e as Error).message}`);
             return;
         }
         this.log.debug(`getConfig finished with code ${res.statusCode}`);
@@ -284,8 +412,7 @@ class VofoSpeedtest extends utils.Adapter {
             this.conf = JSON.parse(res.body) as SpeedtestConfig;
             await this.getRemotePort();
         } else {
-            this.log.error("Couldn't get Speedtest Config");
-            this.stopNow();
+            this.failTest("Couldn't get Speedtest Config");
         }
     }
 
@@ -302,8 +429,7 @@ class VofoSpeedtest extends utils.Adapter {
                 timeout: REQUEST_TIMEOUT,
             });
         } catch (e) {
-            this.log.error(`getRemotePort error: ${JSON.stringify(e)}`);
-            this.stopNow();
+            this.failTest(`getRemotePort error: ${(e as Error).message}`);
             return;
         }
         this.log.debug(`getRemotePort finished with code ${res.statusCode}`);
@@ -313,12 +439,10 @@ class VofoSpeedtest extends utils.Adapter {
                 this.remotePort = d.port;
                 await this.initSBC();
             } else {
-                this.log.error("Couldn't get Remote Port: empty answer");
-                this.stopNow();
+                this.failTest("Couldn't get Remote Port: empty answer");
             }
         } else {
-            this.log.error("Couldn't get Remote Port");
-            this.stopNow();
+            this.failTest("Couldn't get Remote Port");
         }
     }
 
@@ -360,8 +484,7 @@ class VofoSpeedtest extends utils.Adapter {
             this.log.debug(`initSBC: ${JSON.stringify(options)}`);
             res = await promise;
         } catch (e) {
-            this.log.error(`initSBC: ${JSON.stringify(e)}`);
-            this.stopNow();
+            this.failTest(`initSBC: ${(e as Error).message}`);
             return;
         }
 
@@ -387,8 +510,7 @@ class VofoSpeedtest extends utils.Adapter {
             this.log.debug(`SBC-Init (Success): ${JSON.stringify(args)}`);
             this.startDownload();
         } else {
-            this.log.error('initSBC: Unknown Error');
-            this.stopNow();
+            this.failTest('initSBC: Unknown Error');
         }
     }
 
@@ -402,10 +524,12 @@ class VofoSpeedtest extends utils.Adapter {
 
     private startDownload(): void {
         this.log.debug(`startDownload start: ${this.running}`);
-        if (this.running) {
+        if (this.running || !this.testActive) {
             return;
         }
         this.running = 'download';
+        this.setStatus('download', true);
+        this.bytesLoadedLastSection = 0;
         const numStreams = this.conf.data.download.numStreams;
         this.init.data.speedtest.servers.downloadServers.dualstack.forEach(testServer => {
             this.downloadBytes[testServer] ||= [];
@@ -429,8 +553,7 @@ class VofoSpeedtest extends utils.Adapter {
                 req.on('error', (e: NodeJS.ErrnoException) => {
                     // ECONNRESET is the result of destroying the request at the end of the test
                     if (e.code !== 'ECONNRESET') {
-                        this.log.error(`startDownload error: ${JSON.stringify(e)}`);
-                        this.stopNow();
+                        this.failTest(`startDownload error: ${(e as Error).message}`);
                     }
                 });
 
@@ -451,10 +574,11 @@ class VofoSpeedtest extends utils.Adapter {
     }
 
     private startUpload(): void {
-        if (this.running) {
+        if (this.running || !this.testActive) {
             return;
         }
         this.running = 'upload';
+        this.setStatus('upload', true);
         this.bytesLoadedLastSection = 0;
         this.uploadBytes = [];
         this.interval(
@@ -471,11 +595,13 @@ class VofoSpeedtest extends utils.Adapter {
     }
 
     private async startPing(): Promise<void> {
-        if (this.running) {
+        if (this.running || !this.testActive) {
             return;
         }
         this.timeStart = new Date();
         this.running = 'ping';
+        this.setStatus('ping', true);
+        this.setState('test.speed', { val: 0, ack: true }).catch(e => this.onError('ping', e));
         this.resetStopHandler('ping');
         this.stopHandler = this.setTimeout(
             () => this.stopPingTest().catch(e => this.onError('ping', e)),
@@ -609,6 +735,10 @@ class VofoSpeedtest extends utils.Adapter {
             // Intentional: the download interval is used for the upload, too
             if (newTime > (this.conf.data.download.interval * 1000) / 2) {
                 this.log.silly(`running: ${running}`);
+                // newSpeed is in kbit/s
+                this.setState('test.speed', { val: newSpeed / 1000, ack: true }).catch(e =>
+                    this.log.warn(`Cannot set test.speed: ${(e as Error).message}`),
+                );
                 if (running === 'download') {
                     this.result.download_raw.push(newSpeed);
                     this.log.silly(`draw: ${JSON.stringify(this.result.download_raw)}`);
@@ -664,11 +794,13 @@ class VofoSpeedtest extends utils.Adapter {
             this.log.debug(`result start: ${JSON.stringify(data)}`);
             res = await promise;
         } catch (e) {
-            this.log.error(`result: ${JSON.stringify(e)}`);
-            this.stopNow();
+            this.failTest(`result: ${(e as Error).message}`);
             return;
         }
 
+        if (!this.testActive) {
+            return;
+        }
         if (res.statusCode === 200) {
             const args = JSON.parse(res.body) as SpeedtestCalcResult;
             const value = Number(args.data.value);
@@ -696,8 +828,7 @@ class VofoSpeedtest extends utils.Adapter {
             }
             this.log.debug(`result: ${JSON.stringify(args)}`);
         } else {
-            this.log.error(`result: Unknown Error ${res.statusCode}`);
-            this.stopNow();
+            this.failTest(`result: Unknown Error ${res.statusCode}`);
         }
     }
 
@@ -743,13 +874,23 @@ class VofoSpeedtest extends utils.Adapter {
         this.log.info(
             `Vofo-Speedtest finished with ${result.download / 1000}mbit download speed and ${result.upload / 1000}mbit upload speed.`,
         );
-        this.stopNow();
+        // Download and upload are valid without the ping, but the states would not tell why the ping is missing
+        const answered = result.ping.avg !== NO_PING && !Number.isNaN(parseFloat(result.ping.avg));
+        const hint = answered
+            ? ''
+            : `Ping: no answer from ${this.init.data.speedtest.servers.pingServer.dualstack.replace('https://', '')}`;
+        if (hint) {
+            this.log.warn(hint);
+        }
+        this.finishTest(hint);
     }
 
     private stopDownloadTest(): void {
         this.log.debug(`stopDownloadTest stopped: ${this.running}`);
         this.stopHandler && this.clearTimeout(this.stopHandler);
         this.stopHandler = undefined;
+        this.intervalTimer && this.clearTimeout(this.intervalTimer);
+        this.intervalTimer = undefined;
         this.downloadRequests.forEach(req => req.destroy());
         this.downloadRequests = [];
         this.running = null;
@@ -764,6 +905,8 @@ class VofoSpeedtest extends utils.Adapter {
     private stopUploadTest(): void {
         this.stopHandler && this.clearTimeout(this.stopHandler);
         this.stopHandler = undefined;
+        this.intervalTimer && this.clearTimeout(this.intervalTimer);
+        this.intervalTimer = undefined;
         this.running = null;
         this.uploadRequests.forEach(req => req.destroy());
         this.uploadRequests = [];
@@ -780,7 +923,7 @@ class VofoSpeedtest extends utils.Adapter {
         let t = times;
         const tick = (): void => {
             if (t-- > 0) {
-                this.setTimeout(tick, wait);
+                this.intervalTimer = this.setTimeout(tick, wait);
                 try {
                     func();
                     this.log.silly(`interval: #${t} @${new Date().toString()}`);
@@ -791,7 +934,7 @@ class VofoSpeedtest extends utils.Adapter {
                 }
             }
         };
-        this.setTimeout(tick, wait);
+        this.intervalTimer = this.setTimeout(tick, wait);
     }
 
     private intervalRoundTrips(runtime: number, interval: number): number {

@@ -1,3 +1,7 @@
 {
-    "Local address": "Lokalny adres"
+    "Local address": "Lokalny adres",
+    "Schedule of the automatic test": "Harmonogram automatycznego testu",
+    "Leave empty to start the test only on demand with the state test.start": "Pozostaw puste, aby uruchamiać test tylko na żądanie za pomocą stanu test.start",
+    "Settings": "Ustawienia",
+    "Speed test": "Test prędkości"
 }

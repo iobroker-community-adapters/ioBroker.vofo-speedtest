@@ -21,3 +21,15 @@ admin/i18n/*/flat.txt
 # compiled TypeScript (see common.nogit in io-package.json)
 build
 *.tsbuildinfo
+
+# vis-2 widget set: built by "npm run build:widgets", shipped with the npm package
+widgets/
+# front-ends: node_modules and intermediate builds. admin/dm-widgets/ and admin/webcomponents/ are committed.
+src-widgets/node_modules/
+src-widgets/build/
+src-widgets/.__mf__temp/
+src-devices/node_modules/
+src-devices/build/
+src-devices/.__mf__temp/
+src-webcomponents/node_modules/
+src-webcomponents/build/
