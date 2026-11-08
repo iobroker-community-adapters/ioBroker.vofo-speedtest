@@ -10,9 +10,11 @@
           "type": "ip",
           "label": "Local address",
           "default": "0.0.0.0",
+          "xs": 12,
           "sm": 12,
           "md": 6,
-          "lg": 4
+          "lg": 4,
+          "xl": 4
         },
         "schedule": {
           "newLine": true,
@@ -20,9 +22,11 @@
           "label": "Schedule of the automatic test",
           "help": "Leave empty to start the test only on demand with the state test.start",
           "simple": true,
+          "xs": 12,
           "sm": 12,
           "md": 6,
-          "lg": 4
+          "lg": 4,
+          "xl": 4
         }
       }
     },
