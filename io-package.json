@@ -207,7 +207,28 @@
       ]
     },
     "webComponents": [
-      "webcomponents/vofo-speedtest.json"
+      {
+        "manifest": "webcomponents/vofo-speedtest.json",
+        "tag": "iob-vofo-speedtest",
+        "name": {
+          "en": "Vofo speed test",
+          "de": "Vofo-Speedtest",
+          "ru": "Тест скорости Vofo",
+          "pt": "Teste de velocidade Vofo",
+          "nl": "Vofo-snelheidstest",
+          "fr": "Test de débit Vofo",
+          "it": "Test di velocità Vofo",
+          "es": "Prueba de velocidad Vofo",
+          "pl": "Test prędkości Vofo",
+          "uk": "Тест швидкості Vofo",
+          "zh-cn": "Vofo 网速测试"
+        },
+        "icon": "../dm-widgets/speedtest.png",
+        "size": {
+          "width": 440,
+          "height": 300
+        }
+      }
     ]
   },
   "native": {

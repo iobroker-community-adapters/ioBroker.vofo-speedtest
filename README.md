@@ -63,6 +63,10 @@ This adapter would not have been possible without the great work of Peter Baumer
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+- (bluefox) Added the short form of the web component manifests (tag, name, icon, size) to `common.webComponents`, so that hosts like Aura can list the components before the adapter is installed; the build writes it with `iob-web-components sync-io-package`
+
 ### 3.0.1 (2026-11-08)
 - (mcm1957) Issues detected by repositorychecker have been fixed
 
