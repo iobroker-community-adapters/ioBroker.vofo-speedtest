@@ -1,7 +1,10 @@
 # Older changes
-## 1.0.0 (2023-09-13)
+## 1.0.1 (2023-09-13)
 * (bluefox) Updated packages and refactored code
 
+
+## 1.0.0 (2023-09-13)
+* (bluefox) Updated packages and refactored code
 
 ## 0.0.13 (2022-06-06)
 * some more "already running" fixes

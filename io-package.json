@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "vofo-speedtest",
-    "version": "3.0.1",
+    "version": "3.1.0",
     "news": {
+      "3.1.0": {
+        "en": "Added the short form of the web component manifests (tag, name, icon, size) to `common.webComponents`, so that hosts like Aura can list the components before the adapter is installed; the build writes it with `iob-web-components sync-io-package`",
+        "de": "Die Kurzform der Webkomponenten-Manifeste (Tag, Name, Symbol, Größe) wurde zu `common.WebComponents` hinzugefügt, sodass Hosts wie Aura die Komponenten vor der Adapterinstallation auflisten können; der Build schreibt es mit `iob-web-components sync-io-package`",
+        "ru": "Добавлена краткая форма манифестов веб-компонентов (тег, имя, значок, размер) в `Common.webcomponents`, чтобы такие хосты, как Aura, могли перечислять компоненты до установки адаптера; сборка записывает его с помощью `iob-web-components sync-io-package`",
+        "pt": "A forma abreviada dos manifestos de componentes web (tag, nome, ícone, tamanho) foi adicionada a `common.webComponents` para que hosts como o Aura possam listar os componentes antes da instalação do adaptador; a compilação grava com `iob-web-components sync-io-package`",
+        "nl": "De korte vorm van de manifesten van de webcomponenten (tag, naam, pictogram, grootte) toegevoegd aan `Common.WebComponents`, zodat hosts zoals Aura de componenten kunnen opsommen voordat de adapter wordt geïnstalleerd; de build schrijft het met `iob-web-components sync-io-package`",
+        "fr": "Ajout de la forme abrégée des manifestes des composants Web (tag, nom, icône, taille) à « common.WebComponents », afin que des hôtes comme Aura puissent lister les composants avant d'installer l'adaptateur ; la version l'écrit avec « iob-web-components sync-io-package »",
+        "it": "Aggiunto l'abbreviazione dei manifest dei componenti web (tag, nome, icona, dimensione) a Common.WebComponents, in modo che host come Aura possano elencare i componenti prima di installare l'adattatore",
+        "es": "Ha añadido la forma abreviada de los manifiestos de componentes web (etiqueta, nombre, icono, tamaño) a `Common.WebComponents` para que hosts como Aura puedan enumerar los componentes antes de instalar el adaptador; la versión lo escribe con `iob-web-components sync-io-package`",
+        "pl": "Dodano krótką formę manifestów komponentów internetowych (tag, nazwa, ikona, rozmiar) do `common.webcomponents`, aby hosty takie jak Aura mogli wymienić komponenty przed zainstalowaniem adaptera; kompilacja zapisuje go za pomocą `iob-web-components sync-io-package`",
+        "uk": "Додано коротку форму маніфестів веб-компонента (тег, ім'я, піктограма, розмір) до `Common.WebComponents`, щоб такі хости, як Aura, могли перелічити компоненти до встановлення адаптера; збірка записує його за допомогою `iob-web-components sync-io-package`",
+        "zh-cn": "将 Web 组件清单（标签、名称、图标、大小）的简写形式添加到 `common.webComponents` 中，这样像 Aura 这样的主机就可以在安装适配器之前列出组件；该版本使用 `iob-web-components sync-io-package` 写入组件"
+      },
       "3.0.1": {
         "en": "Issues detected by repositorychecker have been fixed",
         "de": "Repositorychecker hat Probleme behoben",
@@ -80,19 +93,6 @@
         "pl": "ponowne wydanie dla 0.0.11 z powodu braku wersji w io-package.json",
         "zh-cn": "由于 io-package.json 中缺少版本，重新发布 0.0.11",
         "uk": "перевипуск для 0.0.11 через відсутність версії в io-package.json"
-      },
-      "0.0.10": {
-        "en": "Fix version numbers",
-        "de": "Versionsnummern korrigieren",
-        "ru": "Исправить номера версий",
-        "pt": "Corrigir números de versão",
-        "nl": "Versienummers herstellen",
-        "fr": "Correction des numéros de version",
-        "it": "Correggi i numeri di versione",
-        "es": "Corregir números de versión",
-        "pl": "Napraw numery wersji",
-        "zh-cn": "修复版本号",
-        "uk": "Виправити номери версій"
       }
     },
     "titleLang": {
