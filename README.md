@@ -22,7 +22,8 @@
 [![Test and Release](https://github.com/iobroker-community-adapters/ioBroker.vofo-speedtest/actions/workflows/test-and-release.yml/badge.svg)](https://github.com/iobroker-community-adapters/ioBroker.vofo-speedtest/actions/workflows/test-and-release.yml)
 [![CodeQL](https://github.com/iobroker-community-adapters/ioBroker.vofo-speedtest/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/iobroker-community-adapters/ioBroker.vofo-speedtest/actions/workflows/github-code-scanning/codeql)
 
-## vofo-speedtest adapter for ioBroker
+> [!IMPORTANT]
+> This adapter cannot be installed from github## vofo-speedtest adapter for ioBroker
 
 Speedtest of Vodafone.de
 
